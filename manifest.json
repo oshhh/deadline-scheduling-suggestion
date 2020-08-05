@@ -6,7 +6,8 @@
 	"content_scripts": [
 	    {
 	      "matches": ["https://classroom.google.com/u/*/w/*/t/all"],
-	      "js": ["popup.js", "iiitd_assignment_option.js", "main.js"]
+	      "js": ["UI/popup.js", "UI/iiitd_assignment_option.js", "main.js"],
+          "css": ["css/style.css"]
 	    }
 	  ]
 }
