@@ -1,0 +1,12 @@
+{
+	"name": "Trial",
+	"version": "1.0",
+	"description": "Modify create assignment page",
+	"manifest_version": 2,
+	"content_scripts": [
+	    {
+	      "matches": ["https://classroom.google.com/u/*/w/*/t/all"],
+	      "js": ["popup.js", "iiitd_assignment_option.js", "main.js"]
+	    }
+	  ]
+}
