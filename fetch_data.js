@@ -65,32 +65,67 @@ function getNewToken(oAuth2Client, callback) {
  *
  * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
  */
-function listCourseWork(auth) {
+function listCourseWork(auth, courseId, callback) {
   const classroom = google.classroom({version: 'v1', auth});
   classroom.courses.courseWork.list({
-  	courseId: "119111145640",
+    courseId: courseId,
+    orderBy: "dueDate desc",
+    courseWorkStates: ["DRAFT", "PUBLISHED"],
     pageSize: 10,
   }, (err, res) => {
     if (err) return console.error('The API returned an error: ' + err);
     const courseWork = res.data.courseWork;
-    if (courseWork && courseWork.length) {
-      console.log('Coursework:');
-      courseWork.forEach((coursework) => {
-        console.log(`${coursework.courseId}, ${coursework.title}`);
-      });
-    } else {
-      console.log('No coursework found.');
-    }
+    callback(courseWork, auth);
   });
 }
 
+function listCourses(auth, callback) {
+  const classroom = google.classroom({version: 'v1', auth});
+  classroom.courses.list({
+    pageSize: 10,
+  }, (err, res) => {
+    if (err) return console.error('The API returned an error: ' + err);
+    const courses = res.data.courses;
+    callback(courses, auth);
+  });
+}
+
+function printCourses(courses) {
+  if (courses && courses.length) {
+    console.log('courses:');
+    courses.forEach((course) => {
+      console.log(`${course.id}, ${course.name}`);
+    });
+  } else {
+    console.log('No courses found.');
+  }
+}
+
+function printCourseWorks(courseWorks) {
+  if (courseWorks && courseWorks.length) {
+    console.log('Coursework:');
+    courseWorks.forEach((courseWork) => {
+      console.log(`${courseWork.courseId}: ${courseWork.title} \n${JSON.stringify(courseWork)}`);
+    });
+  } else {
+    console.log('No coursework found.');
+  }
+}
+
 function main() {
-	// Load client secrets from a local file.
-	fs.readFile('credentials.json', (err, content) => {
-	  if (err) return console.log('Error loading client secret file:', err);
-	  // Authorize a client with credentials, then call the Google Classroom API.
-	  authorize(JSON.parse(content), listCourseWork);
-	});	
+    // Load client secrets from a local file.
+    fs.readFile('credentials.json', (err, content) => {
+      if (err) return console.log('Error loading client secret file:', err);
+      // Authorize a client with credentials, then call the Google Classroom API.
+      authorize(JSON.parse(content), (auth) => {
+      listCourses(auth, printCourses);
+      listCourses(auth, (courses, auth) => {
+        courses.forEach((course) => {
+          listCourseWork(auth, course.id, printCourseWorks);
+        })
+      })
+    });
+    }); 
 }
 
 
