@@ -157,8 +157,8 @@ function getDueDateSuggestions(students, duration, minDueDate, maxDueDate, callb
 function main() {
 	students = [{"roll_no": "S1", "courses": ["122593778141", "122593778147", "122593792063"]}, {"roll_no": "S2", "courses" : ["122593778141", "122593778147", "122593792068"]}];
 	duration = {"date": 1, "hours": 0, "minutes": 0};
-    minDueDate = new Date();
-    maxDueDate = new Date();
+  minDueDate = new Date();
+  maxDueDate = new Date();
 	maxDueDate.setDate(maxDueDate.getDate() + 3);
 	getDueDateSuggestions(students, duration, minDueDate, maxDueDate, (suggestions) => console.log(suggestions));
 }

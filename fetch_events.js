@@ -73,12 +73,11 @@ function listCalendars(auth, callback) {
  * Lists the next 10 events on the user's primary calendar.
  * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
  */
-function listEvents(auth, calendarId, start, end, callback) {
+function listEvents(auth, calendarId, start, callback) {
   const calendar = google.calendar({version: 'v3', auth});
   calendar.events.list({
     calendarId: calendarId,
     timeMin: start,
-    timeMax: end,
     singleEvents: true,
     orderBy: 'startTime',
   }, (err, res) => {
@@ -88,7 +87,7 @@ function listEvents(auth, calendarId, start, end, callback) {
   });
 }
 
-function getAllEvents(start, end, callback) {
+function getAllEvents(start, callback) {
 // Load client secrets from a local file.
   fs.readFile('credentials.json', (err, content) => {
     if (err) return console.log('Error loading client secret file:', err);
@@ -104,7 +103,7 @@ function getAllEvents(start, end, callback) {
         var assignments = [];
         calendars.forEach((calendar) => {
           if(calendar.id.substring(0, 9) == "classroom" || calendar.id.substring(0, 8) == "backpack" || calendar.id.substring(0, 12) == "iiitd_events") {
-            listEvents(auth, calendar.id, start, end, (auth, events) => {
+            listEvents(auth, calendar.id, start, (auth, events) => {
               calendar_count --;
               events.forEach((event) => {
                 assignments.push({
@@ -125,11 +124,6 @@ function getAllEvents(start, end, callback) {
   });
 }
 
-start = new Date();
-start.setDate(start.getDate() - 2);
-end = new Date();
-end.setDate(end.getDate() + 2);
-
-getAllEvents(start, end, (events) => {
-  console.log(events);
-});
+module.exports = {
+  getAllEvents: getAllEvents
+}
