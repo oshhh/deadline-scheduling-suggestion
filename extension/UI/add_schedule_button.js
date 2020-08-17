@@ -105,6 +105,32 @@ schedule_button.addEventListener("click", function () {
   console.log(s_date_left_input.value);
 })
 
+//drop down for suggestions
+var drop_down = document.createElement('div');
+drop_down.className = 'dropdown';
+var button = document.createElement('button');
+button.className = 'dropbtn';
+var btntext = document.createTextNode('Suggestions');
+button.appendChild(btntext);
+drop_down.appendChild(button);
+var drop_down_content = document.createElement('div');
+drop_down_content.className = 'dropdown-content';
+drop_down.appendChild(drop_down_content);
+var list_item1 = document.createElement('span');
+var list_item1_text = document.createTextNode('1) dd/mm/yyyy');
+list_item1.appendChild(list_item1_text);
+drop_down_content.appendChild(list_item1);
+var list_item2 = document.createElement('span');
+var list_item2_text = document.createTextNode('2) dd/mm/yyyy');
+list_item2.appendChild(list_item2_text);
+drop_down_content.appendChild(list_item2);
+var list_item3 = document.createElement('span');
+var list_item3_text = document.createTextNode('3) dd/mm/yyyy');
+list_item3.appendChild(list_item3_text);
+drop_down_content.appendChild(list_item3);
+button.className = BUTTON_CLASS;
+
+
 let observer = new MutationObserver((mutations) => {
   mutations.forEach((mutation) => {
     if (!mutation.addedNodes) return;
@@ -119,7 +145,8 @@ let observer = new MutationObserver((mutations) => {
           parent.insertBefore(duration_div, node);
           parent.insertBefore(max_due_date, node);
           parent.insertBefore(release_date_left, node);
-          parent.insertBefore(s_date_left, node);
+          //parent.insertBefore(s_date_left, node);
+          parent.insertBefore(drop_down, node);
           parent.insertBefore(schedule_button, node);
         }, 300);
       }
