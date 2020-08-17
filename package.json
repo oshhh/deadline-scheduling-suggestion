@@ -1,0 +1,19 @@
+{
+  "name": "deadline-scheduling-suggestion",
+  "version": "1.0.0",
+  "description": "application that suggests deadline due date",
+  "main": "app.js",
+  "scripts": {
+  "start": "cd server && node server.js"
+},
+  "repository": {
+  "type": "git",
+  "url": "https://github.com/oshhh/deadline-scheduling-suggestion"
+},
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+  "url": ""
+},
+  "homepage": ""
+}
