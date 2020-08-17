@@ -5,7 +5,6 @@ var fetch_events = require("./fetch_events.js");
 	duration: datatype - JSON, format - {date: .., hours: .., minutes: ..}
 	minDueDate: datatype - Date
 	maxDueDate: datatype - Date
-	allCourseWork: datatype - list of courseWorks, format - {course_name: .., coursework_name: .., start_date: (datatype - Date), end_date: (datatype - Date)}
 	students: datatype - list of JSON, format - list of JSON {"roll_no": .., "courses": ..}
 */
 function suggestDueDate(duration, minDueDate, maxDueDate, students, callback) {
@@ -36,12 +35,13 @@ function suggestDueDate(duration, minDueDate, maxDueDate, students, callback) {
 			end_date.setHours(end_date.getHours() + duration.hours);
 			end_date.setMinutes(end_date.getMinutes() + duration.minutes);
 			suggestions.push({
-				"start_date": start_date,
-				"end_date": end_date,
-				"score": calculateScore(start_date, end_date, allCourseWork, commonStudents)
+				start_date: start_date,
+				end_date: end_date,
+				clash: calculateScore(start_date, end_date, allCourseWork, commonStudents)
 			});
 			suggestion.setDate(suggestion.getDate() + 1);
 		}
+		suggestions.sort((a, b) => {return a.clash.score - b.clash.score;});
 		callback(suggestions);
 	});
 }
@@ -54,16 +54,16 @@ function suggestDueDate(duration, minDueDate, maxDueDate, students, callback) {
 */
 
 function calculateScore(start_date, end_date, allCourseWork, commonStudents) {
-	console.log(start_date);
-	console.log(end_date);
-	console.log(allCourseWork);
-	console.log(commonStudents);
 	var score = 0;
+	var reason = [];
 	for(var i = 0; i < allCourseWork.length; ++ i) {
 		var courseWork = allCourseWork[i];
 		score += commonStudents[courseWork.course_name] * fractionalOverlap(start_date, end_date, courseWork.start_date, courseWork.end_date);
+		if(fractionalOverlap(start_date, end_date, courseWork.start_date, courseWork.end_date) != 0) {
+			reason.push(courseWork);
+		}
 	}
-	return score;
+	return {score: score, reason: reason};
 }
 
 function fractionalOverlap(c1_startDate, c1_endDate, c2_startDate, c2_endDate) {
