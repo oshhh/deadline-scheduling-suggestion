@@ -17,7 +17,7 @@ maxDueDate : YYYY-MM-DDTHH:mm:ss.sssZ
 function handleRequest(req, res) {
     try {
         params = req.url.split("/");
-        if(params.length < 5) {
+        if(params.length < 6) {
             throw("insufficient parameters");
         }
         
