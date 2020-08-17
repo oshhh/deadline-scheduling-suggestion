@@ -69,6 +69,6 @@ function handleRequest(req, res) {
 
 var server = http.createServer(handleRequest);
 
-server.listen(port);
+server.listen(5000);
 
 console.log('Node.js web server at port 5000 is running..')

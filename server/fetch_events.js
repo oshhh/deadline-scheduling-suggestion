@@ -1,13 +1,13 @@
 const fs = require('fs');
 const readline = require('readline');
 const {google} = require('googleapis');
+require('dotenv').config({path: __dirname + '/.env'});
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/calendar.readonly'];
 // The file token.json stores the user's access and refresh tokens, and is
 // created automatically when the authorization flow completes for the first
 // time.
-const TOKEN_PATH = 'token.json';
 
 /**
  * Create an OAuth2 client with the given credentials, and then execute the
@@ -21,11 +21,10 @@ function authorize(credentials, callback) {
       client_id, client_secret, redirect_uris[0]);
 
   // Check if we have previously stored a token.
-  fs.readFile(TOKEN_PATH, (err, token) => {
-    if (err) return getAccessToken(oAuth2Client, callback);
+  token = process.env.TOKEN;
+    if (token == "") return getAccessToken(oAuth2Client, callback);
     oAuth2Client.setCredentials(JSON.parse(token));
     callback(oAuth2Client);
-  });
 }
 
 /**
@@ -50,10 +49,7 @@ function getAccessToken(oAuth2Client, callback) {
       if (err) return console.error('Error retrieving access token', err);
       oAuth2Client.setCredentials(token);
       // Store the token to disk for later program executions
-      fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
-        if (err) return console.error(err);
-        console.log('Token stored to', TOKEN_PATH);
-      });
+      process.env.TOKEN = JSON.stringify(token);
       callback(oAuth2Client);
     });
   });
@@ -90,7 +86,6 @@ function listEvents(auth, calendarId, start, callback) {
 function getAllEvents(start, callback) {
 // Load client secrets from a local file.
   credentials_json = JSON.parse(process.env.GOOGLE_CREDENTIALS);
-  console.log(credentials_json);
   // Authorize a client with credentials, then call the Google Calendar API.
   authorize(credentials_json, (auth) => {
     listCalendars(auth, (auth, calendars) => {
