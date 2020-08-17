@@ -89,36 +89,35 @@ function listEvents(auth, calendarId, start, callback) {
 
 function getAllEvents(start, callback) {
 // Load client secrets from a local file.
-  fs.readFile('google-credentials.json', (err, content) => {
-    if (err) return console.log('Error loading client secret file:', err);
-    // Authorize a client with credentials, then call the Google Calendar API.
-    authorize(JSON.parse(content), (auth) => {
-      listCalendars(auth, (auth, calendars) => {
-        var calendar_count = 0;
-        calendars.forEach((calendar) => {
-          if(calendar.id.substring(0, 9) == "classroom" || calendar.id.substring(0, 8) == "backpack" || calendar.id.substring(0, 12) == "iiitd_events") {
-            calendar_count ++;
-          }          
-        });
-        var assignments = [];
-        calendars.forEach((calendar) => {
-          if(calendar.id.substring(0, 9) == "classroom" || calendar.id.substring(0, 8) == "backpack" || calendar.id.substring(0, 12) == "iiitd_events") {
-            listEvents(auth, calendar.id, start, (auth, events) => {
-              calendar_count --;
-              events.forEach((event) => {
-                assignments.push({
-                  course_name: event.organizer.displayName,
-                  coursework_name: event.summary,
-                  start_date: new Date(event.created),
-                  end_date: new Date(event.end.dateTime != null ? event.end.dateTime : `${event.start.date}T18:29:00Z`),
-                });
+  credentials_json = os.environ['GOOGLE_APPLICATION_CREDENTIALS'];
+  if (err) return console.log('Error loading client secret file:', err);
+  // Authorize a client with credentials, then call the Google Calendar API.
+  authorize(credentials_json, (auth) => {
+    listCalendars(auth, (auth, calendars) => {
+      var calendar_count = 0;
+      calendars.forEach((calendar) => {
+        if(calendar.id.substring(0, 9) == "classroom" || calendar.id.substring(0, 8) == "backpack" || calendar.id.substring(0, 12) == "iiitd_events") {
+          calendar_count ++;
+        }          
+      });
+      var assignments = [];
+      calendars.forEach((calendar) => {
+        if(calendar.id.substring(0, 9) == "classroom" || calendar.id.substring(0, 8) == "backpack" || calendar.id.substring(0, 12) == "iiitd_events") {
+          listEvents(auth, calendar.id, start, (auth, events) => {
+            calendar_count --;
+            events.forEach((event) => {
+              assignments.push({
+                course_name: event.organizer.displayName,
+                coursework_name: event.summary,
+                start_date: new Date(event.created),
+                end_date: new Date(event.end.dateTime != null ? event.end.dateTime : `${event.start.date}T18:29:00Z`),
               });
-              if(calendar_count == 0) {
-                callback(assignments);
-              }
             });
-          }
-        });
+            if(calendar_count == 0) {
+              callback(assignments);
+            }
+          });
+        }
       });
     });
   });
