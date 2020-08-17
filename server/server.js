@@ -2,6 +2,9 @@ var http = require('http'); // 1 - Import Node.js core module
 var fs = require("fs");
 var get_suggestions = require("./get_suggestions")
 
+const port = process.env.PORT || 3000
+
+
 /*
 Request format: 
 "/[college_name]:[duration]/[minDueDate]/[maxDueDate]"
@@ -19,9 +22,10 @@ function handleRequest(req, res) {
         }
         
         var college_name = params[1];
-        var duration = params[2];
-        var minDueDate = params[3];
-        var maxDueDate = params[4];
+        var course_name = params[2]
+        var duration = params[3];
+        var minDueDate = params[4];
+        var maxDueDate = params[5];
         duration = duration.split("-");
         try {
             duration = {"date": parseInt(duration[0]), "hours": parseInt(duration[1]), "minutes": parseInt(duration[2])};
@@ -29,7 +33,7 @@ function handleRequest(req, res) {
             throw("Duration formatted incorrectly");
         }
         minDueDate = new Date(minDueDate);
-        if(isNan(minDueDate)) {
+        if(isNaN(minDueDate)) {
             throw("Minimum Due Date formatted incorrectly")
         }
         maxDueDate = new Date(maxDueDate);
@@ -65,6 +69,6 @@ function handleRequest(req, res) {
 
 var server = http.createServer(handleRequest);
 
-server.listen(5000);
+server.listen(port);
 
 console.log('Node.js web server at port 5000 is running..')
