@@ -7,51 +7,43 @@ var fs = require('fs');
 	minDueDate: datatype - Date
 	maxDueDate: datatype - Date
 */
-function suggestDueDate(duration, minDueDate, maxDueDate, callback) {
-	fs.readFile('./students.json', 'utf8', (err, string) => {
-		if(err) {
-			console.log("error reading student data");
-		} else {
+function suggestDueDate(duration, minDueDate, maxDueDate, students, callback) {
+    fetch_events.getAllEvents(minDueDate, (allCourseWork) => {
+        var commonStudents = {};
+        for(var i in students) {
+            for(var j = 0; j < students[i].length; ++ j) {
+                if(commonStudents[students[i][j]] == null) {
+                    commonStudents[students[i][j]] = 0;
+                }
+                commonStudents[students[i][j]] ++;
+            }
+        }
 
-			students = JSON.parse(string);
-			fetch_events.getAllEvents(minDueDate, (allCourseWork) => {
-				var commonStudents = {};
-				for(var i in students) {
-					for(var j = 0; j < students[i].length; ++ j) {
-						if(commonStudents[students[i][j]] == null) {
-							commonStudents[students[i][j]] = 0;
-						}
-						commonStudents[students[i][j]] ++;
-					}
-				}
+        // for each date call calculateScore and order suggestions score 
+        suggestion = new Date(minDueDate);
+        lastDate = new Date(maxDueDate);
+        lastDate.setDate(lastDate.getDate() - duration.date);
+        lastDate.setHours(lastDate.getHours() - duration.hours);
+        lastDate.setMinutes(lastDate.getMinutes() - duration.minutes);
 
-				// for each date call calculateScore and order suggestions score 
-				suggestion = new Date(minDueDate);
-				lastDate = new Date(maxDueDate);
-				lastDate.setDate(lastDate.getDate() - duration.date);
-				lastDate.setHours(lastDate.getHours() - duration.hours);
-				lastDate.setMinutes(lastDate.getMinutes() - duration.minutes);
+        var suggestions = [];
 
-				var suggestions = [];
-
-				while(suggestion <= lastDate) {
-					var start_date = new Date(suggestion);
-					var end_date = new Date(suggestion);
-					end_date.setDate(end_date.getDate() + duration.date);
-					end_date.setHours(end_date.getHours() + duration.hours);
-					end_date.setMinutes(end_date.getMinutes() + duration.minutes);
-					suggestions.push({
-						start_date: start_date,
-						end_date: end_date,
-						clash: calculateScore(start_date, end_date, allCourseWork, commonStudents)
-					});
-					suggestion.setDate(suggestion.getDate() + 1);
-				}
-				suggestions.sort((a, b) => {return a.clash.score - b.clash.score;});
-				callback(suggestions);
-			});
-		}
-	})
+        while(suggestion <= lastDate) {
+            var start_date = new Date(suggestion);
+            var end_date = new Date(suggestion);
+            end_date.setDate(end_date.getDate() + duration.date);
+            end_date.setHours(end_date.getHours() + duration.hours);
+            end_date.setMinutes(end_date.getMinutes() + duration.minutes);
+            suggestions.push({
+                start_date: start_date,
+                end_date: end_date,
+                clash: calculateScore(start_date, end_date, allCourseWork, commonStudents)
+            });
+            suggestion.setDate(suggestion.getDate() + 1);
+        }
+        suggestions.sort((a, b) => {return a.clash.score - b.clash.score;});
+        callback(suggestions);
+    });
 }
 /*
 	~~ Parameters ~~
@@ -88,23 +80,6 @@ function fractionalOverlap(c1_startDate, c1_endDate, c2_startDate, c2_endDate) {
 }
 
 
-fs.readFile('./students.json', 'utf8', (err, string) => {
-	if(err) {
-		console.log("error reading student data");
-	} else {
-
-		students = JSON.parse(string);
-		duration = {"date": 1, "hours": 0, "minutes": 0};
-		minDueDate = new Date();
-		maxDueDate = new Date();
-		maxDueDate.setDate(maxDueDate.getDate() + 3);
-
-		suggestDueDate(duration, minDueDate, maxDueDate, students, (suggestions) => {
-			console.log(suggestions);
-		});
-
-	}
-})
 
 
 module.exports = {
