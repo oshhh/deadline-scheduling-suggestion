@@ -1,4 +1,5 @@
 var fetch_events = require("./fetch_events.js");
+var fs = require('fs');
 
 /*
 	~~ Parameters ~~
@@ -10,12 +11,12 @@ var fetch_events = require("./fetch_events.js");
 function suggestDueDate(duration, minDueDate, maxDueDate, students, callback) {
 	fetch_events.getAllEvents(minDueDate, (allCourseWork) => {
 		var commonStudents = {};
-		for(var i = 0; i < students.length; ++ i) {
-			for(var j = 0; j < students[i]["courses"].length; ++ j) {
-				if(commonStudents[students[i]["courses"][j]] == null) {
-					commonStudents[students[i]["courses"][j]] = 0;
+		for(var i in students) {
+			for(var j = 0; j < students[i].length; ++ j) {
+				if(commonStudents[students[i][j]] == null) {
+					commonStudents[students[i][j]] = 0;
 				}
-				commonStudents[students[i]["courses"][j]] ++;
+				commonStudents[students[i][j]] ++;
 			}
 		}
 
@@ -79,15 +80,24 @@ function fractionalOverlap(c1_startDate, c1_endDate, c2_startDate, c2_endDate) {
 	}
 }
 
-students = [{"roll_no": "S1", "courses": ["course 1", "course 2", "course 3"]}, {"roll_no": "S2", "courses" : ["course 1", "course 3", "course 4"]}];
-duration = {"date": 1, "hours": 0, "minutes": 0};
-minDueDate = new Date();
-maxDueDate = new Date();
-maxDueDate.setDate(maxDueDate.getDate() + 3);
 
-suggestDueDate(duration, minDueDate, maxDueDate, students, (suggestions) => {
-	console.log(suggestions);
-});
+fs.readFile('./students.json', 'utf8', (err, string) => {
+	if(err) {
+		console.log("error reading student data");
+	} else {
+
+		students = JSON.parse(string);
+		duration = {"date": 1, "hours": 0, "minutes": 0};
+		minDueDate = new Date();
+		maxDueDate = new Date();
+		maxDueDate.setDate(maxDueDate.getDate() + 3);
+
+		suggestDueDate(duration, minDueDate, maxDueDate, students, (suggestions) => {
+			console.log(suggestions);
+		});
+
+	}
+})
 
 
 module.exports = {
