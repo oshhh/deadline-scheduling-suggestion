@@ -90,7 +90,6 @@ function listEvents(auth, calendarId, start, callback) {
 function getAllEvents(start, callback) {
 // Load client secrets from a local file.
   credentials_json = process.env.GOOGLE_APPLICATION_CREDENTIALS;
-  if (err) return console.log('Error loading client secret file:', err);
   // Authorize a client with credentials, then call the Google Calendar API.
   authorize(credentials_json, (auth) => {
     listCalendars(auth, (auth, calendars) => {
