@@ -5,9 +5,9 @@ This project aims to create:
 2. A chrome extension for backpack and classroom that adds to these platforms the functionality of getting suggestions of release date and due date of an assignment/deadline.
 The project consists of 2 parts:
 ## Server: 
-hosted on heroku:    
+hosted on heroku: `https://deadline-scheduling-suggestion.herokuapp.com/`    
 Takes in the college name, duration, minimum due date and maximum due date.    
-**HTTP Request Format:** `/[college_name]/[course_name]/[duration]/[min due date]/[max due date]` 
+**HTTP Request Format:** `https://deadline-scheduling-suggestion.herokuapp.com/[college_name]/[course_name]/[duration]/[min due date]/[max due date]` 
 
 **college_name:**   
 `iiitd` is the only supported college name.   
