@@ -1,7 +1,7 @@
 # Deadline Scheduling Suggestion
 
 This project aims to create:
-1. A server that when given the college name, course name, duration of assignment, minimum and maximum due dates, suggestions the best due date for the assignment of that course. 
+1. A server that when given the college name, course name, duration of assignment, minimum and maximum due dates, suggestions the best due date for the assignment of that course, considering what other assignments the students of this course have. 
 2. A chrome extension for backpack and classroom that adds to these platforms the functionality of getting suggestions of release date and due date of an assignment/deadline.
 The project consists of 2 parts:
 ## Server: 
