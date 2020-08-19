@@ -39,7 +39,7 @@ function handleRequest(req, res) {
         }
         maxDueDate = new Date(maxDueDate);
         if(isNaN(maxDueDate)) {
-            throw "Maximum Due Date formatted incorrectly";
+            throw("Maximum Due Date formatted incorrectly");
         }
         
         fs.readFile(`./${college_name}_students.json`, 'utf8', (err, string) => {
@@ -70,6 +70,6 @@ function handleRequest(req, res) {
 
 var server = http.createServer(handleRequest);
 
-server.listen(port);
+server.listen(5000);
 
 console.log('Node.js web server at port 5000 is running..')
