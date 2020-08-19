@@ -7,10 +7,11 @@ var fs = require('fs');
 	minDueDate: datatype - Date
 	maxDueDate: datatype - Date
 */
-function suggestDueDate(duration, minDueDate, maxDueDate, students, callback) {
+function suggestDueDate(courseName, duration, minDueDate, maxDueDate, students, callback) {
     fetch_events.getAllEvents(minDueDate, (allCourseWork) => {
         var commonStudents = {};
         for(var i in students) {
+            if(!(courseName in students[i])) continue;
             for(var j = 0; j < students[i].length; ++ j) {
                 if(commonStudents[students[i][j]] == null) {
                     commonStudents[students[i][j]] = 0;
@@ -58,6 +59,7 @@ function calculateScore(start_date, end_date, allCourseWork, commonStudents) {
 	var reason = [];
 	for(var i = 0; i < allCourseWork.length; ++ i) {
 		var courseWork = allCourseWork[i];
+        if(commonStudents[courseWork] == null) continue;
 		score += commonStudents[courseWork.course_name] * fractionalOverlap(start_date, end_date, courseWork.start_date, courseWork.end_date);
 		if(fractionalOverlap(start_date, end_date, courseWork.start_date, courseWork.end_date) != 0) {
 			reason.push(courseWork);

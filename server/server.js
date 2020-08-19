@@ -2,7 +2,7 @@ var http = require('http'); // 1 - Import Node.js core module
 var fs = require("fs");
 var get_suggestions = require("./get_suggestions")
 
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 5000
 
 
 /*
@@ -22,8 +22,8 @@ function handleRequest(req, res) {
             throw("insufficient parameters");
         }
         
-        var college_name = params[1];
-        var course_name = params[2]
+        var collegeName = params[1];
+        var courseName = params[2]
         var duration = params[3];
         var minDueDate = params[4];
         var maxDueDate = params[5];
@@ -42,7 +42,7 @@ function handleRequest(req, res) {
             throw("Maximum Due Date formatted incorrectly");
         }
         
-        fs.readFile(`./${college_name}_students.json`, 'utf8', (err, string) => {
+        fs.readFile(`./${collegeName}_students.json`, 'utf8', (err, string) => {
             if(err) {
                 console.log(err);
                 res.writeHead(200, {"Content-Type": "text/plain"});
@@ -51,7 +51,7 @@ function handleRequest(req, res) {
             } else {
                 students = JSON.parse(string);
 
-                get_suggestions.suggestDueDate(duration, minDueDate, maxDueDate, students, (suggestions) => {
+                get_suggestions.suggestDueDate(courseName, duration, minDueDate, maxDueDate, students, (suggestions) => {
                     res.writeHead(200, {"Content-Type": "text/plain"});
                     res.write(JSON.stringify({suggestions: suggestions}));
                     res.end();
