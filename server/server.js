@@ -60,7 +60,7 @@ function handleRequest(req, res) {
 
                 if(!isCourse) {
                     res.writeHead(200, {"Content-Type": "text/plain"});
-                    res.write(`course ${courseName} doesn't exist in college ${collegeName}`);
+                    res.write(`Invalid Request: course ${courseName} doesn't exist in college ${collegeName}`);
                     res.end();
                     return;
                 }

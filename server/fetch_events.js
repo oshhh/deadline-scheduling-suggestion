@@ -22,6 +22,7 @@ function authorize(credentials, callback) {
 	// Check if we have previously stored a token.
 	token = process.env.TOKEN;
 	if (token == "") return getAccessToken(oAuth2Client, callback);
+	console.log(token);
 	oAuth2Client.setCredentials(JSON.parse(token));
 	callback(oAuth2Client);
 }
@@ -86,6 +87,7 @@ function listEvents(auth, calendarId, start, callback) {
 function getAllEvents(start, callback) {
 // Load client secrets from a local file.
   credentials_json = JSON.parse(process.env.GOOGLE_CREDENTIALS);
+  console.log(credentials_json);
   // Authorize a client with credentials, then call the Google Calendar API.
   authorize(credentials_json, (auth) => {
     listCalendars(auth, (auth, calendars) => {
