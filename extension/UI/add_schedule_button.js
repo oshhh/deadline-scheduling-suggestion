@@ -101,8 +101,9 @@ schedule_button.addEventListener("click", function () {
     console.log(lbl + document.getElementById(lbl).value);
   })
   console.log(max_due_date_input.value);
-  console.log(release_date_input.value);
+  console.log(release_date_left_input.value);
   console.log(s_date_left_input.value);
+  console.log(course_name);
 })
 
 //drop down for suggestions
@@ -130,24 +131,39 @@ list_item3.appendChild(list_item3_text);
 drop_down_content.appendChild(list_item3);
 button.className = BUTTON_CLASS;
 
+//course name input
+// var course_name = document.createElement("div");
+// var course_name_title = document.createElement("p");
+// var course_name_title_text = document.createTextNode("Enter your course name");
+// course_name_title.appendChild(course_name_title_text);
+// course_name_title.className = HEADING_CLASS;
+// var course_name_input = document.createElement("input");
+// course_name_input.className = "input";
+// course_name_input.type = "text";
+// course_name.appendChild(course_name_title);
+// course_name.appendChild(course_name_input);
+
+var course_name;
 
 let observer = new MutationObserver((mutations) => {
   mutations.forEach((mutation) => {
     if (!mutation.addedNodes) return;
     observer.disconnect();
     for (let i = 0; i < mutation.addedNodes.length; i++) {
-      // do things to your newly added nodes here
       let node = mutation.addedNodes[i];
+      if (node.className == 'tNGpbb uTUgB YVvGBb') {
+        course_name = node.textContent;
+      }
       if (node.className == HEADING_CLASS && node.childNodes[0].data == "Due") {
         head = node;
         setTimeout(() => {
           let parent = node.parentNode;
+          //parent.insertBefore(course_name, node);
           parent.insertBefore(duration_div, node);
           parent.insertBefore(max_due_date, node);
           parent.insertBefore(release_date_left, node);
-          //parent.insertBefore(s_date_left, node);
-          parent.insertBefore(drop_down, node);
           parent.insertBefore(schedule_button, node);
+          parent.insertBefore(drop_down, node);
         }, 300);
       }
     }
