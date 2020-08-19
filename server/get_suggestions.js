@@ -11,7 +11,13 @@ function suggestDueDate(courseName, duration, minDueDate, maxDueDate, students, 
     fetch_events.getAllEvents(minDueDate, (allCourseWork) => {
         var commonStudents = {};
         for(var i in students) {
-            if(!(courseName in students[i])) continue;
+            var studentInCourse = false;
+            for(var j in students[i]) {
+                if(courseName == students[i][j]) {
+                    studentInCourse = true;
+                }
+            }
+            if(!studentInCourse) continue;
             for(var j = 0; j < students[i].length; ++ j) {
                 if(commonStudents[students[i][j]] == null) {
                     commonStudents[students[i][j]] = 0;
@@ -59,7 +65,7 @@ function calculateScore(start_date, end_date, allCourseWork, commonStudents) {
 	var reason = [];
 	for(var i = 0; i < allCourseWork.length; ++ i) {
 		var courseWork = allCourseWork[i];
-        if(commonStudents[courseWork] == null) continue;
+        if(commonStudents[courseWork.course_name] == null) continue;
 		score += commonStudents[courseWork.course_name] * fractionalOverlap(start_date, end_date, courseWork.start_date, courseWork.end_date);
 		if(fractionalOverlap(start_date, end_date, courseWork.start_date, courseWork.end_date) != 0) {
 			reason.push(courseWork);

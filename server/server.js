@@ -16,7 +16,7 @@ maxDueDate : YYYY-MM-DDTHH:mm:ss.sssZ
 
 function handleRequest(req, res) {
     try {
-        params = req.url.split("/");
+        params = decodeURI(req.url).split("/");
         console.log(params);
         if(params.length < 6) {
             throw("insufficient parameters");
@@ -46,10 +46,24 @@ function handleRequest(req, res) {
             if(err) {
                 console.log(err);
                 res.writeHead(200, {"Content-Type": "text/plain"});
-                res.write("Invalid Request: college name is wrong\n");
+                res.write(`Invalid Request: college ${collegeName} doesn't exist in our database\n`);
                 res.end();
             } else {
                 students = JSON.parse(string);
+
+                var isCourse = false;
+                for(var i in students) {
+                    for(var j in students[i]) {
+                        if(courseName == students[i][j]) isCourse = true;
+                    }
+                }
+
+                if(!isCourse) {
+                    res.writeHead(200, {"Content-Type": "text/plain"});
+                    res.write(`course ${courseName} doesn't exist in college ${collegeName}`);
+                    res.end();
+                    return;
+                }
 
                 get_suggestions.suggestDueDate(courseName, duration, minDueDate, maxDueDate, students, (suggestions) => {
                     res.writeHead(200, {"Content-Type": "text/plain"});
