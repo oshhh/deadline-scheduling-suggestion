@@ -55,6 +55,7 @@ function getStudentSchedule(courseName, duration, students, callback) {
 
 function getCommonStudents(students, courseName) {
 	var commonStudents = {};
+	var total = 0;
 	for(var i in students) {
 		var studentInCourse = false;
 		for(var j in students[i]) {
@@ -63,12 +64,16 @@ function getCommonStudents(students, courseName) {
 		    }
 		}
 		if(!studentInCourse) continue;
+		total ++;
 		for(var j = 0; j < students[i].length; ++ j) {
 		    if(commonStudents[students[i][j]] == null) {
 		        commonStudents[students[i][j]] = 0;
 		    }
 		    commonStudents[students[i][j]] ++;
 		}
+	}
+	for(student in commonStudents) {
+		commonStudents[student] /= total;
 	}
 	return commonStudents;
 }
