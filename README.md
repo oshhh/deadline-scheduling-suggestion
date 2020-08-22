@@ -1,15 +1,15 @@
 # Deadline Scheduling Suggestion
 
 This project aims to create:
-1. A server that answers the following kinds of queries:
-a. when given the college name, course name, duration of assignment, minimum and maximum due dates, suggestions the best due date for the assignment of that course, considering what other assignments the students of this course have. 
-b. when given the college name, course name returns the score (avg number of assignments per student in the next 7 days) and assignments that the students have in the current week. 
-2. A chrome extension for backpack and classroom that adds to these platforms the functionality of getting suggestions of release date and due date of an assignment/deadline.
-The project consists of 2 parts:
-## Server
+1. A server that answers the following kinds of queries:    
+ 1.1. when given the college name, course name, duration of assignment, minimum and maximum due dates, suggestions the best due date for the assignment of that course, considering what other assignments the students of this course have.     
+ 1.2. when given the college name, course name returns the score (avg number of assignments per student in the next 7 days) and assignments that the students have in the current week.     
+2. A chrome extension for backpack and classroom that adds to these platforms the functionality of getting suggestions of release date and due date of an assignment/deadline.     
+
+## 1  Server
 hosted on heroku: `https://deadline-scheduling-suggestion.herokuapp.com/`    
 
-### Get Suggestions
+### 1.1  Get Suggestions
 
 #### HTTP Request Format
 `https://deadline-scheduling-suggestion.herokuapp.com/[college_name]/[course_name]/get_suggestions/[duration]/[min due date]/[max due date]` 
@@ -61,7 +61,7 @@ Example: if the professor wants the assignment's due date to be between `2020-08
 }
 ```
 
-### Student Schedule
+### 1.2  Student Schedule
 
 #### HTTP Request Format
 `https://deadline-scheduling-suggestion.herokuapp.com/[college_name]/[course_name]/student_schedule/week`
@@ -82,5 +82,5 @@ Example: if the professor wants the assignment's due date to be between `2020-08
 }
 ```
 
-## Chrome Extension
+## 2  Chrome Extension
 // will be added soon
