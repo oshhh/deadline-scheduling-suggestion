@@ -41,7 +41,7 @@ Example: if the professor wants the assignment's due date to be between `2020-08
 `https://deadline-scheduling-suggestion.herokuapp.com/[college_name]/[course_name]/student_schedule/week`
 
 #### Response
-`{score: .., reason: []}`
+`{score: .., reason: []}`          
 score: Signifies the average number of assignments each student of this course has.     
 reason: a list of assignments that the students have this week along with the release and due date of each.
 
