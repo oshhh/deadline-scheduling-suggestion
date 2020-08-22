@@ -8,7 +8,6 @@ b. when given the college name, course name returns the score (avg number of ass
 The project consists of 2 parts:
 ## Server: 
 hosted on heroku: `https://deadline-scheduling-suggestion.herokuapp.com/`    
-Takes in the college name, duration, minimum due date and maximum due date.
 
 ### Get Suggestions
 
