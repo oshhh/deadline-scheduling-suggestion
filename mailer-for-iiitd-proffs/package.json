@@ -1,0 +1,20 @@
+{
+  "name": "sendmail",
+  "version": "1.0.0",
+  "description": "Mail sender to notify professors about availability or non-availability of students for deadlines",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Soumyadeep Paul",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^3.1.5",
+    "express": "^4.17.1",
+    "nodemailer": "^6.4.11",
+    "nodemon": "^2.0.4"
+  },
+  "engines": {
+    "node": "12.16.1"
+  }
+}
