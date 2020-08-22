@@ -49,7 +49,6 @@ function getAccessToken(oAuth2Client, callback) {
 			if (err) return console.error('Error retrieving access token', err);
 			oAuth2Client.setCredentials(token);
 			// Store the token to disk for later program executions
-			process.env['TOKEN'] = JSON.stringify(token);
 			console.log(token);
 			callback(oAuth2Client);
 		});

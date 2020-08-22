@@ -9,27 +9,12 @@ var fs = require('fs');
 */
 function suggestDueDate(courseName, duration, minDueDate, maxDueDate, students, callback) {
     fetch_events.getAllEvents(minDueDate, (allCourseWork) => {
-        var commonStudents = {};
-        for(var i in students) {
-            var studentInCourse = false;
-            for(var j in students[i]) {
-                if(courseName == students[i][j]) {
-                    studentInCourse = true;
-                }
-            }
-            if(!studentInCourse) continue;
-            for(var j = 0; j < students[i].length; ++ j) {
-                if(commonStudents[students[i][j]] == null) {
-                    commonStudents[students[i][j]] = 0;
-                }
-                commonStudents[students[i][j]] ++;
-            }
-        }
+        var commonStudents = getCommonStudents(students, courseName)
 
         // for each date call calculateScore and order suggestions score 
         suggestion = new Date(minDueDate);
         lastDate = new Date(maxDueDate);
-        lastDate.setDate(lastDate.getDate() - duration.date);
+        lastDate.setDate(lastDate.getDate() - duration.days);
         lastDate.setHours(lastDate.getHours() - duration.hours);
         lastDate.setMinutes(lastDate.getMinutes() - duration.minutes);
 
@@ -38,7 +23,7 @@ function suggestDueDate(courseName, duration, minDueDate, maxDueDate, students, 
         while(suggestion <= lastDate) {
             var start_date = new Date(suggestion);
             var end_date = new Date(suggestion);
-            end_date.setDate(end_date.getDate() + duration.date);
+            end_date.setDate(end_date.getDate() + duration.days);
             end_date.setHours(end_date.getHours() + duration.hours);
             end_date.setMinutes(end_date.getMinutes() + duration.minutes);
             suggestions.push({
@@ -52,6 +37,42 @@ function suggestDueDate(courseName, duration, minDueDate, maxDueDate, students, 
         callback(suggestions);
     });
 }
+
+function getStudentSchedule(courseName, duration, students, callback) {
+    var start_date = new Date();
+    var end_date = new Date();
+    end_date.setDate(end_date.getDate() + duration.days);
+    end_date.setHours(end_date.getHours() + duration.hours);
+    end_date.setMinutes(end_date.getMinutes() + duration.minutes);
+
+    var commonStudents = getCommonStudents(students, courseName);
+
+    fetch_events.getAllEvents(start_date, (allCourseWork) => {
+    	var score = calculateScore(start_date, end_date, allCourseWork, commonStudents);
+    	callback(score);
+    });
+}
+
+function getCommonStudents(students, courseName) {
+	var commonStudents = {};
+	for(var i in students) {
+		var studentInCourse = false;
+		for(var j in students[i]) {
+		    if(courseName == students[i][j]) {
+		        studentInCourse = true;
+		    }
+		}
+		if(!studentInCourse) continue;
+		for(var j = 0; j < students[i].length; ++ j) {
+		    if(commonStudents[students[i][j]] == null) {
+		        commonStudents[students[i][j]] = 0;
+		    }
+		    commonStudents[students[i][j]] ++;
+		}
+	}
+	return commonStudents;
+}
+
 /*
 	~~ Parameters ~~
 	start_date: datatype - Date
@@ -91,5 +112,6 @@ function fractionalOverlap(c1_startDate, c1_endDate, c2_startDate, c2_endDate) {
 
 
 module.exports = {
-  suggestDueDate: suggestDueDate
+  suggestDueDate: suggestDueDate,
+  getStudentSchedule: getStudentSchedule
 };
