@@ -4,16 +4,20 @@
   "description": "application that suggests deadline due date",
   "main": "app.js",
   "scripts": {
-  "start": "node server.js"
-},
+    "start": "node server.js"
+  },
   "repository": {
-  "type": "git",
-  "url": "https://github.com/oshhh/deadline-scheduling-suggestion"
-},
+    "type": "git",
+    "url": "https://github.com/oshhh/deadline-scheduling-suggestion"
+  },
   "author": "",
   "license": "ISC",
   "bugs": {
-  "url": ""
-},
+    "url": ""
+  },
+  "dependencies": {
+    "googleapis": "^39",
+    "dotenv": "*"
+  },
   "homepage": ""
 }
