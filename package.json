@@ -4,7 +4,7 @@
   "description": "application that suggests deadline due date",
   "main": "app.js",
   "scripts": {
-  "start": "cd server && node server.js"
+  "start": "node server.js"
 },
   "repository": {
   "type": "git",
