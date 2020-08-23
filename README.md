@@ -3,8 +3,8 @@
 This API is a part of a bigger project that aims to create:
 1. An API that answers the following kinds of queries:    
  1.1. when given the college name, course name, duration of assignment, minimum and maximum due dates, suggestions the best due date for the assignment of that course, considering what other assignments the students of this course have.     
- 1.2. when given the college name, course name returns the score (avg number of assignments per student in the next 7 days) and assignments that the students have in the current week. ([Repository](https://github.com/oshhh/google-classroom-extension))     
-2. A chrome extension for classroom that adds to these platforms the functionality of getting suggestions of release date and due date of an assignment/deadline.  
+ 1.2. when given the college name, course name returns the score (avg number of assignments per student in the next 7 days) and assignments that the students have in the current week.  
+2. A chrome extension for classroom that adds to these platforms the functionality of getting suggestions of release date and due date of an assignment/deadline. ([Repository](https://github.com/oshhh/google-classroom-extension))      
 3. A mailer to send regular (weekly) mails to profs about how free/busy the students are in the coming week. ([Repository](https://github.com/oshhh/weekly-mailer))
 
 hosted on heroku: `https://deadline-scheduling-suggestion.herokuapp.com/`    
