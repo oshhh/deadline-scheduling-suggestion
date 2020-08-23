@@ -9,7 +9,7 @@ This API is a part of a bigger project that aims to create:
 
 hosted on heroku: `https://deadline-scheduling-suggestion.herokuapp.com/`    
 
-## 1  Get Suggestions
+## 1   Get Suggestions
 
 ### HTTP Request Format
 `https://deadline-scheduling-suggestion.herokuapp.com/[college_name]/[course_name]/get_suggestions/[duration]/[min due date]/[max due date]` 
@@ -61,7 +61,7 @@ Example: if the professor wants the assignment's due date to be between `2020-08
 }
 ```
 
-## 1  Student Schedule
+## 2   Student Schedule
 
 ### HTTP Request Format
 `https://deadline-scheduling-suggestion.herokuapp.com/[college_name]/[course_name]/student_schedule/week`
