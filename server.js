@@ -15,6 +15,7 @@ maxDueDate : YYYY-MM-DDTHH:mm:ss.sssZ
 */
 
 function handleRequest(req, res) {
+	res.setHeader('Access-Control-Allow-Origin', '*');
     try {
         params = decodeURI(req.url).split(`/`);
         console.log(params);
@@ -120,10 +121,6 @@ function handleRequest(req, res) {
 
 var server = http.createServer(handleRequest);
 
-server.use((req, res, next) => {
-	res.setHeader('Access-Control-Allow-Origin', '*');
-	next();
-});
 
 server.listen(port);
 
