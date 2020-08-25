@@ -15,7 +15,9 @@ maxDueDate : YYYY-MM-DDTHH:mm:ss.sssZ
 */
 
 function handleRequest(req, res) {
+	// to avoid CORS error
 	res.setHeader('Access-Control-Allow-Origin', '*');
+
     try {
         params = decodeURI(req.url).split(`/`);
         console.log(params);
@@ -45,7 +47,6 @@ function handleRequest(req, res) {
         				res.write(JSON.stringify(schedule));
         				res.end();
 					});
-
         		});
         	} else {
         		throw(`only valid value of 3rd parameter is "week"`);
@@ -97,19 +98,15 @@ function handleRequest(req, res) {
 
 				get_suggestions.suggestDueDate(courseName, duration, minDueDate, maxDueDate, students, (suggestions) => {
 				    res.writeHead(200, {"Content-Type": `text/plain`});
-				    res.write(JSON.stringify({suggestions: suggestions}));
+				    res.write(JSON.stringify({suggestions: suggestions, flexi_suggestions: []}));
 				    res.end();
-				});
-
-		        
+				}); 
 		    });
-
 		}
 
         else {
             throw(`unrecognised request ${params[3]}`);
         }
-
     }
     catch(err) {
         console.log(err);
