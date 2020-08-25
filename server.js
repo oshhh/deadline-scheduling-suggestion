@@ -120,6 +120,10 @@ function handleRequest(req, res) {
 
 var server = http.createServer(handleRequest);
 
+server.listen((req, res, next) => {
+	res.setHeader('Access-Control-Allow-Origin', '*');
+});
+
 server.listen(port);
 
 console.log(`Node.js web server at port 5000 is running..`)
