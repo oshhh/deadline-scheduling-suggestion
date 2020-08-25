@@ -96,10 +96,11 @@ function handleRequest(req, res) {
 				    return;
 				}
 
+
 				get_suggestions.suggestDueDate(courseName, duration, minDueDate, maxDueDate, students, (suggestions) => {
-				    res.writeHead(200, {"Content-Type": `text/plain`});
-				    res.write(JSON.stringify({suggestions: suggestions, flexi_suggestions: []}));
-				    res.end();
+					res.writeHead(200, {"Content-Type": `text/plain`});
+					res.write(JSON.stringify(suggestions));
+					res.end();
 				}); 
 		    });
 		}

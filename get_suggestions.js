@@ -11,15 +11,13 @@ function suggestDueDate(courseName, duration, minDueDate, maxDueDate, students, 
     fetch_events.getAllEvents(minDueDate, (allCourseWork) => {
         var commonStudents = getCommonStudents(students, courseName)
 
-        // for each date call calculateScore and order suggestions score 
+        var suggestions = [];
+
         suggestion = new Date(minDueDate);
         lastDate = new Date(maxDueDate);
         lastDate.setDate(lastDate.getDate() - duration.days);
         lastDate.setHours(lastDate.getHours() - duration.hours);
         lastDate.setMinutes(lastDate.getMinutes() - duration.minutes);
-
-        var suggestions = [];
-
         while(suggestion <= lastDate) {
             var start_date = new Date(suggestion);
             var end_date = new Date(suggestion);
@@ -29,12 +27,58 @@ function suggestDueDate(courseName, duration, minDueDate, maxDueDate, students, 
             suggestions.push({
                 start_date: start_date,
                 end_date: end_date,
-                clash: calculateScore(start_date, end_date, allCourseWork, commonStudents)
+                clash: calculateScore(start_date, end_date, allCourseWork, commonStudents),
             });
             suggestion.setDate(suggestion.getDate() + 1);
         }
         suggestions.sort((a, b) => {return a.clash.score - b.clash.score;});
-        callback(suggestions);
+
+        var flexi_suggestions = [];
+        if(duration.days > 0) {
+        	// one day more than allowed duration
+	        duration.days ++;
+	        suggestion = new Date(minDueDate);
+	        lastDate = new Date(maxDueDate);
+	        lastDate.setDate(lastDate.getDate() - duration.days);
+	        lastDate.setHours(lastDate.getHours() - duration.hours);
+	        lastDate.setMinutes(lastDate.getMinutes() - duration.minutes);
+	        while(suggestion <= lastDate) {
+	            var start_date = new Date(suggestion);
+	            var end_date = new Date(suggestion);
+	            end_date.setDate(end_date.getDate() + duration.days);
+	            end_date.setHours(end_date.getHours() + duration.hours);
+	            end_date.setMinutes(end_date.getMinutes() + duration.minutes);
+	            flexi_suggestions.push({
+	                start_date: start_date,
+	                end_date: end_date,
+	                clash: calculateScore(start_date, end_date, allCourseWork, commonStudents, duration.days/(duration.days - 1)),
+	            });
+	            suggestion.setDate(suggestion.getDate() + 1);
+	        }
+	        // two days more than allowed duration
+	        duration.days ++;
+	        suggestion = new Date(minDueDate);
+	        lastDate = new Date(maxDueDate);
+	        lastDate.setDate(lastDate.getDate() - duration.days);
+	        lastDate.setHours(lastDate.getHours() - duration.hours);
+	        lastDate.setMinutes(lastDate.getMinutes() - duration.minutes);
+	        while(suggestion <= lastDate) {
+	            var start_date = new Date(suggestion);
+	            var end_date = new Date(suggestion);
+	            end_date.setDate(end_date.getDate() + duration.days);
+	            end_date.setHours(end_date.getHours() + duration.hours);
+	            end_date.setMinutes(end_date.getMinutes() + duration.minutes);
+	            flexi_suggestions.push({
+	                start_date: start_date,
+	                end_date: end_date,
+	                clash: calculateScore(start_date, end_date, allCourseWork, commonStudents, duration.days/(duration.days - 2)),
+	            });
+	            suggestion.setDate(suggestion.getDate() + 1);
+	        }
+	        flexi_suggestions.sort((a, b) => {return a.clash.score - b.clash.score;});
+	    }
+
+        callback({suggestions: suggestions, flexi_suggestions: flexi_suggestions});
     });
 }
 
@@ -86,7 +130,7 @@ function getCommonStudents(students, courseName) {
 	commonStudents: datatype - JSON, format - {courseName: studentCount}
 */
 
-function calculateScore(start_date, end_date, allCourseWork, commonStudents) {
+function calculateScore(start_date, end_date, allCourseWork, commonStudents, flexi_factor = 1) {
 	var score = 0;
 	var reason = [];
 	for(var i = 0; i < allCourseWork.length; ++ i) {
@@ -97,7 +141,8 @@ function calculateScore(start_date, end_date, allCourseWork, commonStudents) {
 			reason.push(courseWork);
 		}
 	}
-	return {score: score, reason: reason};
+	console.log(flexi_factor);
+	return {score: score/flexi_factor, reason: reason};
 }
 
 function fractionalOverlap(c1_startDate, c1_endDate, c2_startDate, c2_endDate) {
