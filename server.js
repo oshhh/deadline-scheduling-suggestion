@@ -122,6 +122,7 @@ var server = http.createServer(handleRequest);
 
 server.use((req, res, next) => {
 	res.setHeader('Access-Control-Allow-Origin', '*');
+	next();
 });
 
 server.listen(port);
