@@ -120,7 +120,7 @@ function handleRequest(req, res) {
 
 var server = http.createServer(handleRequest);
 
-server.listen((req, res, next) => {
+server.use((req, res, next) => {
 	res.setHeader('Access-Control-Allow-Origin', '*');
 });
 
