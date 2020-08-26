@@ -138,10 +138,13 @@ function calculateScore(start_date, end_date, allCourseWork, commonStudents, fle
         if(commonStudents[courseWork.course_name] == null) continue;
 		score += commonStudents[courseWork.course_name] * fractionalOverlap(start_date, end_date, courseWork.start_date, courseWork.end_date);
 		if(fractionalOverlap(start_date, end_date, courseWork.start_date, courseWork.end_date) != 0) {
-			reason.push(courseWork);
+			reason.push({
+				courseWork: courseWork,
+				fraction_of_students: commonStudents[courseWork.course_name],
+				fraction_of_overlap: fractionalOverlap(start_date, end_date, courseWork.start_date, courseWork.end_date),
+			});
 		}
 	}
-	console.log(flexi_factor);
 	return {score: score/flexi_factor, reason: reason};
 }
 

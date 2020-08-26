@@ -47,11 +47,15 @@ Example: if the professor wants the assignment's due date to be between `2020-08
         score: type - float, // avg number of assignments each student of this course has in this duration
         reason: [
           {
-            course_name: type- string, 
-            coursework_name: type- string,
-            start_date: type- date,
-            end_date: type- date,
-          }, // assignment
+            courseWork: {
+              course_name: type- string, 
+              coursework_name: type- string,
+              start_date: type- date,
+              end_date: type- date,
+            }, // assignment
+            fraction_of_students: type - float,
+            fraction_of_overlap: type - float
+          }
           ... 
         ]// list of assignments
       }
@@ -72,11 +76,15 @@ Example: if the professor wants the assignment's due date to be between `2020-08
   score: type - float, // avg number of assignments each student of this course has in this duration (week)
   reason: [
     {
-      course_name: type- string, 
-      coursework_name: type- string,
-      start_date: type- date,
-      end_date: type- date,
-    }, // assignment
+      courseWork: {
+        course_name: type- string, 
+        coursework_name: type- string,
+        start_date: type- date,
+        end_date: type- date,
+      }, // assignment
+      fraction_of_students: type - float,
+      fraction_of_overlap: type - float
+    }
     ... 
   ]// list of assignments
 }
