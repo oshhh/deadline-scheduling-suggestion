@@ -91,7 +91,11 @@ function getStudentSchedule(courseName, duration, students, callback) {
 
     var commonStudents = getCommonStudents(students, courseName);
 
+    console.log(commonStudents)
+    console.log(courseName)
+
     fetch_events.getAllEvents(start_date, (allCourseWork) => {
+    	console.log(allCourseWork)
     	var score = calculateScore(start_date, end_date, allCourseWork, commonStudents);
     	callback(score);
     });

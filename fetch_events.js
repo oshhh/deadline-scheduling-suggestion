@@ -3,6 +3,10 @@ const readline = require('readline');
 const {google} = require('googleapis');
 require('dotenv').config({path: __dirname + '/.env'});
 
+const CLASSROOM_CALENDAR_ID = 'iiitd.ac.in_classroom'
+const BACKPACK_CALENDAR_ID = 'backpack'
+const EVENTS = 'iiitd_events'
+
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/calendar.readonly'];
 // The file token.json stores the user's access and refresh tokens, and is
@@ -48,6 +52,7 @@ function getAccessToken(oAuth2Client, callback) {
 			if (err) return console.error('Error retrieving access token', err);
 			oAuth2Client.setCredentials(token);
 			// Store the token to disk for later program executions
+      console.log(token)
 			callback(oAuth2Client);
 		});
 	});
@@ -89,13 +94,14 @@ function getAllEvents(start, callback) {
     listCalendars(auth, (auth, calendars) => {
       var calendar_count = 0;
       calendars.forEach((calendar) => {
-        if(calendar.id.substring(0, 9) == "classroom" || calendar.id.substring(0, 8) == "backpack" || calendar.id.substring(0, 12) == "iiitd_events") {
+        console.log(calendar.id)
+        if(calendar.id.substring(0, CLASSROOM_CALENDAR_ID.length) == CLASSROOM_CALENDAR_ID || calendar.id.substring(0, BACKPACK_CALENDAR_ID.length) == BACKPACK_CALENDAR_ID || calendar.id.substring(0, EVENTS.length) == EVENTS) {
           calendar_count ++;
         }          
       });
       var assignments = [];
       calendars.forEach((calendar) => {
-        if(calendar.id.substring(0, 9) == "classroom" || calendar.id.substring(0, 8) == "backpack" || calendar.id.substring(0, 12) == "iiitd_events") {
+        if(calendar.id.substring(0, CLASSROOM_CALENDAR_ID.length) == CLASSROOM_CALENDAR_ID || calendar.id.substring(0, BACKPACK_CALENDAR_ID.length) == BACKPACK_CALENDAR_ID || calendar.id.substring(0, EVENTS.length) == EVENTS) {
           listEvents(auth, calendar.id, start, (auth, events) => {
             calendar_count --;
             events.forEach((event) => {
