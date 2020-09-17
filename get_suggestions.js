@@ -91,11 +91,7 @@ function getStudentSchedule(courseName, duration, students, callback) {
 
     var commonStudents = getCommonStudents(students, courseName);
 
-    console.log(commonStudents)
-    console.log(courseName)
-
     fetch_events.getAllEvents(start_date, (allCourseWork) => {
-    	console.log(allCourseWork)
     	var score = calculateScore(start_date, end_date, allCourseWork, commonStudents);
     	callback(score);
     });
@@ -153,7 +149,6 @@ function calculateScore(start_date, end_date, allCourseWork, commonStudents, fle
 }
 
 function fractionalOverlap(c1_startDate, c1_endDate, c2_startDate, c2_endDate) {
-	// console.log(`${c1_startDate} ${c1_endDate} ${c2_startDate} ${c2_endDate}`);
 	if(c1_startDate >= c2_endDate || c2_startDate > c1_endDate) return 0;
 	if(c1_endDate >= c2_endDate && c1_startDate <= c2_endDate) {
 		return 1;
@@ -161,7 +156,7 @@ function fractionalOverlap(c1_startDate, c1_endDate, c2_startDate, c2_endDate) {
 	if(c1_startDate < c2_startDate) {
 		return (c1_endDate - c2_startDate)/(c2_endDate - c2_startDate);
 	} else {
-		return (c2_endDate - c1_startDate)/(c2_endDate - c1_startDate);
+		return (c2_endDate - c1_startDate)/(c2_endDate - c2_startDate);
 	}
 }
 

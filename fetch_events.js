@@ -94,7 +94,6 @@ function getAllEvents(start, callback) {
     listCalendars(auth, (auth, calendars) => {
       var calendar_count = 0;
       calendars.forEach((calendar) => {
-        console.log(calendar.id)
         if(calendar.id.substring(0, CLASSROOM_CALENDAR_ID.length) == CLASSROOM_CALENDAR_ID || calendar.id.substring(0, BACKPACK_CALENDAR_ID.length) == BACKPACK_CALENDAR_ID || calendar.id.substring(0, EVENTS.length) == EVENTS) {
           calendar_count ++;
         }          
