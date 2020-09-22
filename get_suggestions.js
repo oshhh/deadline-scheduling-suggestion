@@ -141,7 +141,7 @@ function calculateScore(start_date, end_date, allCourseWork, commonStudents, fle
 			reason.push({
 				courseWork: courseWork,
 				fraction_of_students: commonStudents[courseWork.course_name],
-				fraction_of_overlap: fractionalOverlap(start_date, end_date, courseWork.start_date, courseWork.end_date),
+				fraction_of_overlap: fractionalOverlap(start_date, end_date, max(courseWork.start_date, start_date), courseWork.end_date),
 			});
 		}
 	}
