@@ -140,8 +140,8 @@ function calculateScore(start_date, end_date, allCourseWork, commonStudents, fle
 		if(fractionalOverlap(start_date, end_date, courseWork.start_date, courseWork.end_date) != 0) {
 			reason.push({
 				courseWork: courseWork,
-				fraction_of_students: commonStudents[courseWork.course_name],
-				fraction_of_overlap: fractionalOverlap(start_date, end_date, courseWork.start_date, courseWork.end_date),
+				fraction_of_students: commonStudents[courseWork.course_name]
+				fraction_of_overlap: fractionalOverlap(start_date, end_date, max(courseWork.start_date), courseWork.end_date),
 			});
 		}
 	}
@@ -150,7 +150,7 @@ function calculateScore(start_date, end_date, allCourseWork, commonStudents, fle
 
 function fractionalOverlap(c1_startDate, c1_endDate, c2_startDate, c2_endDate) {
 	if(c1_startDate >= c2_endDate || c2_startDate > c1_endDate) return 0;
-	if(c1_endDate >= c2_endDate && c1_startDate <= c2_endDate) {
+	if(c1_endDate >= c2_endDate && c1_startDate <= c2_startDate) {
 		return 1;
 	}
 	if(c1_startDate < c2_startDate) {
