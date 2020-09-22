@@ -140,7 +140,7 @@ function calculateScore(start_date, end_date, allCourseWork, commonStudents, fle
 		if(fractionalOverlap(start_date, end_date, courseWork.start_date, courseWork.end_date) != 0) {
 			reason.push({
 				courseWork: courseWork,
-				fraction_of_students: commonStudents[courseWork.course_name]
+				fraction_of_students: commonStudents[courseWork.course_name],
 				fraction_of_overlap: fractionalOverlap(start_date, end_date, courseWork.start_date, courseWork.end_date),
 			});
 		}
