@@ -135,7 +135,7 @@ function insertEvent(event_name, event_start_date, event_end_date) {
       start: event_start_date,
       description: event_name
     }, (auth) => {})
-  }
+  })
 }
 
 
