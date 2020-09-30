@@ -27,11 +27,10 @@ function handleRequest(req, res) {
         	throw("insufficient parameters");
         }
 
-		var collegeName = params[1];
-		var courseName = params[2];
+		var collegeName = params[1];		
 
-        if(params[3] == `student_schedule`) {
-
+        if(params[2] == `student_schedule`) {
+        	var courseName = params[3];
         	if(params[4] == `week`) {
         		var duration = {days: 7, hours: 0, minutes: 0};
         		fs.readFile(`${collegeName}_students.json`, `utf8`, (err, string) => {
@@ -54,7 +53,8 @@ function handleRequest(req, res) {
         	}
         } 
 
-        else if(params[3] == `get_suggestions`) {
+        else if(params[2] == `get_suggestions`) {
+        	var courseName = params[3];
 		    var duration = params[4];
 		    var minDueDate = params[5];
 		    var maxDueDate = params[6];
@@ -106,10 +106,10 @@ function handleRequest(req, res) {
 		    });
 		}
 
-		else if(params[3] == `inform_about_event`) {
-			event_name = params[4]
-			event_start_date = new Date(params[5])
-			event_end_date = new Date(params[6])
+		else if(params[2] == `inform_about_event`) {
+			event_name = params[3]
+			event_start_date = new Date(params[4])
+			event_end_date = new Date(params[5])
 			if(isNaN(event_start_date)) {
 				throw(`Event start date not formatted correctly: ${event_start_date}`)
 			}
@@ -122,7 +122,7 @@ function handleRequest(req, res) {
 		}
 
         else {
-            throw(`unrecognised request ${params[3]}`);
+            throw(`unrecognised request ${params[2]}`);
         }
     }
     catch(err) {
