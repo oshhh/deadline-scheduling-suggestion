@@ -10,7 +10,7 @@ const EVENTS = 'iiitd_events'
 const STUDENT_CALENDAR = 'iiitdstudentcalendar@gmail.com'
 
 // If modifying these scopes, delete token.json.
-const SCOPES = ['https://www.googleapis.com/auth/calendar.readonly'];
+const SCOPES = ['https://www.googleapis.com/auth/calendar'];
 // The file token.json stores the user's access and refresh tokens, and is
 // created automatically when the authorization flow completes for the first
 // time.
@@ -124,6 +124,10 @@ function getAllEvents(start, callback) {
 }
 
 function insertEvent(event_name, event_start_date, event_end_date) {
+
+  console.log(event_start_date.toISOString())
+  console.log(event_end_date.toISOString())
+
   // Load client secrets from a local file.
   credentials_json = JSON.parse(process.env.GOOGLE_CREDENTIALS);
   // Authorize a client with credentials, then call the Google Calendar API.
@@ -131,10 +135,18 @@ function insertEvent(event_name, event_start_date, event_end_date) {
     const calendar = google.calendar({version: 'v3', auth});
     calendar.events.insert({
       calendarId: STUDENT_CALENDAR,
-      end: event_end_date,
-      start: event_start_date,
-      description: event_name
-    }, (auth) => {})
+      resource: {
+        end: {
+          dateTime: event_end_date.toISOString()
+        },
+        start: {
+          dateTime: event_start_date.toISOString()
+        },
+        summary: event_name
+      }
+    }, (err) => {
+      console.log(err)
+    })
   })
 }
 
