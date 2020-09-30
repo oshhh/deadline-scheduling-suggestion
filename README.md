@@ -2,17 +2,21 @@
 
 This API is a part of a bigger project that aims to create:
 1. An API that answers the following kinds of queries:    
- 1.1. when given the college name, course name, duration of assignment, minimum and maximum due dates, suggestions the best due date for the assignment of that course, considering what other assignments the students of this course have.     
- 1.2. when given the college name, course name returns the score (avg number of assignments per student in the next 7 days) and assignments that the students have in the current week.  
+ 1.1. **Get Suggestions:** when given the college name, course name, duration of assignment, minimum and maximum due dates, suggestions the best due date for the assignment of that course, considering what other assignments the students of this course have.     
+ 1.2. **Student Schedule:** when given the college name, course name returns the score (avg number of assignments per student in the next 7 days) and assignments that the students have in the current week.  
+ 1.3. **Inform about Events:** inform the API about other events that should be considered while scheduling the assignments besides assignments of other courses. For example, quizzes, college fests, etc.
 2. A chrome extension for classroom that adds to these platforms the functionality of getting suggestions of release date and due date of an assignment/deadline. ([Repository](https://github.com/oshhh/google-classroom-extension))      
 3. A mailer to send regular (weekly) mails to profs about how free/busy the students are in the coming week. ([Repository](https://github.com/oshhh/weekly-mailer))
 
 hosted on heroku: `https://deadline-scheduling-suggestion.herokuapp.com/`    
 
+This API Supports the following features:
+1. 
+
 ## 1   Get Suggestions
 
 ### HTTP Request Format
-`https://deadline-scheduling-suggestion.herokuapp.com/[college_name]/[course_name]/get_suggestions/[duration]/[min due date]/[max due date]` 
+`https://deadline-scheduling-suggestion.herokuapp.com/[college_name]/get_suggestions/[course_name]/[duration]/[min due date]/[max due date]` 
 
 ### Parameters
 <ins>college_name</ins>    
@@ -68,7 +72,7 @@ Example: if the professor wants the assignment's due date to be between `2020-08
 ## 2   Student Schedule
 
 ### HTTP Request Format
-`https://deadline-scheduling-suggestion.herokuapp.com/[college_name]/[course_name]/student_schedule/week`
+`https://deadline-scheduling-suggestion.herokuapp.com/[college_name]/student_schedule/[course_name]/week`
 
 ### Response
 ```
@@ -89,3 +93,10 @@ Example: if the professor wants the assignment's due date to be between `2020-08
   ]// list of assignments
 }
 ```
+
+## 3   Inform about Event
+Inform the API to consider some event while scheduling deadlines. The start datetime and end datetime needs to be provided. Some examples of such events can be quizzes, fests, sports events, etc.
+
+### HTTP Request Format
+`https://deadline-scheduling-suggestion.herokuapp.com/[college_name]/inform_about_event/[event_name]/[event_start_datetime]/[event_end_datetime]`
+
