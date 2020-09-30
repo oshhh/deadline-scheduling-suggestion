@@ -3,7 +3,8 @@ const readline = require('readline');
 const {google} = require('googleapis');
 require('dotenv').config({path: __dirname + '/.env'});
 
-const CLASSROOM_CALENDAR_ID = 'iiitd.ac.in_classroom'
+// const CLASSROOM_CALENDAR_ID = 'iiitd.ac.in_classroom'
+const CLASSROOM_CALENDAR_ID = 'classroom'
 const BACKPACK_CALENDAR_ID = 'backpack'
 const EVENTS = 'iiitd_events'
 const STUDENT_CALENDAR = 'iiitdstudentcalendar@gmail.com'
