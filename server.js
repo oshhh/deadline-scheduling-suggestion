@@ -1,6 +1,7 @@
 var http = require(`http`); // 1 - Import Node.js core module
 var fs = require(`fs`);
 var get_suggestions = require(`./get_suggestions`)
+var calendar_helper = require(`./calendar_helper`)
 
 const port = process.env.PORT || 5000
 
@@ -105,6 +106,21 @@ function handleRequest(req, res) {
 		    });
 		}
 
+		else if(params[3] == `inform_about_event`) {
+			event_name = params[4]
+			event_start_date = new Date(params[5])
+			event_end_date = new Date(params[6])
+			if(isNaN(event_start_date)) {
+				throw(`Event start date not formatted correctly`)
+			}
+			if(isNaN(event_end_date)) {
+				throw(`Event end date not formatted correctly`)
+			}
+			calendar_helper.insertEvent(event_name, event_start_date, event_end_date)
+			res.writeHead(200, {"Content-Type": `text/plain`});
+			res.end();
+		}
+
         else {
             throw(`unrecognised request ${params[3]}`);
         }
@@ -114,7 +130,7 @@ function handleRequest(req, res) {
         res.writeHead(200, {"Content-Type": `text/plain`});
         res.write(`Invalid Request: ` + err.toString() + `\n`);
         res.end();
-    } 
+    }
 }
 
 var server = http.createServer(handleRequest);

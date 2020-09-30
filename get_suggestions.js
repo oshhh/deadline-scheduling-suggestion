@@ -1,4 +1,4 @@
-var fetch_events = require("./fetch_events.js");
+var calendar_helper = require("./calendar_helper.js");
 var fs = require('fs');
 
 /*
@@ -8,7 +8,7 @@ var fs = require('fs');
 	maxDueDate: datatype - Date
 */
 function suggestDueDate(courseName, duration, minDueDate, maxDueDate, students, callback) {
-    fetch_events.getAllEvents(minDueDate, (allCourseWork) => {
+    calendar_helper.getAllEvents(minDueDate, (allCourseWork) => {
         var commonStudents = getCommonStudents(students, courseName)
 
         var suggestions = [];
@@ -91,7 +91,7 @@ function getStudentSchedule(courseName, duration, students, callback) {
 
     var commonStudents = getCommonStudents(students, courseName);
 
-    fetch_events.getAllEvents(start_date, (allCourseWork) => {
+    calendar_helper.getAllEvents(start_date, (allCourseWork) => {
     	var score = calculateScore(start_date, end_date, allCourseWork, commonStudents);
     	callback(score);
     });

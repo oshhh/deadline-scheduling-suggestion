@@ -6,6 +6,7 @@ require('dotenv').config({path: __dirname + '/.env'});
 const CLASSROOM_CALENDAR_ID = 'iiitd.ac.in_classroom'
 const BACKPACK_CALENDAR_ID = 'backpack'
 const EVENTS = 'iiitd_events'
+const STUDENT_CALENDAR = 'iiitdstudentcalendar@gmail.com'
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/calendar.readonly'];
@@ -52,7 +53,7 @@ function getAccessToken(oAuth2Client, callback) {
 			if (err) return console.error('Error retrieving access token', err);
 			oAuth2Client.setCredentials(token);
 			// Store the token to disk for later program executions
-      console.log(token)
+      console.log(JSON.stringify(token))
 			callback(oAuth2Client);
 		});
 	});
@@ -121,6 +122,18 @@ function getAllEvents(start, callback) {
   });
 }
 
+function insertEvent(event_name, event_start_date, event_end_date) {
+  const calendar = google.calendar({version: 'v3', auth});
+  calendar.events.insert({
+    calendarId: STUDENT_CALENDAR,
+    end: event_end_date,
+    start: event_start_date,
+    description: event_name
+  }, (auth) => {})
+}
+
+
 module.exports = {
-  getAllEvents: getAllEvents
+  getAllEvents: getAllEvents,
+  insertEvent: insertEvent
 }
