@@ -89,7 +89,7 @@ function listEvents(auth, calendarId, start, callback) {
 }
 
 function getAllEvents(start, callback) {
-// Load client secrets from a local file.
+  // Load client secrets from a local file.
   credentials_json = JSON.parse(process.env.GOOGLE_CREDENTIALS);
   // Authorize a client with credentials, then call the Google Calendar API.
   authorize(credentials_json, (auth) => {
@@ -124,13 +124,18 @@ function getAllEvents(start, callback) {
 }
 
 function insertEvent(event_name, event_start_date, event_end_date) {
-  const calendar = google.calendar({version: 'v3', auth});
-  calendar.events.insert({
-    calendarId: STUDENT_CALENDAR,
-    end: event_end_date,
-    start: event_start_date,
-    description: event_name
-  }, (auth) => {})
+  // Load client secrets from a local file.
+  credentials_json = JSON.parse(process.env.GOOGLE_CREDENTIALS);
+  // Authorize a client with credentials, then call the Google Calendar API.
+  authorize(credentials_json, (auth) => {
+    const calendar = google.calendar({version: 'v3', auth});
+    calendar.events.insert({
+      calendarId: STUDENT_CALENDAR,
+      end: event_end_date,
+      start: event_start_date,
+      description: event_name
+    }, (auth) => {})
+  }
 }
 
 

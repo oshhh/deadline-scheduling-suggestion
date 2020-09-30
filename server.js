@@ -111,10 +111,10 @@ function handleRequest(req, res) {
 			event_start_date = new Date(params[5])
 			event_end_date = new Date(params[6])
 			if(isNaN(event_start_date)) {
-				throw(`Event start date not formatted correctly`)
+				throw(`Event start date not formatted correctly: ${event_start_date}`)
 			}
 			if(isNaN(event_end_date)) {
-				throw(`Event end date not formatted correctly`)
+				throw(`Event end date not formatted correctly: ${event_end_date}`)
 			}
 			calendar_helper.insertEvent(event_name, event_start_date, event_end_date)
 			res.writeHead(200, {"Content-Type": `text/plain`});
