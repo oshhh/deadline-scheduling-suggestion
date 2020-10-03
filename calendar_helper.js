@@ -123,7 +123,7 @@ function getAllEvents(start, callback) {
   });
 }
 
-function insertEvent(event_name, event_start_date, event_end_date) {
+function insertEvent(event_name, event_start_date, event_end_date, callback) {
 
   console.log(event_start_date.toISOString())
   console.log(event_end_date.toISOString())
@@ -145,7 +145,7 @@ function insertEvent(event_name, event_start_date, event_end_date) {
         summary: event_name
       }
     }, (err) => {
-      console.log(err)
+      callback(err)
     })
   })
 }

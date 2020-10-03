@@ -1,6 +1,6 @@
 var http = require(`http`); // 1 - Import Node.js core module
 var fs = require(`fs`);
-var get_suggestions = require(`./get_suggestions`)
+var helper = require(`./helper`)
 var calendar_helper = require(`./calendar_helper`)
 
 const port = process.env.PORT || 5000
@@ -15,7 +15,7 @@ minDueDate : YYYY-MM-DDTHH:mm:ss.sssZ
 maxDueDate : YYYY-MM-DDTHH:mm:ss.sssZ
 */
 
-function handleRequest(req, res) {
+async function handleRequest(req, res) {
 	// to avoid CORS error
 	res.setHeader('Access-Control-Allow-Origin', '*');
 
@@ -32,24 +32,18 @@ function handleRequest(req, res) {
         if(params[2] == `student_schedule`) {
         	var courseName = params[3];
         	if(params[4] == `week`) {
-        		var duration = {days: 7, hours: 0, minutes: 0};
-        		fs.readFile(`${collegeName}_students.json`, `utf8`, (err, string) => {
-        			if(err) {
-        				console.log(err);
-        				res.writeHead(200, {"Content-Type": `text/plain`});
-        				res.write(`Invalid Request: college ${collegeName} doesn't exist in our database\n`);
-        				res.end();
-        				return;
-        			}
-					var students = JSON.parse(string);
-					get_suggestions.getStudentSchedule(courseName, duration, students, (schedule) => {
+        		duration = {
+        			days: 7,
+        			hours: 0,
+        			minutes: 0
+        		}
+        		helper.getStudentSchedule(collegeName, courseName, duration, (schedule) => {
         				res.writeHead(200, {"Content-Type": `text/plain`});
         				res.write(JSON.stringify(schedule));
         				res.end();
-					});
-        		});
+				});
         	} else {
-        		throw(`only valid value of 3rd parameter is "week"`);
+        		throw(`only valid value of 4th parameter is "week"`);
         	}
         } 
 
@@ -73,52 +67,50 @@ function handleRequest(req, res) {
 		        throw(`Maximum Due Date formatted incorrectly`);
 		    }
 		    
-		    fs.readFile(`./${collegeName}_students.json`, `utf8`, (err, string) => {
-		        if(err) {
-		            console.log(err);
-		            res.writeHead(200, {"Content-Type": `text/plain`});
-		            res.write(`Invalid Request: college ${collegeName} doesn't exist in our database\n`);
-		            res.end();
-		            return;
-		        }
-				students = JSON.parse(string);
-
-				var isCourse = false;
-				for(var i in students) {
-				    for(var j in students[i]) {
-				        if(courseName == students[i][j]) isCourse = true;
-				    }
-				}
-
-				if(!isCourse) {
-				    res.writeHead(200, {"Content-Type": `text/plain`});
-				    res.write(`Invalid Request: course ${courseName} doesn't exist in college ${collegeName}`);
-				    res.end();
-				    return;
-				}
-
-
-				get_suggestions.suggestDueDate(courseName, duration, minDueDate, maxDueDate, students, (suggestions) => {
-					res.writeHead(200, {"Content-Type": `text/plain`});
-					res.write(JSON.stringify(suggestions));
-					res.end();
-				}); 
-		    });
+			helper.suggestDueDate(collegeName, courseName, duration, minDueDate, maxDueDate, (suggestions) => {
+				res.writeHead(200, {"Content-Type": `text/plain`});
+				res.write(JSON.stringify(suggestions));
+				res.end();
+			}); 
 		}
 
 		else if(params[2] == `inform_about_event`) {
-			event_name = params[3]
-			event_start_date = new Date(params[4])
-			event_end_date = new Date(params[5])
-			if(isNaN(event_start_date)) {
-				throw(`Event start date not formatted correctly: ${event_start_date}`)
+			eventName = params[3]
+			eventStartDate = new Date(params[4])
+			eventEndDate = new Date(params[5])
+			if(isNaN(eventStartDate)) {
+				throw(`Event start date not formatted correctly: ${eventStartDate}`)
 			}
-			if(isNaN(event_end_date)) {
-				throw(`Event end date not formatted correctly: ${event_end_date}`)
+			if(isNaN(eventEndDate)) {
+				throw(`Event end date not formatted correctly: ${eventEndDate}`)
 			}
-			calendar_helper.insertEvent(event_name, event_start_date, event_end_date)
-			res.writeHead(200, {"Content-Type": `text/plain`});
-			res.end();
+			helper.addEventToCalendar(eventName, eventStartDate, eventEndDate, (err) => {
+				res.write(err.toString())
+				res.writeHead(200, {"Content-Type": `text/plain`});
+				res.end();
+			})
+		}
+
+		else if(params[2] == `courses`) {
+			var courseName = params[3]
+			var query = params[4]
+			if(query == `isPresent`) {
+        		if(await helper.isCoursePresent(collegeName, courseName)) {
+        			res.write('Yes')
+        		} else {
+        			res.write('No')
+        		}
+        		res.writeHead(200, {"Content-Type": `text/plain`});
+				res.end();
+			} else if(query == `add_course`) {
+				professorName = params[5]
+				professorEmail = params[6]
+				students = params[7].split(',')
+				helper.addNewCourse(collegeName, courseName, professorName, professorEmail, students, () => {
+					res.writeHead(200, {"Content-Type": `text/plain`});
+					res.end();
+				})
+			}
 		}
 
         else {
