@@ -94,14 +94,12 @@ async function handleRequest(req, res) {
 		else if(params[2] == `courses`) {
 			var courseName = params[3]
 			var query = params[4]
-			if(query == `isPresent`) {
-        		if(await helper.isCoursePresent(collegeName, courseName)) {
-        			res.write('Yes')
-        		} else {
-        			res.write('No')
-        		}
-        		res.writeHead(200, {"Content-Type": `text/plain`});
-				res.end();
+			if(query == `is_present`) {
+				var isPresent = await helper.isCoursePresent(collegeName, courseName)
+				console.log(isPresent.toString())
+				res.writeHead(200, {"Content-Type": `text/plain`});
+    			res.write(isPresent.toString())
+				res.end();        		
 			} else if(query == `add_course`) {
 				professorName = params[5]
 				professorEmail = params[6]
@@ -116,11 +114,12 @@ async function handleRequest(req, res) {
         else {
             throw(`unrecognised request ${params[2]}`);
         }
+
     }
     catch(err) {
         console.log(err);
-        res.writeHead(200, {"Content-Type": `text/plain`});
         res.write(`Invalid Request: ` + err.toString() + `\n`);
+        res.writeHead(200, {"Content-Type": `text/plain`});
         res.end();
     }
 }

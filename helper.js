@@ -16,22 +16,6 @@ async function main() {
 
 main()
 
-async function getStudents(collegeName, callback) {
-	var college = await db.collection('colleges').doc(collegeName)
-	if(!(await college.get()).exists) {
-		throw(`Invalid Request: college ${collegeName} doesn't exist in our database\n`)
-	}
-	var students_snapshot = await college.collection('students').get()
-	students = {}
-	students_snapshot.forEach((doc) => {
-			students[doc.id] = []
-			for(i in doc.data().courses) {
-				students[doc.id].push(doc.data().courses[i].id)
-			}
-		})
-	callback(students)
-}
-
 /*
 	~~ Parameters ~~
 	collegeName: datatype - string
@@ -155,7 +139,7 @@ async function addEventToCalendar(eventName, eventStartDate, eventEndDate, callb
 	calendar_helper.insertEvent(eventName, eventStartDate, eventEndDate, callback)
 }
 
-async function isCoursePresent(collegeName, courseName, callback) {
+async function isCoursePresent(collegeName, courseName) {
 	var college = db.collection('colleges').doc(collegeName)
 	if(!(await college.get()).exists) {
 		throw(`Invalid Request: college ${collegeName} doesn't exist in our database\n`)
@@ -237,6 +221,23 @@ async function updateCourseStudents(collegeName, courseName, students, callback)
 	callback()
 }
 
+async function getStudents(collegeName, callback) {
+	var college = await db.collection('colleges').doc(collegeName)
+	if(!(await college.get()).exists) {
+		throw(`Invalid Request: college ${collegeName} doesn't exist in our database\n`)
+	}
+	var students_snapshot = await college.collection('students').get()
+	students = {}
+	students_snapshot.forEach((doc) => {
+			students[doc.id] = []
+			for(i in doc.data().courses) {
+				students[doc.id].push(doc.data().courses[i].id)
+			}
+		})
+	callback(students)
+}
+
+
 function getCommonStudents(students, courseName) {
 	var commonStudents = {};
 	var total = 0;
@@ -306,5 +307,8 @@ function fractionalOverlap(c1_startDate, c1_endDate, c2_startDate, c2_endDate) {
 
 module.exports = {
   suggestDueDate: suggestDueDate,
-  getStudentSchedule: getStudentSchedule
+  getStudentSchedule: getStudentSchedule,
+  addEventToCalendar: addEventToCalendar,
+  isCoursePresent: isCoursePresent,
+  addNewCourse: addNewCourse,
 };
