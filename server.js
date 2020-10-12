@@ -103,10 +103,13 @@ async function handleRequest(req, res) {
 			} else if(query == `add_course`) {
 				professorName = params[5]
 				professorEmail = params[6]
-				students = params[7].split(',')
-				helper.addNewCourse(collegeName, courseName, professorName, professorEmail, students, () => {
-					res.writeHead(200, {"Content-Type": `text/plain`});
-					res.end();
+				req.on('data', (data) => {
+					students = data.split(',')
+					helper.addNewCourse(collegeName, courseName, professorName, professorEmail, students, () => {
+						res.writeHead(200, {"Content-Type": `text/plain`});
+						res.end();
+					})
+
 				})
 			}
 		}
