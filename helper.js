@@ -12,6 +12,9 @@ async function main() {
 	});
 
 	db = admin.firestore()
+	getStudentSchedule('iiitd', 'Math I', {days: 7,hours: 0,minutes: 0}, (schedule) => {
+		console.log(schedule)
+	})
 }
 
 main()

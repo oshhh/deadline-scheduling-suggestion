@@ -3,11 +3,11 @@ const readline = require('readline');
 const {google} = require('googleapis');
 require('dotenv').config({path: __dirname + '/.env'});
 
-// const CLASSROOM_CALENDAR_ID = 'iiitd.ac.in_classroom'
-const CLASSROOM_CALENDAR_ID = 'classroom'
+const CLASSROOM_CALENDAR_ID = 'iiitd.ac.in_classroom'
+// const CLASSROOM_CALENDAR_ID = 'classroom'
 const BACKPACK_CALENDAR_ID = 'backpack'
 const EVENTS = 'iiitd_events'
-const STUDENT_CALENDAR = 'iiitdstudentcalendar@gmail.com'
+const STUDENT_CALENDAR = 'osheen18059@iiitd.ac.in'
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/calendar'];
@@ -103,7 +103,10 @@ function getAllEvents(start, callback) {
       var assignments = [];
       calendars.forEach((calendar) => {
         if(calendar.id.substring(0, CLASSROOM_CALENDAR_ID.length) == CLASSROOM_CALENDAR_ID || calendar.id.substring(0, BACKPACK_CALENDAR_ID.length) == BACKPACK_CALENDAR_ID || calendar.id.substring(0, EVENTS.length) == EVENTS) {
+          console.log(calendar.summary)
           listEvents(auth, calendar.id, start, (auth, events) => {
+            console.log(calendar.summary)
+            console.log(events)
             calendar_count --;
             events.forEach((event) => {
               assignments.push({
