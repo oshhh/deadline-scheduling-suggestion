@@ -37,7 +37,8 @@ async function suggestDueDate(collegeName, courseName, duration, minDueDate, max
 	getStudents(collegeName, (students) => {
 	    calendar_helper.getAllEvents(minDueDate, (allCourseWork) => {
 	        var commonStudents = getCommonStudents(students, courseName)
-
+	        console.log(commonStudents)
+	        console.log(allCourseWork)
 	        var suggestions = [];
 
 	        suggestion = new Date(minDueDate);

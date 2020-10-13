@@ -92,7 +92,8 @@ async function handleRequest(req, res) {
 		}
 
 		else if(params[2] == `courses`) {
-			var courseName = params[3]
+			var courseName = decodeURIComponent(params[3])
+			console.log(courseName)
 			var query = params[4]
 			if(query == `is_present`) {
 				var isPresent = await helper.isCoursePresent(collegeName, courseName)
