@@ -104,12 +104,13 @@ async function handleRequest(req, res) {
 				professorName = params[5]
 				professorEmail = params[6]
 				req.on('data', (data) => {
-					students = data.split(',')
-					helper.addNewCourse(collegeName, courseName, professorName, professorEmail, students, () => {
-						res.writeHead(200, {"Content-Type": `text/plain`});
-						res.end();
-					})
-
+					console.log(data.toString())
+					// students = data.body.split(',')
+					// console.log(students)
+					// helper.addNewCourse(collegeName, courseName, professorName, professorEmail, students, () => {
+					// 	res.writeHead(200, {"Content-Type": `text/plain`});
+					// 	res.end();
+					// })
 				})
 			}
 		}
