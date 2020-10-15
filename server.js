@@ -107,7 +107,6 @@ async function handleRequest(req, res) {
 				req.on('data', (data) => {
 					data = data.toString()
 					students = data.split(',')
-					console.log(students)
 					helper.addNewCourse(collegeName, courseName, professorName, professorEmail, students, () => {
 						console.log('done')
 					})

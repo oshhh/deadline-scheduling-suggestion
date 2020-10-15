@@ -154,19 +154,12 @@ async function isCoursePresent(collegeName, courseName) {
 }
 
 async function addNewCourse(collegeName, courseName, professorName, professorEmail, students, callback) {
-	if(await isCoursePresent(collegeName, courseName)) {
-		updateCourseStudents(collegeName, courseName, students, callback)
-		return
-	}
 	var userName = professorEmail.split('@')[0]
-	console.log(userName)
 	var professor = db.collection('colleges').doc(collegeName).collection('professors').doc(userName)
-	if(!(await professor.get()).exists) {
-		professor.set({
-			name: professorName,
-			email: professorEmail
-		})
-	}
+	await professor.set({
+		name: professorName,
+		email: professorEmail
+	})
 	await db.collection('colleges').doc(collegeName).collection('courses').doc(courseName).set({
 		name: courseName,
 		professor: professor
@@ -174,54 +167,18 @@ async function addNewCourse(collegeName, courseName, professorName, professorEma
 	var course = db.collection('colleges').doc(collegeName).collection('courses').doc(courseName)
 	for(i in students) {
 		student = students[i]
-		console.log(student)
+		console.log(`${courseName}: ${student}`)
 		var docref = db.collection('colleges').doc(collegeName).collection('students').doc(student)
 		var doc = await docref.get()
-		if(!doc.exists) {
-			docref.set({
-				courses: [course]
-			})
-		} else {
-			db.collection('colleges').doc(collegeName).collection('students').doc(doc.id).update({
-				courses: admin.firestore.FieldValue.arrayUnion(course)
-			})
-		}
-	}
-	callback()
-}
-
-async function updateCourseStudents(collegeName, courseName, students, callback) {
-	if(! await isCoursePresent(collegeName, courseName)) {
-		throw(`Course ${courseName} not present in college ${collegeName} according to our database`)
-	}
-	var course = db.collection('colleges').doc(collegeName).collection('courses').doc(courseName)
-	var oldStudents = await db.collection('colleges').doc(collegeName).collection('students').get()
-	oldStudents.forEach((doc) => {
-		inCourse = false
-		for(i in doc.data().courses) {
-			if(doc.data().courses[i].id == courseName) {
-				inCourse = true
-			}
-		}
-		if((students.includes(doc.id)) && ! inCourse) {
-			db.collection('colleges').doc(collegeName).collection('students').doc(doc.id).update({
-				courses: admin.firestore.FieldValue.arrayUnion(course)
-			})
-		} else if(!(students.includes(doc.id)) && inCourse) {
-			db.collection('colleges').doc(collegeName).collection('students').doc(doc.id).update({
-				courses: admin.firestore.FieldValue.arrayRemove(course)
-			})
-		}
-	})
-	for(i in students) {
-		var student = students[i]
-		var docref = db.collection('colleges').doc(collegeName).collection('students').doc(student)
-		var doc = await docref.get()
-		if(!doc.exists) {
-			docref.set({
-				courses: [course]
-			})
-		}
+		// if(!doc.exists) {
+		// 	docref.set({
+		// 		courses: [course]
+		// 	})
+		// } else {
+		db.collection('colleges').doc(collegeName).collection('students').doc(doc.id).set({
+			courses: admin.firestore.FieldValue.arrayUnion(course)
+		}, {merge: true})
+		// }
 	}
 	callback()
 }
