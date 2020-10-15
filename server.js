@@ -109,9 +109,9 @@ async function handleRequest(req, res) {
 					students = data.split(',')
 					console.log(students)
 					helper.addNewCourse(collegeName, courseName, professorName, professorEmail, students, () => {
-						res.writeHead(200, {"Content-Type": `text/plain`});
-						res.end();
+
 					})
+
 				})
 			}
 		}

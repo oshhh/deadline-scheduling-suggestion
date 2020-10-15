@@ -12,9 +12,9 @@ async function main() {
 	});
 
 	db = admin.firestore()
-	getStudentSchedule('iiitd', 'Math I', {days: 7,hours: 0,minutes: 0}, (schedule) => {
-		console.log(schedule)
-	})
+	// getStudentSchedule('iiitd', 'Math I', {days: 7,hours: 0,minutes: 0}, (schedule) => {
+	// 	console.log(schedule)
+	// })
 }
 
 main()
@@ -38,17 +38,18 @@ async function suggestDueDate(collegeName, courseName, duration, minDueDate, max
 	    calendar_helper.getAllEvents(minDueDate, (allCourseWork) => {
 	        var commonStudents = getCommonStudents(students, courseName)
 	        console.log(commonStudents)
-	        console.log(allCourseWork)
 	        var suggestions = [];
 
-	        suggestion = new Date(minDueDate);
-	        lastDate = new Date(maxDueDate);
+	        var suggestion = new Date(minDueDate);
+	        var lastDate = new Date(maxDueDate);
 	        lastDate.setDate(lastDate.getDate() - duration.days);
 	        lastDate.setHours(lastDate.getHours() - duration.hours);
 	        lastDate.setMinutes(lastDate.getMinutes() - duration.minutes);
 	        while(suggestion <= lastDate) {
 	            var start_date = new Date(suggestion);
 	            var end_date = new Date(suggestion);
+	            console.log(start_date)
+	            console.log(end_date)
 	            end_date.setDate(end_date.getDate() + duration.days);
 	            end_date.setHours(end_date.getHours() + duration.hours);
 	            end_date.setMinutes(end_date.getMinutes() + duration.minutes);
