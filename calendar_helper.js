@@ -109,6 +109,7 @@ function getAllEvents(start, callback) {
             console.log(events)
             calendar_count --;
             events.forEach((event) => {
+              if(event.summary.substring(0, 10) != 'Assignment') return
               assignments.push({
                 course_name: event.organizer.displayName,
                 coursework_name: event.summary,
