@@ -62,9 +62,12 @@ async function handleRequest(req, res) {
 		    if(isNaN(minDueDate)) {
 		        throw(`Minimum Due Date formatted incorrectly`)
 		    }
+		    console.log(maxDueDate)
 		    maxDueDate = new Date(maxDueDate);
+		    console.log(maxDueDate)
 		    if(isNaN(maxDueDate)) {
-		        throw(`Maximum Due Date formatted incorrectly`);
+			console.log(maxDueDate)
+			throw(`Maximum Due Date formatted incorrectly`);
 		    }
 		    
 			helper.suggestDueDate(collegeName, courseName, duration, minDueDate, maxDueDate, (suggestions) => {
@@ -85,8 +88,8 @@ async function handleRequest(req, res) {
 				throw(`Event end date not formatted correctly: ${eventEndDate}`)
 			}
 			helper.addEventToCalendar(eventName, eventStartDate, eventEndDate, (err) => {
-				res.write(err.toString())
 				res.writeHead(200, {"Content-Type": `text/plain`});
+				res.write(err.toString())
 				res.end();
 			})
 		}
@@ -123,8 +126,8 @@ async function handleRequest(req, res) {
     }
     catch(err) {
         console.log(err);
-        res.write(`Invalid Request: ` + err.toString() + `\n`);
         res.writeHead(200, {"Content-Type": `text/plain`});
+	res.write(`Invalid Request: ` + err.toString() + `\n`);
         res.end();
     }
 }

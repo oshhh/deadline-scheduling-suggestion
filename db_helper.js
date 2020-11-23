@@ -15,7 +15,7 @@ require('dotenv').config({path: __dirname + '/.env'});
 // 			Granted all privileges on 'scheduler_dev'
 
 var con = mysql.createConnection({
-  host: "1.1.1.255",
+  host: "localhost",
   port: 3306,
   database: "scheduler_dev",
   user: "client-scheduler",
@@ -28,10 +28,6 @@ con.connect((err) => {
 		console.log(err);
 	}
 });
-
-isCoursePresent('IIIT Delhi', 'CSE101', (isPresent) => {
-	console.log(isPresent);
-})
 
 function runQuery(query, callback) {
     console.log("Query Run/ :"+query);
@@ -50,37 +46,36 @@ function runQuery(query, callback) {
 }
 
 
-async function getStudents(collegeName, callback) {
+async function getStudents(collegeName, courseName, callback) {
 	query = `select id from college where name = '${collegeName}'`
 	console.log(query);
 	runQuery(query, (college) => {
 		console.log(college);
-		if(college.length == 0) throw(`Invalid Request: college ${collegeName} doesn't exist in our database\n`);
+		if(college.length == 0) throw(`Invalid Request: college '${collegeName}' doesn't exist in our database\n`);
 		college_id = college[0]['id']
 		console.log(college_id)
-		query = `select admission_number, course_code from course_students, student, course where student.id = students_id and course.id = courses_id and student.college_id = ${college_id}`;
+		query = `select admission_number, course.classroom_name from course_student, student, course where student.id = student_id and course.id = course_id and student.college_id = '${college_id}' and student.id in (select s.id from student as s, course_student as cs, course as c where s.id = cs.student_id and c.id = cs.course_id and c.classroom_name = '${courseName}');`;
 		runQuery(query, (course_students) => {
 			students = {}
 			for(i in course_students) {
 				if(!(course_students[i]['admission_number'] in students)) {
 					students[course_students[i]['admission_number']] = []
 				}
-				console.log(course_students[i]['admission_number'] in students)
-				students[course_students[i]['admission_number']].push(course_students[i]['course_code'])
+				students[course_students[i]['admission_number']].push(course_students[i]['classroom_name'])
 			}
 			callback(students);
 		})
 	})
 }
 
-async function isCoursePresent(collegeName, courseCode, callback) {
+async function isCoursePresent(collegeName, courseName, callback) {
 	query = `select id from college where name = '${collegeName}'`
 	runQuery(query, (college) => {
 		console.log(college)
 		if(college.length == 0) throw(`Invalid Request: college ${collegeName} doesn't exist in our database\n`)
 		college_id = college[0]['id']
 		
-		query = `select id from course where college_id = ${college_id} and course_code = '${courseCode}'`
+		query = `select id from course where college_id = ${college_id} and classroom_name = '${courseName}'`
 		runQuery(query, (course) => {
 			callback(course.lengthv != 0)
 		})

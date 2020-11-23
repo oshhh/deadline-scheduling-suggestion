@@ -21,9 +21,10 @@ async function suggestDueDate(collegeName, courseName, duration, minDueDate, max
 		if(! isPresent) {
 			throw(`Invalid Request: course ${courseName} not in college ${collegeName} according to our database`)
 		}	
-		db_helper.getStudents(collegeName, (students) => {
+		db_helper.getStudents(collegeName, courseName, (students) => {
 		    calendar_helper.getAllEvents(minDueDate, (allCourseWork) => {
-		        var commonStudents = getCommonStudents(students, courseName)
+			console.log(students);
+			var commonStudents = getCommonStudents(students, courseName)
 		        console.log(commonStudents)
 		        var suggestions = [];
 
@@ -113,7 +114,7 @@ async function getStudentSchedule(collegeName, courseName, duration, callback) {
 		if(! isPresent) {
 			throw(`Invalid Request: course ${courseName} not in college ${collegeName} according to our database`)
 		}
-		db_helper.getStudents(collegeName, (students) => {
+		db_helper.getStudents(collegeName, courseName, (students) => {
 		    var start_date = new Date();
 		    var end_date = new Date();
 		    end_date.setDate(end_date.getDate() + duration.days);
