@@ -14,20 +14,39 @@ require('dotenv').config({path: __dirname + '/.env'});
 // 			Password:- Client$$ched486436
 // 			Granted all privileges on 'scheduler_dev'
 
-var con = mysql.createConnection({
+db_config = {
   host: "1.1.1.255",
   port: 3306,
   database: "scheduler_dev",
   user: "client-scheduler",
   password: "Client$$ched486436",
   insecureAuth : true
-});
+}
 
-con.connect((err) => {
-	if(err) {
-		console.log(err);
-	}
-});
+var con = null
+
+function handleDisconnect() {
+  con = mysql.createConnection(db_config); // Recreate the con, since
+                                                  // the old one cannot be reused.
+
+  con.connect(function(err) {              // The server is either down
+    if(err) {                                     // or restarting (takes a while sometimes).
+      console.log('error when connecting to db:', err);
+      setTimeout(handleDisconnect, 2000); // We introduce a delay before attempting to reconnect,
+    }                                     // to avoid a hot loop, and to allow our node script to
+  });                                     // process asynchronous requests in the meantime.
+                                          // If you're also serving http, display a 503 error.
+  con.on('error', function(err) {
+    console.log('db error', err);
+    if(err.code === 'PROTOCOL_CONNECTION_LOST') { // Connection to the MySQL server is usually
+      handleDisconnect();                         // lost due to either server restart, or a
+    } else {                                      // connnection idle timeout (the wait_timeout
+      throw err;                                  // server variable configures this)
+    }
+  });
+}
+
+handleDisconnect();
 
 isCoursePresent('IIIT Delhi', 'CSE101', (isPresent) => {
 	console.log(isPresent);
