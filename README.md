@@ -2,7 +2,7 @@
 
 This API is a part of a bigger project that aims to create:
 1. An API that answers the following kinds of queries:    
- 1.1. **Get Suggestions:** when given the college name, course name, duration of assignment, minimum and maximum due dates, suggestions the best due date for the assignment of that course, considering what other assignments the students of this course have.     
+ 1.1. **Get Suggestions:** when given the college name, course name, duration of assignment, minimum and maximum due dates, suggests the best due date for the assignment of that course, considering what other assignments the students of this course have.     
  1.2. **Student Schedule:** when given the college name, course name returns the score (avg number of assignments per student in the next 7 days) and assignments that the students have in the current week.  
  1.3. **Inform about Events:** inform the API about other events that should be considered while scheduling the assignments besides assignments of other courses. For example, quizzes, college fests, etc.
 2. A chrome extension for classroom that adds to these platforms the functionality of getting suggestions of release date and due date of an assignment/deadline. ([Repository](https://github.com/oshhh/google-classroom-extension))      
