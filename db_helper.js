@@ -25,6 +25,8 @@ db_config = {
 
 var con = null
 
+console.log(db_config)
+
 function handleDisconnect() {
   con = mysql.createConnection(db_config); // Recreate the con, since
                                                   // the old one cannot be reused.
