@@ -1,10 +1,11 @@
-var http = require(`http`); // 1 - Import Node.js core module
+var https = require(`https`); // 1 - Import Node.js core module
 var fs = require(`fs`);
 var helper = require(`./helper`)
 var calendar_helper = require(`./calendar_helper`)
 
 const port = process.env.PORT || 8200
 
+require('dotenv').config({path: __dirname + '/.env'});
 
 /*
 Request format: 
@@ -132,7 +133,12 @@ async function handleRequest(req, res) {
     }
 }
 
-var server = http.createServer(handleRequest);
+const options = {
+	key: process.env.SSL_KEY_FILE,
+	cert: process.env.SSL_CERT_FILE
+}
+
+var server = https.createServer(options, handleRequest);
 
 
 server.listen(port);

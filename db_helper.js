@@ -25,6 +25,8 @@ db_config = {
 
 var con = null
 
+console.log(db_config)
+
 function handleDisconnect() {
   console.log("connecting to SQL")
   console.log(db_config)
