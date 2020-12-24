@@ -3,7 +3,7 @@ var fs = require(`fs`);
 var helper = require(`./helper`)
 var calendar_helper = require(`./calendar_helper`)
 
-const port = process.env.PORT || 5000
+const port = process.env.PORT || 8200
 
 
 /*
@@ -137,4 +137,4 @@ var server = http.createServer(handleRequest);
 
 server.listen(port);
 
-console.log(`Node.js web server at port 5000 is running..`)
+console.log(`Node.js web server at port ${port} is running..`)
