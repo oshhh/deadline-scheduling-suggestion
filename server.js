@@ -134,8 +134,8 @@ async function handleRequest(req, res) {
 }
 
 const options = {
-	key: process.env.SSL_KEY_FILE,
-	cert: process.env.SSL_CERT_FILE
+	key: fs.readFileSync(process.env.SSL_KEY_FILE).toString(),
+	cert: fs.readFileSync(process.env.SSL_CERT_FILE).toString()
 }
 
 var server = https.createServer(options, handleRequest);
