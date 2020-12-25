@@ -15,7 +15,7 @@ require('dotenv').config({path: __dirname + '/.env'});
 // 			Granted all privileges on 'scheduler_dev'
 
 db_config = {
-  host: "1.1.1.255",
+  host: "localhost",
   port: 3306,
   database: "scheduler_dev",
   user: "client-scheduler",
@@ -28,6 +28,8 @@ var con = null
 console.log(db_config)
 
 function handleDisconnect() {
+  console.log("connecting to SQL")
+  console.log(db_config)
   con = mysql.createConnection(db_config); // Recreate the con, since
                                                   // the old one cannot be reused.
 
@@ -52,9 +54,9 @@ handleDisconnect();
 
 function runQuery(query, callback) {
     console.log("Query Run/ :"+query);
-    result = con.query(query, function (err, result) {
-        if (err)
-        {
+    result = con.query(query, function (err, result){
+        if (err) {
+	    console.log("ERROR :(")
             console.log(err);
             callback(null);
             return;

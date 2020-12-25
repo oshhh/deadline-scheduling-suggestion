@@ -3,7 +3,7 @@ var fs = require(`fs`);
 var helper = require(`./helper`)
 var calendar_helper = require(`./calendar_helper`)
 
-const port = process.env.PORT || 5000
+const port = process.env.PORT || 8200
 
 require('dotenv').config({path: __dirname + '/.env'});
 
@@ -134,8 +134,8 @@ async function handleRequest(req, res) {
 }
 
 const options = {
-	key: process.env.SSL_KEY_FILE,
-	cert: process.env.SSL_CERT_FILE
+	key: fs.readFileSync(process.env.SSL_KEY_FILE).toString(),
+	cert: fs.readFileSync(process.env.SSL_CERT_FILE).toString()
 }
 
 var server = https.createServer(options, handleRequest);
@@ -143,4 +143,4 @@ var server = https.createServer(options, handleRequest);
 
 server.listen(port);
 
-console.log(`Node.js web server at port 5000 is running..`)
+console.log(`Node.js web server at port ${port} is running..`)
