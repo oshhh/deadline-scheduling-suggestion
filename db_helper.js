@@ -98,7 +98,7 @@ async function isCoursePresent(collegeName, courseName, callback) {
 		
 		query = `select id from course where college_id = ${college_id} and classroom_name = '${courseName}'`
 		runQuery(query, (course) => {
-			callback(course.lengthv != 0)
+			callback(course.length != 0)
 		})
 	})
 }

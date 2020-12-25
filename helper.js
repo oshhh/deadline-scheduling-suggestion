@@ -4,6 +4,10 @@ var fs = require('fs');
 require('dotenv').config({path: __dirname + '/.env'});
 
 
+async function isCoursePresent(collegeName, courseName, callback) {
+	db_helper.isCoursePresent(collegeName, courseName, callback)
+}
+
 
 /*
 	~~ Parameters ~~
@@ -203,4 +207,5 @@ module.exports = {
   suggestDueDate: suggestDueDate,
   getStudentSchedule: getStudentSchedule,
   addEventToCalendar: addEventToCalendar,
+  isCoursePresent: isCoursePresent
 };
