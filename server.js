@@ -100,11 +100,12 @@ async function handleRequest(req, res) {
 			console.log(courseName)
 			var query = params[4]
 			if(query == `is_present`) {
-				var isPresent = await helper.isCoursePresent(collegeName, courseName)
-				console.log(isPresent.toString())
-				res.writeHead(200, {"Content-Type": `text/plain`});
-    			res.write(isPresent.toString())
-				res.end();        		
+				helper.isCoursePresent(collegeName, courseName, (isPresent) => {
+					console.log(isPresent.toString())
+					res.writeHead(200, {"Content-Type": `text/plain`});
+	    			res.write(isPresent.toString())
+					res.end();      
+				})
 			} else if(query == `add_course`) {
 				professorName = params[5]
 				professorEmail = params[6]
