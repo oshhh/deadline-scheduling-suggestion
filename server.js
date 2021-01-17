@@ -120,7 +120,15 @@ async function handleRequest(req, res) {
 				})
 			}
 		}
-
+		
+		else if(params[2] == `find_date`) {
+    		var dateNow = new Date(Date.now());
+    		var dateResult = chrono.parseDate(params[3].toUpperCase(), dateNow, { forwardDate: forward });
+    		res.write(dateResult);
+			res.writeHead(200, {"Content-Type": `text/plain`});
+			res.end();
+		}
+        
         else {
             throw(`unrecognised request ${params[2]}`);
         }
