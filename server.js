@@ -125,7 +125,7 @@ async function handleRequest(req, res) {
 		else if(params[2] == `find_date`) {
     		var dateNow = new Date(Date.now());
     		var dateResult = chrono.parseDate(params[3].toUpperCase(), dateNow, { forwardDate: true });
-    		res.write(dateResult);
+    		res.write(dateResult.toString());
 			res.writeHead(200, {"Content-Type": `text/plain`});
 			res.end();
 		}
