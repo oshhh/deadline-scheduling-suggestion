@@ -16,7 +16,7 @@ This API Supports the following features:
 ## 1   Get Suggestions
 
 ### HTTP Request Format
-`GET https://deadline-scheduling-suggestion.herokuapp.com/[college_name]/get_suggestions/[course_name]/[duration]/[min due date]/[max due date]` 
+`GET http://easyscheduler.kracr.iiitd.edu.in:8200/[college_name]/get_suggestions/[course_name]/[duration]/[min due date]/[max due date]` 
 
 ### Parameters
 <ins>college_name</ins>    
@@ -72,7 +72,7 @@ Example: if the professor wants the assignment's due date to be between `2020-08
 ## 2   Student Schedule
 
 ### HTTP Request Format
-`GET https://deadline-scheduling-suggestion.herokuapp.com/[college_name]/student_schedule/[course_name]/week`
+`GET https://http://easyscheduler.kracr.iiitd.edu.in:8200/[college_name]/student_schedule/[course_name]/week`
 
 ### Response
 ```
@@ -98,13 +98,13 @@ Example: if the professor wants the assignment's due date to be between `2020-08
 Inform the API to consider some event while scheduling deadlines. The start datetime and end datetime needs to be provided. Some examples of such events can be quizzes, fests, sports events, etc.
 
 ### HTTP Request Format
-`GET https://deadline-scheduling-suggestion.herokuapp.com/[college_name]/inform_about_event/[event_name]/[event_start_datetime]/[event_end_datetime]`
+`GET http://easyscheduler.kracr.iiitd.edu.in:8200/[college_name]/inform_about_event/[event_name]/[event_start_datetime]/[event_end_datetime]`
 
 ## 4   Is Course Present
 Know whether a course is in our database
 
 ### HTTP Request Format
-`GET https://deadline-scheduling-suggestion.herokuapp.com/[college_name]/courses/[course_name]/is_present`
+`GET http://easyscheduler.kracr.iiitd.edu.in:8200/[college_name]/courses/[course_name]/is_present`
 
 ### Response
 If the course is present it returns `'true'` else returns `'false'`.
@@ -112,7 +112,7 @@ If the course is present it returns `'true'` else returns `'false'`.
 ## 5   Add new course
 
 ### HTTP Request Format
-`GET https://deadline-scheduling-suggestion.herokuapp.com/[college_name]/courses/[course_name]/add_course/[professor_name]/[professor_email]/[students]`
+`GET http://easyscheduler.kracr.iiitd.edu.in:8200/[college_name]/courses/[course_name]/add_course/[professor_name]/[professor_email]/[students]`
 
 `students` should be a comma seperated list of the unique identifiers of students (roll no., email, etc). Eg. `2018001,2018002,2018003`
 
