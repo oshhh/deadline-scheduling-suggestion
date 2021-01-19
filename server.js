@@ -1,10 +1,12 @@
-var http = require(`http`); // 1 - Import Node.js core module
+var https = require(`https`); // 1 - Import Node.js core module
 var fs = require(`fs`);
 var helper = require(`./helper`)
 var calendar_helper = require(`./calendar_helper`)
+var chrono = require('chrono-node')
 
-const port = process.env.PORT || 5000
+const port = process.env.PORT || 8200
 
+require('dotenv').config({path: __dirname + '/.env'});
 
 /*
 Request format: 
@@ -62,9 +64,12 @@ async function handleRequest(req, res) {
 		    if(isNaN(minDueDate)) {
 		        throw(`Minimum Due Date formatted incorrectly`)
 		    }
+		    console.log(maxDueDate)
 		    maxDueDate = new Date(maxDueDate);
+		    console.log(maxDueDate)
 		    if(isNaN(maxDueDate)) {
-		        throw(`Maximum Due Date formatted incorrectly`);
+			console.log(maxDueDate)
+			throw(`Maximum Due Date formatted incorrectly`);
 		    }
 		    
 			helper.suggestDueDate(collegeName, courseName, duration, minDueDate, maxDueDate, (suggestions) => {
@@ -85,8 +90,8 @@ async function handleRequest(req, res) {
 				throw(`Event end date not formatted correctly: ${eventEndDate}`)
 			}
 			helper.addEventToCalendar(eventName, eventStartDate, eventEndDate, (err) => {
-				res.write(err.toString())
 				res.writeHead(200, {"Content-Type": `text/plain`});
+				res.write(err.toString())
 				res.end();
 			})
 		}
@@ -96,11 +101,12 @@ async function handleRequest(req, res) {
 			console.log(courseName)
 			var query = params[4]
 			if(query == `is_present`) {
-				var isPresent = await helper.isCoursePresent(collegeName, courseName)
-				console.log(isPresent.toString())
-				res.writeHead(200, {"Content-Type": `text/plain`});
-    			res.write(isPresent.toString())
-				res.end();        		
+				helper.isCoursePresent(collegeName, courseName, (isPresent) => {
+					console.log(isPresent.toString())
+					res.writeHead(200, {"Content-Type": `text/plain`});
+	    			res.write(isPresent.toString())
+					res.end();      
+				})
 			} else if(query == `add_course`) {
 				professorName = params[5]
 				professorEmail = params[6]
@@ -115,7 +121,15 @@ async function handleRequest(req, res) {
 				})
 			}
 		}
-
+		
+		else if(params[2] == `find_date`) {
+    		var dateNow = new Date(Date.now());
+    		var dateResult = chrono.parseDate(params[3].toUpperCase(), dateNow, { forwardDate: true });
+			res.writeHead(200, {"Content-Type": `text/plain`});
+    		res.write(dateResult.toString());
+			res.end();
+		}
+        
         else {
             throw(`unrecognised request ${params[2]}`);
         }
@@ -123,15 +137,20 @@ async function handleRequest(req, res) {
     }
     catch(err) {
         console.log(err);
-        res.write(`Invalid Request: ` + err.toString() + `\n`);
         res.writeHead(200, {"Content-Type": `text/plain`});
+	res.write(`Invalid Request: ` + err.toString() + `\n`);
         res.end();
     }
 }
 
-var server = http.createServer(handleRequest);
+const options = {
+	key: fs.readFileSync(process.env.SSL_KEY_FILE).toString(),
+	cert: fs.readFileSync(process.env.SSL_CERT_FILE).toString()
+}
+
+var server = https.createServer(options, handleRequest);
 
 
 server.listen(port);
 
-console.log(`Node.js web server at port 5000 is running..`)
+console.log(`Node.js web server at port ${port} is running..`)
