@@ -1,19 +1,6 @@
 const mysql = require('mysql');
 require('dotenv').config({path: __dirname + '/.env'});
 
-// Mysql Server Details:-
-// 	1. Hostname:- 192.168.1.255
-// 	2. Port:- 3306 (Default)
-// 	3. Root Password:- Sched@*486426
-	
-// 	Databases:-
-// 		1. scheduler_dev
-	
-// 	Clients:-
-// 		1. client-scheduler
-// 			Password:- Client$$ched486436
-// 			Granted all privileges on 'scheduler_dev'
-
 db_config = {
   host: "localhost",
   port: 3306,
