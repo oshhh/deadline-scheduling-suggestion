@@ -8,7 +8,7 @@ This API is a part of a bigger project that aims to create:
 2. A chrome extension for classroom that adds to these platforms the functionality of getting suggestions of release date and due date of an assignment/deadline. ([Repository](https://github.com/oshhh/google-classroom-extension))      
 3. A mailer to send regular (weekly) mails to profs about how free/busy the students are in the coming week. ([Repository](https://github.com/oshhh/weekly-mailer))
 
-hosted on heroku: `https://deadline-scheduling-suggestion.herokuapp.com/`    
+hosted on: `http://easyscheduler.kracr.iiitd.edu.in:8200/`    
 
 This API Supports the following features:
 1. 
