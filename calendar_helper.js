@@ -109,13 +109,28 @@ function getAllEvents(start, callback) {
             console.log(events)
             calendar_count --;
             events.forEach((event) => {
-              if(event.summary.substring(0, 10) != 'Assignment') return
-              assignments.push({
-                course_name: event.organizer.displayName,
-                coursework_name: event.summary,
-                start_date: new Date(event.created),
-                end_date: new Date(event.end.dateTime != null ? event.end.dateTime : `${event.start.date}T18:29:00Z`),
-              });
+              if(event.summary.substring(0, 10) == 'Assignment') {
+                assignments.push({
+                  course_name: event.organizer.displayName,
+                  coursework_name: event.summary,
+                  start_date: new Date(event.created),
+                  end_date: new Date(event.end.dateTime != null ? event.end.dateTime : `${event.start.date}T18:29:00Z`),
+                });
+              } else if(event.summary.substring(0, 10) == '#Deadline:') {
+                assignments.push({
+                  course_name: event.summary.substring(11),
+                  coursework_name: event.summary,
+                  start_date: new Date(event.created),
+                  end_date: new Date(event.end.dateTime != null ? event.end.dateTime : `${event.start.date}T18:29:00Z`),
+                });
+              } else if(event.summary.substring(0, 6) == '#Quiz:') {
+                assignments.push({
+                  course_name: event.summary.substring(7),
+                  coursework_name: event.summary,
+                  start_date: new Date(event.created),
+                  end_date: new Date(event.end.dateTime != null ? event.end.dateTime : `${event.start.date}T18:29:00Z`),
+                });
+              }
             });
             if(calendar_count == 0) {
               callback(assignments);

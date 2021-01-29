@@ -17,8 +17,7 @@
   },
   "dependencies": {
     "googleapis": "^39",
-    "dotenv": "*",
-    "firebase-admin": "*"
+    "dotenv": "*"
   },
   "homepage": ""
 }
