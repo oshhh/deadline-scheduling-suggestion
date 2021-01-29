@@ -43,10 +43,10 @@ function runQuery(query, callback) {
   if (err) {
     console.log("Error in SQL Query")
     console.log(err);
-    callback(err);
+    return callback(err);
     return;
   } else {
-    if(callback != null) callback(err, result);
+    if(callback != null) return callback(err, result);
   }
 
   });
@@ -57,14 +57,14 @@ async function getStudents(collegeName, courseName, callback) {
 	query = `select id from college where name = '${collegeName}'`
 	console.log(query);
 	runQuery(query, (err, college) => {
-    if(err) callback(err);
+    if(err) return callback(err);
 		console.log(college);
-		if(college.length == 0) callback(new Error(`Invalid Request: college '${collegeName}' doesn't exist in our database\n`), null);
+		if(college.length == 0) return callback(new Error(`Invalid Request: college '${collegeName}' doesn't exist in our database\n`), null);
 		college_id = college[0]['id']
 		console.log(college_id)
 		query = `select admission_number, course.classroom_name from course_student, student, course where student.id = student_id and course.id = course_id and student.college_id = '${college_id}' and student.id in (select s.id from student as s, course_student as cs, course as c where s.id = cs.student_id and c.id = cs.course_id and c.classroom_name = '${courseName}');`;
 		runQuery(query, (err, course_students) => {
-      if(err) callback(err);
+      if(err) return callback(err);
 			students = {}
 			for(i in course_students) {
 				if(!(course_students[i]['admission_number'] in students)) {
@@ -72,7 +72,7 @@ async function getStudents(collegeName, courseName, callback) {
 				}
 				students[course_students[i]['admission_number']].push(course_students[i]['classroom_name'])
 			}
-			callback(null, students);
+			return callback(null, students);
 		})
 	})
 }
@@ -85,15 +85,15 @@ async function isCoursePresent(collegeName, courseName, callback) {
 
 	query = `select id from college where name = '${collegeName}'`
 	runQuery(query, (err, college) => {
-    if(err) callback(err);
+    if(err) return callback(err);
 		console.log(college)
-		if(college.length == 0) callback(new Error(`Invalid Request: college ${collegeName} doesn't exist in our database\n`), null)
+		if(college.length == 0) return callback(new Error(`Invalid Request: college ${collegeName} doesn't exist in our database\n`), null)
 		college_id = college[0]['id']
 		
 		query = `select id from course where college_id = ${college_id} and classroom_name = '${courseName}'`
 		runQuery(query, (err, course) => {
-      if(err) callback(err);
-			callback(null, course.length != 0)
+      if(err) return callback(err);
+			return callback(null, course.length != 0)
 		})
 	})
 }
@@ -125,7 +125,7 @@ async function isCoursePresent(collegeName, courseName, callback) {
 // 		}, {merge: true})
 // 		// }
 // 	}
-// 	callback()
+// 	return callback()
 // }
 
 

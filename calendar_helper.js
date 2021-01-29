@@ -29,7 +29,7 @@ function authorize(credentials, callback) {
 	token = process.env.TOKEN;
 	if (token == "") return getAccessToken(oAuth2Client, callback);
 	oAuth2Client.setCredentials(JSON.parse(token));
-	callback(oAuth2Client);
+	return callback(oAuth2Client);
 }
 
 /**
@@ -55,7 +55,7 @@ function getAccessToken(oAuth2Client, callback) {
 			oAuth2Client.setCredentials(token);
 			// Store the token to disk for later program executions
       console.log(JSON.stringify(token))
-			callback(oAuth2Client);
+			return callback(oAuth2Client);
 		});
 	});
 }
@@ -64,9 +64,9 @@ function listCalendars(auth, callback) {
   const calendar = google.calendar({version: 'v3', auth});
   calendar.calendarList.list({
   }, (err, res) => {
-    if (err) callback(err);
+    if (err) return callback(err);
     const calendars = res.data.items;
-    callback(null, auth, calendars);
+    return callback(null, auth, calendars);
   });	
 }
 
@@ -82,9 +82,9 @@ function listEvents(auth, calendarId, start, callback) {
     singleEvents: true,
     orderBy: 'startTime',
   }, (err, res) => {
-    if (err) callback(err)
+    if (err) return callback(err)
     const events = res.data.items;
-    callback(null, auth, events);
+    return callback(null, auth, events);
   });
 }
 
@@ -94,7 +94,7 @@ function getAllEvents(start, callback) {
   // Authorize a client with credentials, then call the Google Calendar API.
   authorize(credentials_json, (auth) => {
     listCalendars(auth, (err, auth, calendars) => {
-      if(err) callback(err);
+      if(err) return callback(err);
       var calendar_count = 0;
       calendars.forEach((calendar) => {
         if(calendar.id.substring(0, CLASSROOM_CALENDAR_ID.length) == CLASSROOM_CALENDAR_ID || calendar.id.substring(0, BACKPACK_CALENDAR_ID.length) == BACKPACK_CALENDAR_ID || calendar.id.substring(0, EVENTS.length) == EVENTS) {
@@ -106,7 +106,7 @@ function getAllEvents(start, callback) {
         if(calendar.id.substring(0, CLASSROOM_CALENDAR_ID.length) == CLASSROOM_CALENDAR_ID || calendar.id.substring(0, BACKPACK_CALENDAR_ID.length) == BACKPACK_CALENDAR_ID || calendar.id.substring(0, EVENTS.length) == EVENTS) {
           console.log(calendar.summary)
           listEvents(auth, calendar.id, start, (err, auth, events) => {
-            if(err) callback(err);
+            if(err) return callback(err);
             console.log(calendar.summary)
             console.log(events)
             calendar_count --;
@@ -135,7 +135,7 @@ function getAllEvents(start, callback) {
               }
             });
             if(calendar_count == 0) {
-              callback(null, assignments);
+              return callback(null, assignments);
             }
           });
         }
@@ -166,7 +166,7 @@ function insertEvent(event_name, event_start_date, event_end_date, callback) {
         summary: event_name
       }
     }, (err) => {
-      callback(err)
+      return callback(err)
     })
   })
 }

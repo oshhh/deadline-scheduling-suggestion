@@ -22,14 +22,14 @@ async function isCoursePresent(collegeName, courseName, callback) {
 */
 async function suggestDueDate(collegeName, courseName, duration, minDueDate, maxDueDate, callback) {
 	db_helper.isCoursePresent(collegeName, courseName, (err, isPresent) => {
-		if(err) callback(err);
+		if(err) return callback(err);
 		if(! isPresent) {
-			throw(`Invalid Request: course ${courseName} not in college ${collegeName} according to our database`)
+			return callback(new Error(`course ${courseName} not in college ${collegeName} according to our database`))
 		}	
 		db_helper.getStudents(collegeName, courseName, (err, students) => {
-			if(err) callback(err);
+			if(err) return callback(err);
 		    calendar_helper.getAllEvents(minDueDate, (err, allCourseWork) => {
-		    	if(err) callback(err);
+		    	if(err) return callback(err);
 				console.log(students);
 				var commonStudents = getCommonStudents(students, courseName)
 		        console.log(commonStudents)
@@ -102,7 +102,7 @@ async function suggestDueDate(collegeName, courseName, duration, minDueDate, max
 			        flexi_suggestions.sort((a, b) => {return a.clash.score - b.clash.score;});
 			    }
 
-		        callback(null, {suggestions: suggestions, flexi_suggestions: flexi_suggestions});
+		        return callback(null, {suggestions: suggestions, flexi_suggestions: flexi_suggestions});
 		    });		
 		})
 	})
@@ -118,12 +118,12 @@ async function suggestDueDate(collegeName, courseName, duration, minDueDate, max
 */
 async function getStudentSchedule(collegeName, courseName, duration, callback) {
 	db_helper.isCoursePresent(collegeName, courseName, (err, isPresent) => {
-		if(err) callback(err);
+		if(err) return callback(err);
 		if(! isPresent) {
-			throw(`Invalid Request: course ${courseName} not in college ${collegeName} according to our database`)
+			return callback(new Error(`course ${courseName} not in college ${collegeName} according to our database`))
 		}
 		db_helper.getStudents(collegeName, courseName, (err, students) => {
-			if(err) callback(err);
+			if(err) return callback(err);
 		    var start_date = new Date();
 		    var end_date = new Date();
 		    end_date.setDate(end_date.getDate() + duration.days);
@@ -133,9 +133,9 @@ async function getStudentSchedule(collegeName, courseName, duration, callback) {
 		    var commonStudents = getCommonStudents(students, courseName);
 
 		    calendar_helper.getAllEvents(start_date, (err, allCourseWork) => {
-		    	if(err) callback(err);
+		    	if(err) return callback(err);
 		    	var score = calculateScore(start_date, end_date, allCourseWork, commonStudents);
-		    	callback(null, score);
+		    	return callback(null, score);
 		    });
 		})
 	})
