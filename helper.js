@@ -21,14 +21,17 @@ async function isCoursePresent(collegeName, courseName, callback) {
 	Score and clashes with other events.
 */
 async function suggestDueDate(collegeName, courseName, duration, minDueDate, maxDueDate, callback) {
-	db_helper.isCoursePresent(collegeName, courseName, (isPresent) => {
+	db_helper.isCoursePresent(collegeName, courseName, (err, isPresent) => {
+		if(err) callback(err);
 		if(! isPresent) {
 			throw(`Invalid Request: course ${courseName} not in college ${collegeName} according to our database`)
 		}	
-		db_helper.getStudents(collegeName, courseName, (students) => {
-		    calendar_helper.getAllEvents(minDueDate, (allCourseWork) => {
-			console.log(students);
-			var commonStudents = getCommonStudents(students, courseName)
+		db_helper.getStudents(collegeName, courseName, (err, students) => {
+			if(err) callback(err);
+		    calendar_helper.getAllEvents(minDueDate, (err, allCourseWork) => {
+		    	if(err) callback(err);
+				console.log(students);
+				var commonStudents = getCommonStudents(students, courseName)
 		        console.log(commonStudents)
 		        var suggestions = [];
 
@@ -99,7 +102,7 @@ async function suggestDueDate(collegeName, courseName, duration, minDueDate, max
 			        flexi_suggestions.sort((a, b) => {return a.clash.score - b.clash.score;});
 			    }
 
-		        callback({suggestions: suggestions, flexi_suggestions: flexi_suggestions});
+		        callback(null, {suggestions: suggestions, flexi_suggestions: flexi_suggestions});
 		    });		
 		})
 	})
@@ -114,11 +117,13 @@ async function suggestDueDate(collegeName, courseName, duration, minDueDate, max
 	Score relating to how free the students are and the clashes with other events from today to today + duration
 */
 async function getStudentSchedule(collegeName, courseName, duration, callback) {
-	db_helper.isCoursePresent(collegeName, courseName, (isPresent) => {
+	db_helper.isCoursePresent(collegeName, courseName, (err, isPresent) => {
+		if(err) callback(err);
 		if(! isPresent) {
 			throw(`Invalid Request: course ${courseName} not in college ${collegeName} according to our database`)
 		}
-		db_helper.getStudents(collegeName, courseName, (students) => {
+		db_helper.getStudents(collegeName, courseName, (err, students) => {
+			if(err) callback(err);
 		    var start_date = new Date();
 		    var end_date = new Date();
 		    end_date.setDate(end_date.getDate() + duration.days);
@@ -127,9 +132,10 @@ async function getStudentSchedule(collegeName, courseName, duration, callback) {
 
 		    var commonStudents = getCommonStudents(students, courseName);
 
-		    calendar_helper.getAllEvents(start_date, (allCourseWork) => {
+		    calendar_helper.getAllEvents(start_date, (err, allCourseWork) => {
+		    	if(err) callback(err);
 		    	var score = calculateScore(start_date, end_date, allCourseWork, commonStudents);
-		    	callback(score);
+		    	callback(null, score);
 		    });
 		})
 	})

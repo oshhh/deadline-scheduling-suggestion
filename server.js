@@ -17,6 +17,13 @@ minDueDate : YYYY-MM-DDTHH:mm:ss.sssZ
 maxDueDate : YYYY-MM-DDTHH:mm:ss.sssZ
 */
 
+function sendError(res, err) {
+    console.log(err);
+    res.writeHead(200, {"Content-Type": `text/plain`});
+	res.write(`Invalid Request: ` + err.toString() + `\n`);
+    res.end();
+}
+
 async function handleRequest(req, res) {
 	// to avoid CORS error
 	res.setHeader('Access-Control-Allow-Origin', '*');
@@ -40,10 +47,14 @@ async function handleRequest(req, res) {
 	        			hours: 0,
 	        			minutes: 0
 	        		}
-	        		helper.getStudentSchedule(collegeName, courseName, duration, (schedule) => {
-	        				res.writeHead(200, {"Content-Type": `text/plain`});
-	        				res.write(JSON.stringify(schedule));
-	        				res.end();
+	        		helper.getStudentSchedule(collegeName, courseName, duration, (err, schedule) => {
+        				if(err) {
+        					sendError(res, err);
+        					return;
+        				}
+        				res.writeHead(200, {"Content-Type": `text/plain`});
+        				res.write(JSON.stringify(schedule));
+        				res.end();
 					});
 	        	} else {
 	        		throw(`only valid value of 4th parameter is "week"`);
@@ -72,7 +83,12 @@ async function handleRequest(req, res) {
 				throw(`Maximum Due Date formatted incorrectly`);
 			    }
 			    
-				helper.suggestDueDate(collegeName, courseName, duration, minDueDate, maxDueDate, (suggestions) => {
+				helper.suggestDueDate(collegeName, courseName, duration, minDueDate, maxDueDate, (err, suggestions) => {
+				    if(err) {
+    					sendError(res, err);
+    					return;
+    				}
+
 					res.writeHead(200, {"Content-Type": `text/plain`});
 					res.write(JSON.stringify(suggestions));
 					res.end();
@@ -83,7 +99,12 @@ async function handleRequest(req, res) {
 				switch(eventType) {
 					case `quiz`:
 						courseName = params[4]
-						helper.isCoursePresent(collegeName, courseName).then((isPresent) => {
+						helper.isCoursePresent(collegeName, courseName, (err, isPresent) => {
+							if(err) {
+	        					sendError(res, err);
+	        					return;
+	        				}
+
 							if(!isPresent) {
 								throw(`Course ${courseName} not found in college ${collegeName}`)
 							}
@@ -98,15 +119,21 @@ async function handleRequest(req, res) {
 
 							eventName = `#Quiz: ${courseName}`
 							helper.addEventToCalendar(eventName, eventStartDate, eventEndDate, (err) => {
-								res.write(err.toString())
-								res.writeHead(200, {"Content-Type": `text/plain`});
-								res.end();
+		        				if(err) {
+		        					sendError(res, err);
+		        					return;
+		        				}
 							})
 						})
 					break
 					case `backpack_deadline`:
 						courseName = params[4]
-							helper.isCoursePresent(collegeName, courseName).then((isPresent) => {
+							helper.isCoursePresent(collegeName, courseName, (err, isPresent) => {
+							if(err) {
+	        					sendError(res, err);
+	        					return;
+	        				}
+
 							if(!isPresent) {
 								throw(`Course ${courseName} not found in college ${collegeName}`)
 							}
@@ -121,15 +148,21 @@ async function handleRequest(req, res) {
 
 							eventName = `#Deadline: ${courseName}`
 							helper.addEventToCalendar(eventName, eventStartDate, eventEndDate, (err) => {
-								res.write(err.toString())
-								res.writeHead(200, {"Content-Type": `text/plain`});
-								res.end();
+		        				if(err) {
+		        					sendError(res, err);
+		        					return;
+		        				}
 							})
 						})
 					break
 					case `backpack_deadline_reminder`:
 						courseName = params[4]
-						helper.isCoursePresent(collegeName, courseName).then((isPresent) => {
+						helper.isCoursePresent(collegeName, courseName, (err, isPresent) => {
+							if(err) {
+	        					sendError(res, err);
+	        					return;
+	        				}
+
 							if(!isPresent) {
 								throw(`Course ${courseName} not found in college ${collegeName}`)
 							}
@@ -144,53 +177,35 @@ async function handleRequest(req, res) {
 
 							eventName = `#DeadlineReminder: ${courseName}`
 							helper.addEventToCalendar(eventName, eventStartDate, eventEndDate, (err) => {
-								res.write(err.toString())
-								res.writeHead(200, {"Content-Type": `text/plain`});
-								res.end();
+		        				if(err) {
+		        					sendError(res, err);
+		        					return;
+		        				}
 							})
 						})
 					break
 					default:
-						throw(`Unrecognised event: ${eventType}`)
+						sendError(new Error(`Unrecognised event: ${eventType}`))
 				}
-				courseName = params[4]
-				eventStartDate = new Date(params[5])
-				eventEndDate = new Date(params[6])
-				if(isNaN(eventStartDate)) {
-					throw(`Event start date not formatted correctly: ${eventStartDate}`)
-				}
-				if(isNaN(eventEndDate)) {
-					throw(`Event end date not formatted correctly: ${eventEndDate}`)
-				}
-				helper.addEventToCalendar(eventName, eventStartDate, eventEndDate, (err) => {
-					res.write(err.toString())
-					res.writeHead(200, {"Content-Type": `text/plain`});
-					res.end();
-				})
 			break
 			case `courses`: 
 				var courseName = decodeURIComponent(params[3])
 				console.log(courseName)
 				var query = params[4]
 				if(query == `is_present`) {
-					helper.isCoursePresent(collegeName, courseName).then((isPresent) => {
+					helper.isCoursePresent(collegeName, courseName, (err, isPresent) => {
+        				if(err) {
+        					sendError(res, err);
+        					return;
+        				}
+
 						console.log(isPresent.toString())
 						res.writeHead(200, {"Content-Type": `text/plain`});
 		    			res.write(isPresent.toString())
 						res.end();        			
 					})
-				} else if(query == `add_course`) {
-					professorName = params[5]
-					professorEmail = params[6]
-					req.on('data', (data) => {
-						data = data.toString()
-						students = data.split(',')
-						helper.addNewCourse(collegeName, courseName, professorName, professorEmail, students, () => {
-							console.log('done')
-						})
-						res.writeHead(200, {"Content-Type": `text/plain`});
-						res.end();
-					})
+				} else {
+					sendError(new Error(`Unrecognised query: ${query}`))
 				}
 			break
 			case `find_date`:
@@ -201,14 +216,12 @@ async function handleRequest(req, res) {
 				res.end();
 			break
 			default:
-				throw(`unrecognised request ${params[2]}`);
+				sendError(new Error(`Unrecognised request: ${params[2]}`));
 		}
     }
     catch(err) {
-        console.log(err);
-        res.writeHead(200, {"Content-Type": `text/plain`});
-		res.write(`Invalid Request: ` + err.toString() + `\n`);
-        res.end();
+    	console.log(err);
+    	sendError(new Error(`Oops! An error occurred.`))
     }
 }
 

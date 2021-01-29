@@ -64,9 +64,9 @@ function listCalendars(auth, callback) {
   const calendar = google.calendar({version: 'v3', auth});
   calendar.calendarList.list({
   }, (err, res) => {
-    if (err) return console.log('The API returned an error: ' + err);
+    if (err) callback(err);
     const calendars = res.data.items;
-    callback(auth, calendars);
+    callback(null, auth, calendars);
   });	
 }
 
@@ -82,9 +82,9 @@ function listEvents(auth, calendarId, start, callback) {
     singleEvents: true,
     orderBy: 'startTime',
   }, (err, res) => {
-    if (err) return console.log('The API returned an error: ' + err);
+    if (err) callback(err)
     const events = res.data.items;
-    callback(auth, events);
+    callback(null, auth, events);
   });
 }
 
@@ -93,7 +93,8 @@ function getAllEvents(start, callback) {
   credentials_json = JSON.parse(process.env.GOOGLE_CREDENTIALS);
   // Authorize a client with credentials, then call the Google Calendar API.
   authorize(credentials_json, (auth) => {
-    listCalendars(auth, (auth, calendars) => {
+    listCalendars(auth, (err, auth, calendars) => {
+      if(err) callback(err);
       var calendar_count = 0;
       calendars.forEach((calendar) => {
         if(calendar.id.substring(0, CLASSROOM_CALENDAR_ID.length) == CLASSROOM_CALENDAR_ID || calendar.id.substring(0, BACKPACK_CALENDAR_ID.length) == BACKPACK_CALENDAR_ID || calendar.id.substring(0, EVENTS.length) == EVENTS) {
@@ -104,7 +105,8 @@ function getAllEvents(start, callback) {
       calendars.forEach((calendar) => {
         if(calendar.id.substring(0, CLASSROOM_CALENDAR_ID.length) == CLASSROOM_CALENDAR_ID || calendar.id.substring(0, BACKPACK_CALENDAR_ID.length) == BACKPACK_CALENDAR_ID || calendar.id.substring(0, EVENTS.length) == EVENTS) {
           console.log(calendar.summary)
-          listEvents(auth, calendar.id, start, (auth, events) => {
+          listEvents(auth, calendar.id, start, (err, auth, events) => {
+            if(err) callback(err);
             console.log(calendar.summary)
             console.log(events)
             calendar_count --;
@@ -133,7 +135,7 @@ function getAllEvents(start, callback) {
               }
             });
             if(calendar_count == 0) {
-              callback(assignments);
+              callback(null, assignments);
             }
           });
         }

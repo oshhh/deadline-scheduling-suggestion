@@ -28,7 +28,8 @@ function handleDisconnect() {
   });                                     // process asynchronous requests in the meantime.
                                           // If you're also serving http, display a 503 error.
   con.on('error', function(err) {
-    console.log('db error', err);
+    throw err;
+    console.log(`ERROR: ${err.toString()}`);
     if(err.code === 'PROTOCOL_CONNECTION_LOST') { // Connection to the MySQL server is usually
       handleDisconnect();                         // lost due to either server restart, or a
     } else {                                      // connnection idle timeout (the wait_timeout
@@ -40,32 +41,33 @@ function handleDisconnect() {
 handleDisconnect();
 
 function runQuery(query, callback) {
-    console.log("Query Run/ :"+query);
-    result = con.query(query, function (err, result){
-        if (err) {
-	    console.log("ERROR :(")
-            console.log(err);
-            callback(null);
-            return;
-        } else {
-            if(callback!=null)
-            callback(result);
-        }
+  console.log("Query Run/ :"+query);
+  result = con.query(query, function (err, result) {
+  if (err) {
+    console.log("Error in SQL Query")
+    console.log(err);
+    callback(err);
+    return;
+  } else {
+    if(callback != null) callback(err, result);
+  }
 
-    });
+  });
 }
 
 
 async function getStudents(collegeName, courseName, callback) {
 	query = `select id from college where name = '${collegeName}'`
 	console.log(query);
-	runQuery(query, (college) => {
+	runQuery(query, (err, college) => {
+    if(err) callback(err);
 		console.log(college);
-		if(college.length == 0) throw(`Invalid Request: college '${collegeName}' doesn't exist in our database\n`);
+		if(college.length == 0) callback(new Error(`Invalid Request: college '${collegeName}' doesn't exist in our database\n`), null);
 		college_id = college[0]['id']
 		console.log(college_id)
 		query = `select admission_number, course.classroom_name from course_student, student, course where student.id = student_id and course.id = course_id and student.college_id = '${college_id}' and student.id in (select s.id from student as s, course_student as cs, course as c where s.id = cs.student_id and c.id = cs.course_id and c.classroom_name = '${courseName}');`;
-		runQuery(query, (course_students) => {
+		runQuery(query, (err, course_students) => {
+      if(err) callback(err);
 			students = {}
 			for(i in course_students) {
 				if(!(course_students[i]['admission_number'] in students)) {
@@ -73,21 +75,28 @@ async function getStudents(collegeName, courseName, callback) {
 				}
 				students[course_students[i]['admission_number']].push(course_students[i]['classroom_name'])
 			}
-			callback(students);
+			callback(null, students);
 		})
 	})
 }
 
+async function isCollegePresent(collegeName, courseName, callback) {
+
+}
+
 async function isCoursePresent(collegeName, courseName, callback) {
+
 	query = `select id from college where name = '${collegeName}'`
-	runQuery(query, (college) => {
+	runQuery(query, (err, college) => {
+    if(err) callback(err);
 		console.log(college)
-		if(college.length == 0) throw(`Invalid Request: college ${collegeName} doesn't exist in our database\n`)
+		if(college.length == 0) callback(new Error(`Invalid Request: college ${collegeName} doesn't exist in our database\n`), null)
 		college_id = college[0]['id']
 		
 		query = `select id from course where college_id = ${college_id} and classroom_name = '${courseName}'`
-		runQuery(query, (course) => {
-			callback(course.length != 0)
+		runQuery(query, (err, course) => {
+      if(err) callback(err);
+			callback(null, course.length != 0)
 		})
 	})
 }
