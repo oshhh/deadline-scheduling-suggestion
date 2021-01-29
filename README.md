@@ -98,7 +98,11 @@ Example: if the professor wants the assignment's due date to be between `2020-08
 Inform the API to consider some event while scheduling deadlines. The start datetime and end datetime needs to be provided. Some examples of such events can be quizzes, fests, sports events, etc.
 
 ### HTTP Request Format
-`GET https://deadline-scheduling-suggestion.herokuapp.com/[college_name]/inform_about_event/[event_name]/[event_start_datetime]/[event_end_datetime]`
+`GET https://deadline-scheduling-suggestion.herokuapp.com/[college_name]/inform_about_event/[event_type]/[course_name]/[event_start_datetime]/[event_end_datetime]`
+
+#### event_type
+Currently the three supported event_types are `quiz`, `backpack_deadline`, `backpack_deadline_reminder`.
+
 
 ## 4   Is Course Present
 Know whether a course is in our database
