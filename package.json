@@ -16,8 +16,9 @@
     "url": ""
   },
   "dependencies": {
+    "dotenv": "*",
     "googleapis": "^39",
-    "dotenv": "*"
+    "mysql": "^2.18.1"
   },
   "homepage": ""
 }

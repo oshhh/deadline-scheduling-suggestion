@@ -8,7 +8,7 @@ This API is a part of a bigger project that aims to create:
 2. A chrome extension for classroom that adds to these platforms the functionality of getting suggestions of release date and due date of an assignment/deadline. ([Repository](https://github.com/oshhh/google-classroom-extension))      
 3. A mailer to send regular (weekly) mails to profs about how free/busy the students are in the coming week. ([Repository](https://github.com/oshhh/weekly-mailer))
 
-hosted on heroku: `https://deadline-scheduling-suggestion.herokuapp.com/`    
+hosted on: `https://easyscheduler.kracr.iiitd.edu.in:8200/`    
 
 This API Supports the following features:
 1. 
@@ -16,7 +16,7 @@ This API Supports the following features:
 ## 1   Get Suggestions
 
 ### HTTP Request Format
-`GET https://deadline-scheduling-suggestion.herokuapp.com/[college_name]/get_suggestions/[course_name]/[duration]/[min due date]/[max due date]` 
+`GET https://easyscheduler.kracr.iiitd.edu.in:8200/[college_name]/get_suggestions/[course_name]/[duration]/[min due date]/[max due date]` 
 
 ### Parameters
 <ins>college_name</ins>    
@@ -72,7 +72,7 @@ Example: if the professor wants the assignment's due date to be between `2020-08
 ## 2   Student Schedule
 
 ### HTTP Request Format
-`GET https://deadline-scheduling-suggestion.herokuapp.com/[college_name]/student_schedule/[course_name]/week`
+`GET https://https://easyscheduler.kracr.iiitd.edu.in:8200/[college_name]/student_schedule/[course_name]/week`
 
 ### Response
 ```
@@ -98,17 +98,16 @@ Example: if the professor wants the assignment's due date to be between `2020-08
 Inform the API to consider some event while scheduling deadlines. The start datetime and end datetime needs to be provided. Some examples of such events can be quizzes, fests, sports events, etc.
 
 ### HTTP Request Format
-`GET https://deadline-scheduling-suggestion.herokuapp.com/[college_name]/inform_about_event/[event_type]/[course_name]/[event_start_datetime]/[event_end_datetime]`
+`GET https://easyscheduler.kracr.iiitd.edu.in:8200/[college_name]/inform_about_event/[event_type]/[course_name]/[event_start_datetime]/[event_end_datetime]`
 
 #### event_type
 Currently the three supported event_types are `quiz`, `backpack_deadline`, `backpack_deadline_reminder`.
-
 
 ## 4   Is Course Present
 Know whether a course is in our database
 
 ### HTTP Request Format
-`GET https://deadline-scheduling-suggestion.herokuapp.com/[college_name]/courses/[course_name]/is_present`
+`GET https://easyscheduler.kracr.iiitd.edu.in:8200/[college_name]/courses/[course_name]/is_present`
 
 ### Response
 If the course is present it returns `'true'` else returns `'false'`.
@@ -116,7 +115,7 @@ If the course is present it returns `'true'` else returns `'false'`.
 ## 5   Add new course
 
 ### HTTP Request Format
-`GET https://deadline-scheduling-suggestion.herokuapp.com/[college_name]/courses/[course_name]/add_course/[professor_name]/[professor_email]/[students]`
+`GET https://easyscheduler.kracr.iiitd.edu.in:8200/[college_name]/courses/[course_name]/add_course/[professor_name]/[professor_email]/[students]`
 
 `students` should be a comma seperated list of the unique identifiers of students (roll no., email, etc). Eg. `2018001,2018002,2018003`
 

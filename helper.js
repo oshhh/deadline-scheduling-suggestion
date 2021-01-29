@@ -1,23 +1,13 @@
 var calendar_helper = require("./calendar_helper.js");
+var db_helper = require("./db_helper.js");
 var fs = require('fs');
-var admin = require("firebase-admin")
 require('dotenv').config({path: __dirname + '/.env'});
 
-var db = null
 
-async function main() {
-	admin.initializeApp({
-	  credential: admin.credential.cert(JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_CREDENTIALS)),
-	  databaseURL: "https://deadline-schedule-suggestions.firebaseio.com"
-	});
-
-	db = admin.firestore()
-	// getStudentSchedule('iiitd', 'Math I', {days: 7,hours: 0,minutes: 0}, (schedule) => {
-	// 	console.log(schedule)
-	// })
+async function isCoursePresent(collegeName, courseName, callback) {
+	db_helper.isCoursePresent(collegeName, courseName, callback)
 }
 
-main()
 
 /*
 	~~ Parameters ~~
@@ -31,84 +21,87 @@ main()
 	Score and clashes with other events.
 */
 async function suggestDueDate(collegeName, courseName, duration, minDueDate, maxDueDate, callback) {
-	if(! await isCoursePresent(collegeName, courseName)) {
-		throw(`Invalid Request: course ${courseName} not in college ${collegeName} according to our database`)
-	}
-	getStudents(collegeName, (students) => {
-	    calendar_helper.getAllEvents(minDueDate, (allCourseWork) => {
-	        var commonStudents = getCommonStudents(students, courseName)
-	        console.log(commonStudents)
-	        var suggestions = [];
+	db_helper.isCoursePresent(collegeName, courseName, (isPresent) => {
+		if(! isPresent) {
+			throw(`Invalid Request: course ${courseName} not in college ${collegeName} according to our database`)
+		}	
+		db_helper.getStudents(collegeName, courseName, (students) => {
+		    calendar_helper.getAllEvents(minDueDate, (allCourseWork) => {
+			console.log(students);
+			var commonStudents = getCommonStudents(students, courseName)
+		        console.log(commonStudents)
+		        var suggestions = [];
 
-	        var suggestion = new Date(minDueDate);
-	        var lastDate = new Date(maxDueDate);
-	        lastDate.setDate(lastDate.getDate() - duration.days);
-	        lastDate.setHours(lastDate.getHours() - duration.hours);
-	        lastDate.setMinutes(lastDate.getMinutes() - duration.minutes);
-	        while(suggestion <= lastDate) {
-	            var start_date = new Date(suggestion);
-	            var end_date = new Date(suggestion);
-	            console.log(start_date)
-	            console.log(end_date)
-	            end_date.setDate(end_date.getDate() + duration.days);
-	            end_date.setHours(end_date.getHours() + duration.hours);
-	            end_date.setMinutes(end_date.getMinutes() + duration.minutes);
-	            suggestions.push({
-	                start_date: start_date,
-	                end_date: end_date,
-	                clash: calculateScore(start_date, end_date, allCourseWork, commonStudents),
-	            });
-	            suggestion.setDate(suggestion.getDate() + 1);
-	        }
-	        suggestions.sort((a, b) => {return a.clash.score - b.clash.score;});
-
-	        var flexi_suggestions = [];
-	        if(duration.days > 0) {
-	        	// one day more than allowed duration
-		        duration.days ++;
-		        suggestion = new Date(minDueDate);
-		        lastDate = new Date(maxDueDate);
+		        var suggestion = new Date(minDueDate);
+		        var lastDate = new Date(maxDueDate);
 		        lastDate.setDate(lastDate.getDate() - duration.days);
 		        lastDate.setHours(lastDate.getHours() - duration.hours);
 		        lastDate.setMinutes(lastDate.getMinutes() - duration.minutes);
 		        while(suggestion <= lastDate) {
 		            var start_date = new Date(suggestion);
 		            var end_date = new Date(suggestion);
+		            console.log(start_date)
+		            console.log(end_date)
 		            end_date.setDate(end_date.getDate() + duration.days);
 		            end_date.setHours(end_date.getHours() + duration.hours);
 		            end_date.setMinutes(end_date.getMinutes() + duration.minutes);
-		            flexi_suggestions.push({
+		            suggestions.push({
 		                start_date: start_date,
 		                end_date: end_date,
-		                clash: calculateScore(start_date, end_date, allCourseWork, commonStudents, duration.days/(duration.days - 1)),
+		                clash: calculateScore(start_date, end_date, allCourseWork, commonStudents),
 		            });
 		            suggestion.setDate(suggestion.getDate() + 1);
 		        }
-		        // two days more than allowed duration
-		        duration.days ++;
-		        suggestion = new Date(minDueDate);
-		        lastDate = new Date(maxDueDate);
-		        lastDate.setDate(lastDate.getDate() - duration.days);
-		        lastDate.setHours(lastDate.getHours() - duration.hours);
-		        lastDate.setMinutes(lastDate.getMinutes() - duration.minutes);
-		        while(suggestion <= lastDate) {
-		            var start_date = new Date(suggestion);
-		            var end_date = new Date(suggestion);
-		            end_date.setDate(end_date.getDate() + duration.days);
-		            end_date.setHours(end_date.getHours() + duration.hours);
-		            end_date.setMinutes(end_date.getMinutes() + duration.minutes);
-		            flexi_suggestions.push({
-		                start_date: start_date,
-		                end_date: end_date,
-		                clash: calculateScore(start_date, end_date, allCourseWork, commonStudents, duration.days/(duration.days - 2)),
-		            });
-		            suggestion.setDate(suggestion.getDate() + 1);
-		        }
-		        flexi_suggestions.sort((a, b) => {return a.clash.score - b.clash.score;});
-		    }
+		        suggestions.sort((a, b) => {return a.clash.score - b.clash.score;});
 
-	        callback({suggestions: suggestions, flexi_suggestions: flexi_suggestions});
-	    });		
+		        var flexi_suggestions = [];
+		        if(duration.days > 0) {
+		        	// one day more than allowed duration
+			        duration.days ++;
+			        suggestion = new Date(minDueDate);
+			        lastDate = new Date(maxDueDate);
+			        lastDate.setDate(lastDate.getDate() - duration.days);
+			        lastDate.setHours(lastDate.getHours() - duration.hours);
+			        lastDate.setMinutes(lastDate.getMinutes() - duration.minutes);
+			        while(suggestion <= lastDate) {
+			            var start_date = new Date(suggestion);
+			            var end_date = new Date(suggestion);
+			            end_date.setDate(end_date.getDate() + duration.days);
+			            end_date.setHours(end_date.getHours() + duration.hours);
+			            end_date.setMinutes(end_date.getMinutes() + duration.minutes);
+			            flexi_suggestions.push({
+			                start_date: start_date,
+			                end_date: end_date,
+			                clash: calculateScore(start_date, end_date, allCourseWork, commonStudents, duration.days/(duration.days - 1)),
+			            });
+			            suggestion.setDate(suggestion.getDate() + 1);
+			        }
+			        // two days more than allowed duration
+			        duration.days ++;
+			        suggestion = new Date(minDueDate);
+			        lastDate = new Date(maxDueDate);
+			        lastDate.setDate(lastDate.getDate() - duration.days);
+			        lastDate.setHours(lastDate.getHours() - duration.hours);
+			        lastDate.setMinutes(lastDate.getMinutes() - duration.minutes);
+			        while(suggestion <= lastDate) {
+			            var start_date = new Date(suggestion);
+			            var end_date = new Date(suggestion);
+			            end_date.setDate(end_date.getDate() + duration.days);
+			            end_date.setHours(end_date.getHours() + duration.hours);
+			            end_date.setMinutes(end_date.getMinutes() + duration.minutes);
+			            flexi_suggestions.push({
+			                start_date: start_date,
+			                end_date: end_date,
+			                clash: calculateScore(start_date, end_date, allCourseWork, commonStudents, duration.days/(duration.days - 2)),
+			            });
+			            suggestion.setDate(suggestion.getDate() + 1);
+			        }
+			        flexi_suggestions.sort((a, b) => {return a.clash.score - b.clash.score;});
+			    }
+
+		        callback({suggestions: suggestions, flexi_suggestions: flexi_suggestions});
+		    });		
+		})
 	})
 }
 
@@ -121,84 +114,30 @@ async function suggestDueDate(collegeName, courseName, duration, minDueDate, max
 	Score relating to how free the students are and the clashes with other events from today to today + duration
 */
 async function getStudentSchedule(collegeName, courseName, duration, callback) {
-	if(! await isCoursePresent(collegeName, courseName)) {
-		throw(`Invalid Request: course ${courseName} not in college ${collegeName} according to our database`)
-	}
-	getStudents(collegeName, (students) => {
-	    var start_date = new Date();
-	    var end_date = new Date();
-	    end_date.setDate(end_date.getDate() + duration.days);
-	    end_date.setHours(end_date.getHours() + duration.hours);
-	    end_date.setMinutes(end_date.getMinutes() + duration.minutes);
+	db_helper.isCoursePresent(collegeName, courseName, (isPresent) => {
+		if(! isPresent) {
+			throw(`Invalid Request: course ${courseName} not in college ${collegeName} according to our database`)
+		}
+		db_helper.getStudents(collegeName, courseName, (students) => {
+		    var start_date = new Date();
+		    var end_date = new Date();
+		    end_date.setDate(end_date.getDate() + duration.days);
+		    end_date.setHours(end_date.getHours() + duration.hours);
+		    end_date.setMinutes(end_date.getMinutes() + duration.minutes);
 
-	    var commonStudents = getCommonStudents(students, courseName);
+		    var commonStudents = getCommonStudents(students, courseName);
 
-	    calendar_helper.getAllEvents(start_date, (allCourseWork) => {
-	    	var score = calculateScore(start_date, end_date, allCourseWork, commonStudents);
-	    	callback(score);
-	    });
+		    calendar_helper.getAllEvents(start_date, (allCourseWork) => {
+		    	var score = calculateScore(start_date, end_date, allCourseWork, commonStudents);
+		    	callback(score);
+		    });
+		})
 	})
 }
 
 async function addEventToCalendar(eventName, eventStartDate, eventEndDate, callback) {
 	calendar_helper.insertEvent(eventName, eventStartDate, eventEndDate, callback)
 }
-
-async function isCoursePresent(collegeName, courseName) {
-	var college = db.collection('colleges').doc(collegeName)
-	if(!(await college.get()).exists) {
-		throw(`Invalid Request: college ${collegeName} doesn't exist in our database\n`)
-	}
-	var course = await college.collection('courses').doc(courseName).get()
-	return course.exists
-}
-
-async function addNewCourse(collegeName, courseName, professorName, professorEmail, students, callback) {
-	var userName = professorEmail.split('@')[0]
-	var professor = db.collection('colleges').doc(collegeName).collection('professors').doc(userName)
-	await professor.set({
-		name: professorName,
-		email: professorEmail
-	})
-	await db.collection('colleges').doc(collegeName).collection('courses').doc(courseName).set({
-		name: courseName,
-		professor: professor
-	})
-	var course = db.collection('colleges').doc(collegeName).collection('courses').doc(courseName)
-	for(i in students) {
-		student = students[i]
-		console.log(`${courseName}: ${student}`)
-		var docref = db.collection('colleges').doc(collegeName).collection('students').doc(student)
-		var doc = await docref.get()
-		// if(!doc.exists) {
-		// 	docref.set({
-		// 		courses: [course]
-		// 	})
-		// } else {
-		db.collection('colleges').doc(collegeName).collection('students').doc(doc.id).set({
-			courses: admin.firestore.FieldValue.arrayUnion(course)
-		}, {merge: true})
-		// }
-	}
-	callback()
-}
-
-async function getStudents(collegeName, callback) {
-	var college = await db.collection('colleges').doc(collegeName)
-	if(!(await college.get()).exists) {
-		throw(`Invalid Request: college ${collegeName} doesn't exist in our database\n`)
-	}
-	var students_snapshot = await college.collection('students').get()
-	students = {}
-	students_snapshot.forEach((doc) => {
-			students[doc.id] = []
-			for(i in doc.data().courses) {
-				students[doc.id].push(doc.data().courses[i].id)
-			}
-		})
-	callback(students)
-}
-
 
 function getCommonStudents(students, courseName) {
 	var commonStudents = {};
@@ -264,13 +203,9 @@ function fractionalOverlap(c1_startDate, c1_endDate, c2_startDate, c2_endDate) {
 }
 
 
-
-
-
 module.exports = {
   suggestDueDate: suggestDueDate,
   getStudentSchedule: getStudentSchedule,
   addEventToCalendar: addEventToCalendar,
-  isCoursePresent: isCoursePresent,
-  addNewCourse: addNewCourse,
+  isCoursePresent: isCoursePresent
 };
