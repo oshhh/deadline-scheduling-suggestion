@@ -33,7 +33,7 @@ async function handleRequest(req, res) {
         console.log(params);
 
         if(params.length < 3) {
-        	throw("insufficient parameters");
+        	sendError(res, new Error("insufficient parameters"));
         }
 
 		var collegeName = params[1];		
@@ -57,7 +57,7 @@ async function handleRequest(req, res) {
         				res.end();
 					});
 	        	} else {
-	        		throw(`only valid value of 4th parameter is "week"`);
+	        		sendError(res, new Error(`only valid value of 4th parameter is "week"`));
 	        	}
         	break
 	        case `get_suggestions`:
@@ -69,18 +69,18 @@ async function handleRequest(req, res) {
 			    try {
 			        duration = {days: parseInt(duration[0]), hours: parseInt(duration[1]), minutes: parseInt(duration[2])};
 			    } catch(err) {
-			        throw(`Duration formatted incorrectly`);
+			        sendError(res, new Error(`Duration formatted incorrectly`));
 			    }
 			    minDueDate = new Date(minDueDate);
 			    if(isNaN(minDueDate)) {
-			        throw(`Minimum Due Date formatted incorrectly`)
+			        sendError(res, new Error(`Minimum Due Date formatted incorrectly`))
 			    }
 			    console.log(maxDueDate)
 			    maxDueDate = new Date(maxDueDate);
 			    console.log(maxDueDate)
 			    if(isNaN(maxDueDate)) {
-				console.log(maxDueDate)
-				throw(`Maximum Due Date formatted incorrectly`);
+					console.log(maxDueDate)
+					sendError(res, new Error(`Maximum Due Date formatted incorrectly`));
 			    }
 			    
 				helper.suggestDueDate(collegeName, courseName, duration, minDueDate, maxDueDate, (err, suggestions) => {
@@ -106,15 +106,15 @@ async function handleRequest(req, res) {
 	        				}
 
 							if(!isPresent) {
-								throw(`Course ${courseName} not found in college ${collegeName}`)
+								sendError(res, new Error(`Course ${courseName} not found in college ${collegeName}`))
 							}
 							eventStartDate = new Date(params[5])
 							if(isNaN(eventStartDate)) {
-								throw(`Event start date not formatted correctly: ${eventStartDate}`)
+								sendError(res, new Error(`Event start date not formatted correctly: ${eventStartDate}`))
 							}
 							eventEndDate = new Date(params[6])
 							if(isNaN(eventEndDate)) {
-								throw(`Event end date not formatted correctly: ${eventEndDate}`)
+								sendError(res, new Error(`Event end date not formatted correctly: ${eventEndDate}`))
 							}
 
 							eventName = `#Quiz: ${courseName}`
@@ -135,15 +135,15 @@ async function handleRequest(req, res) {
 	        				}
 
 							if(!isPresent) {
-								throw(`Course ${courseName} not found in college ${collegeName}`)
+								sendError(res, new Error(`Course ${courseName} not found in college ${collegeName}`))
 							}
 							eventStartDate = new Date(params[5])
 							if(isNaN(eventStartDate)) {
-								throw(`Event start date not formatted correctly: ${eventStartDate}`)
+								sendError(res, new Error(`Event start date not formatted correctly: ${eventStartDate}`))
 							}
 							eventEndDate = new Date(params[6])
 							if(isNaN(eventEndDate)) {
-								throw(`Event end date not formatted correctly: ${eventEndDate}`)
+								sendError(res, new Error(`Event end date not formatted correctly: ${eventEndDate}`))
 							}
 
 							eventName = `#Deadline: ${courseName}`
@@ -164,15 +164,15 @@ async function handleRequest(req, res) {
 	        				}
 
 							if(!isPresent) {
-								throw(`Course ${courseName} not found in college ${collegeName}`)
+								sendError(res, new Error(`Course ${courseName} not found in college ${collegeName}`))
 							}
 							eventStartDate = new Date(params[5])
 							if(isNaN(eventStartDate)) {
-								throw(`Event start date not formatted correctly: ${eventStartDate}`)
+								sendError(res, new Error(`Event start date not formatted correctly: ${eventStartDate}`))
 							}
 							eventEndDate = new Date(params[6])
 							if(isNaN(eventEndDate)) {
-								throw(`Event end date not formatted correctly: ${eventEndDate}`)
+								sendError(res, new Error(`Event end date not formatted correctly: ${eventEndDate}`))
 							}
 
 							eventName = `#DeadlineReminder: ${courseName}`
@@ -221,7 +221,7 @@ async function handleRequest(req, res) {
     }
     catch(err) {
     	console.log(err);
-    	sendError(new Error(`Oops! An error occurred.`))
+    	sendError(res, new Error(`Oops! An error occurred.`))
     }
 }
 
