@@ -18,7 +18,8 @@
   "dependencies": {
     "dotenv": "*",
     "googleapis": "^39",
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "chrono-node": "*"
   },
   "homepage": ""
 }
