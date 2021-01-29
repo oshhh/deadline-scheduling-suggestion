@@ -83,68 +83,71 @@ async function handleRequest(req, res) {
 				switch(eventType) {
 					case `quiz`:
 						courseName = params[4]
-						var isPresent = await helper.isCoursePresent(collegeName, courseName)
-						if(!isPresent) {
-							throw(`Course ${courseName} not found in college ${collegeName}`)
-						}
-						eventStartDate = new Date(params[5])
-						if(isNaN(eventStartDate)) {
-							throw(`Event start date not formatted correctly: ${eventStartDate}`)
-						}
-						eventEndDate = new Date(params[6])
-						if(isNaN(eventEndDate)) {
-							throw(`Event end date not formatted correctly: ${eventEndDate}`)
-						}
+						helper.isCoursePresent(collegeName, courseName).then((isPresent) => {
+							if(!isPresent) {
+								throw(`Course ${courseName} not found in college ${collegeName}`)
+							}
+							eventStartDate = new Date(params[5])
+							if(isNaN(eventStartDate)) {
+								throw(`Event start date not formatted correctly: ${eventStartDate}`)
+							}
+							eventEndDate = new Date(params[6])
+							if(isNaN(eventEndDate)) {
+								throw(`Event end date not formatted correctly: ${eventEndDate}`)
+							}
 
-						eventName = `#Quiz: ${courseName}`
-						helper.addEventToCalendar(eventName, eventStartDate, eventEndDate, (err) => {
-							res.write(err.toString())
-							res.writeHead(200, {"Content-Type": `text/plain`});
-							res.end();
+							eventName = `#Quiz: ${courseName}`
+							helper.addEventToCalendar(eventName, eventStartDate, eventEndDate, (err) => {
+								res.write(err.toString())
+								res.writeHead(200, {"Content-Type": `text/plain`});
+								res.end();
+							})
 						})
 					break
 					case `backpack_deadline`:
 						courseName = params[4]
-						var isPresent = await helper.isCoursePresent(collegeName, courseName)
-						if(!isPresent) {
-							throw(`Course ${courseName} not found in college ${collegeName}`)
-						}
-						eventStartDate = new Date(params[5])
-						if(isNaN(eventStartDate)) {
-							throw(`Event start date not formatted correctly: ${eventStartDate}`)
-						}
-						eventEndDate = new Date(params[6])
-						if(isNaN(eventEndDate)) {
-							throw(`Event end date not formatted correctly: ${eventEndDate}`)
-						}
+							helper.isCoursePresent(collegeName, courseName).then((isPresent) => {
+							if(!isPresent) {
+								throw(`Course ${courseName} not found in college ${collegeName}`)
+							}
+							eventStartDate = new Date(params[5])
+							if(isNaN(eventStartDate)) {
+								throw(`Event start date not formatted correctly: ${eventStartDate}`)
+							}
+							eventEndDate = new Date(params[6])
+							if(isNaN(eventEndDate)) {
+								throw(`Event end date not formatted correctly: ${eventEndDate}`)
+							}
 
-						eventName = `#Deadline: ${courseName}`
-						helper.addEventToCalendar(eventName, eventStartDate, eventEndDate, (err) => {
-							res.write(err.toString())
-							res.writeHead(200, {"Content-Type": `text/plain`});
-							res.end();
+							eventName = `#Deadline: ${courseName}`
+							helper.addEventToCalendar(eventName, eventStartDate, eventEndDate, (err) => {
+								res.write(err.toString())
+								res.writeHead(200, {"Content-Type": `text/plain`});
+								res.end();
+							})
 						})
 					break
 					case `backpack_deadline_reminder`:
 						courseName = params[4]
-						var isPresent = await helper.isCoursePresent(collegeName, courseName)
-						if(!isPresent) {
-							throw(`Course ${courseName} not found in college ${collegeName}`)
-						}
-						eventStartDate = new Date(params[5])
-						if(isNaN(eventStartDate)) {
-							throw(`Event start date not formatted correctly: ${eventStartDate}`)
-						}
-						eventEndDate = new Date(params[6])
-						if(isNaN(eventEndDate)) {
-							throw(`Event end date not formatted correctly: ${eventEndDate}`)
-						}
+						helper.isCoursePresent(collegeName, courseName).then((isPresent) => {
+							if(!isPresent) {
+								throw(`Course ${courseName} not found in college ${collegeName}`)
+							}
+							eventStartDate = new Date(params[5])
+							if(isNaN(eventStartDate)) {
+								throw(`Event start date not formatted correctly: ${eventStartDate}`)
+							}
+							eventEndDate = new Date(params[6])
+							if(isNaN(eventEndDate)) {
+								throw(`Event end date not formatted correctly: ${eventEndDate}`)
+							}
 
-						eventName = `#DeadlineReminder: ${courseName}`
-						helper.addEventToCalendar(eventName, eventStartDate, eventEndDate, (err) => {
-							res.write(err.toString())
-							res.writeHead(200, {"Content-Type": `text/plain`});
-							res.end();
+							eventName = `#DeadlineReminder: ${courseName}`
+							helper.addEventToCalendar(eventName, eventStartDate, eventEndDate, (err) => {
+								res.write(err.toString())
+								res.writeHead(200, {"Content-Type": `text/plain`});
+								res.end();
+							})
 						})
 					break
 					default:
@@ -170,11 +173,12 @@ async function handleRequest(req, res) {
 				console.log(courseName)
 				var query = params[4]
 				if(query == `is_present`) {
-					var isPresent = await helper.isCoursePresent(collegeName, courseName)
-					console.log(isPresent.toString())
-					res.writeHead(200, {"Content-Type": `text/plain`});
-	    			res.write(isPresent.toString())
-					res.end();        		
+					helper.isCoursePresent(collegeName, courseName).then((isPresent) => {
+						console.log(isPresent.toString())
+						res.writeHead(200, {"Content-Type": `text/plain`});
+		    			res.write(isPresent.toString())
+						res.end();        			
+					})
 				} else if(query == `add_course`) {
 					professorName = params[5]
 					professorEmail = params[6]
@@ -203,7 +207,7 @@ async function handleRequest(req, res) {
     catch(err) {
         console.log(err);
         res.writeHead(200, {"Content-Type": `text/plain`});
-	res.write(`Invalid Request: ` + err.toString() + `\n`);
+		res.write(`Invalid Request: ` + err.toString() + `\n`);
         res.end();
     }
 }
