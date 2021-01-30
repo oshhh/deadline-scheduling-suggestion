@@ -38,6 +38,7 @@ async function handleRequest(req, res) {
 
         if(params.length < 3) {
         	sendError(res, new Error("insufficient parameters"));
+        	return;
         }
 
 		var collegeName = params[1];		
@@ -62,6 +63,7 @@ async function handleRequest(req, res) {
 					});
 	        	} else {
 	        		sendError(res, new Error(`only valid value of 4th parameter is "week"`));
+	        		return;
 	        	}
         	break
 	        case `get_suggestions`:
@@ -69,24 +71,22 @@ async function handleRequest(req, res) {
 			    var duration = params[4];
 			    var minDueDate = params[5];
 			    var maxDueDate = params[6];
-			    duration = duration.split(`-`);
-			    try {
-			        duration = {days: parseInt(duration[0]), hours: parseInt(duration[1]), minutes: parseInt(duration[2])};
-			    } catch(err) {
+			    if(!duration.match(/[0-9]*-[0-9]*-[0-9]*/g)) {
 			        sendError(res, new Error(`Duration formatted incorrectly`));
 			        return;
 			    }
+			    duration = duration.split(`-`);
+			    duration = {days: parseInt(duration[0]), hours: parseInt(duration[1]), minutes: parseInt(duration[2])};
 			    minDueDate = new Date(minDueDate);
 			    if(isNaN(minDueDate)) {
 			        sendError(res, new Error(`Minimum Due Date formatted incorrectly`));
 			        return;
 			    }
-			    console.log(maxDueDate)
 			    maxDueDate = new Date(maxDueDate);
-			    console.log(maxDueDate)
 			    if(isNaN(maxDueDate)) {
 					console.log(maxDueDate)
 					sendError(res, new Error(`Maximum Due Date formatted incorrectly`));
+					return;
 			    }
 			    
 				helper.suggestDueDate(collegeName, courseName, duration, minDueDate, maxDueDate, (err, suggestions) => {
@@ -125,12 +125,15 @@ async function handleRequest(req, res) {
 								sendError(res, new Error(`Event end date not formatted correctly: ${eventEndDate}`));
 								return;
 							}
-
 							eventName = `#Quiz: ${courseName}`
 							helper.addEventToCalendar(eventName, eventStartDate, eventEndDate, (err) => {
 		        				if(err) {
 		        					sendError(res, err);
 		        					return;
+		        				} else {
+									res.writeHead(200, {"Content-Type": `text/plain`});
+									res.write(`${courseName} quiz from ${eventStartDate} to ${eventEndDate} created`)
+									res.end();
 		        				}
 							})
 						})
@@ -163,6 +166,10 @@ async function handleRequest(req, res) {
 		        				if(err) {
 		        					sendError(res, err);
 		        					return;
+		        				} else {
+									res.writeHead(200, {"Content-Type": `text/plain`});
+									res.write(`${courseName} deadline from ${eventStartDate} to ${eventEndDate} created`)
+									res.end();
 		        				}
 							})
 						})
@@ -195,12 +202,16 @@ async function handleRequest(req, res) {
 		        				if(err) {
 		        					sendError(res, err);
 		        					return;
+		        				} else {
+									res.writeHead(200, {"Content-Type": `text/plain`});
+									res.write(`${courseName} deadline posting reminder from ${eventStartDate} to ${eventEndDate} created`)
+									res.end();
 		        				}
 							})
 						})
 					break
 					default:
-						sendError(new Error(`Unrecognised event: ${eventType}`));
+						sendError(res, new Error(`Unrecognised event: ${eventType}`));
 						return;
 				}
 			break
@@ -221,19 +232,24 @@ async function handleRequest(req, res) {
 						res.end();        			
 					})
 				} else {
-					sendError(new Error(`Unrecognised query: ${query}`));
+					sendError(res, new Error(`Unrecognised query: ${query}`));
 					return;
 				}
 			break
 			case `find_date`:
+				query = ''
+				if(params[3]) {
+					query = decodeURIComponent(params[3])
+				}
 	    		var dateNow = new Date(Date.now());
-	    		var dateResult = chrono.parseDate(params[3].toUpperCase(), dateNow, { forwardDate: true });
+	    		var dateResult = chrono.parseDate(query.toUpperCase(), dateNow, { forwardDate: true });
+				if(dateResult == null) dateResult = dateNow;
 				res.writeHead(200, {"Content-Type": `text/plain`});
 	    		res.write(dateResult.toString());
 				res.end();
 			break
 			default:
-				sendError(new Error(`Unrecognised request: ${params[2]}`));
+				sendError(res, new Error(`Unrecognised request ${params[2]}`));
 				return;
 		}
     }
