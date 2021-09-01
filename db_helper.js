@@ -101,7 +101,7 @@ async function getCourses(collegeName, callback) {
 		query = `select name from course where college_id = ${college_id}`
 		runQuery(query, (err, courses) => {
       if(err) return callback(err);
-			return callback(null, courses);
+			return callback(null, courses.map(course => course['name']));
 		})
 	})
 }
