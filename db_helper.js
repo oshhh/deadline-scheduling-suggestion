@@ -98,10 +98,14 @@ async function getCourses(collegeName, callback) {
 		console.log(college)
 		if(college.length == 0) return callback(new Error(`Invalid Request: college ${collegeName} doesn't exist in our database\n`), null)
 		college_id = college[0]['id']
-		query = `select name from course where college_id = ${college_id}`
+		query = `select id, name from course where college_id = ${college_id}`
 		runQuery(query, (err, courses) => {
       if(err) return callback(err);
-			return callback(null, courses.map(course => course['name']));
+      courseNames = {}
+      courses.forEach(course => {
+        courseNames[course['id']] = course['name']
+      });
+			return callback(null, courseNames);
 		})
 	})
 }
