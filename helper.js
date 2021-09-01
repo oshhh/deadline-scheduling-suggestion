@@ -8,6 +8,9 @@ async function isCoursePresent(collegeName, courseName, callback) {
 	db_helper.isCoursePresent(collegeName, courseName, callback)
 }
 
+async function getCourses(collegeName, callback) {
+	db_helper.getCourses(collegeName, callback);
+}
 
 /*
 	~~ Parameters ~~
@@ -214,5 +217,6 @@ module.exports = {
   suggestDueDate: suggestDueDate,
   getStudentSchedule: getStudentSchedule,
   addEventToCalendar: addEventToCalendar,
-  isCoursePresent: isCoursePresent
+  isCoursePresent: isCoursePresent,
+  getCourses: getCourses,
 };

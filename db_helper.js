@@ -91,6 +91,21 @@ async function isCoursePresent(collegeName, courseName, callback) {
 	})
 }
 
+async function getCourses(collegeName, callback) {
+  query = `select id from college where name = '${collegeName}'`
+	runQuery(query, (err, college) => {
+    if(err) return callback(err);
+		console.log(college)
+		if(college.length == 0) return callback(new Error(`Invalid Request: college ${collegeName} doesn't exist in our database\n`), null)
+		college_id = college[0]['id']
+		query = `select name from course where college_id = ${college_id}`
+		runQuery(query, (err, courses) => {
+      if(err) return callback(err);
+			return callback(null, courses);
+		})
+	})
+}
+
 // async function addNewCourse(collegeName, courseCode, professorName, professorEmail, students, callback) {
 // 	var userName = professorEmail.split('@')[0]
 // 	var professor = db.collection('colleges').doc(collegeName).collection('professors').doc(userName)
@@ -125,4 +140,5 @@ async function isCoursePresent(collegeName, courseName, callback) {
 module.exports = {
   getStudents: getStudents,
   isCoursePresent: isCoursePresent,
+  getCourses: getCourses,
 };

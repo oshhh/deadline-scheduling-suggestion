@@ -50,7 +50,7 @@ async function handleRequest(req, res) {
 
 		var collegeName = params[1];		
 
-		switch(params[2]) {
+		switch(params[2]) {		
 			case `student_schedule`:
 	        	var courseName = params[3];
 	        	if(params[4] == `week`) {
@@ -223,6 +223,17 @@ async function handleRequest(req, res) {
 				}
 			break
 			case `courses`: 
+				if(params.length == 3) {
+					helper.isCoursePresent(collegeName, courseName, (err, courses) => {
+        				if(err) {
+        					sendError(res, err);
+        					return;
+        				}
+						res.writeHead(200, {"Content-Type": `text/plain`});
+		    			res.write(courses.toString())
+						res.end();        			
+					})
+				}
 				var courseName = decodeURIComponent(params[3])
 				console.log(courseName)
 				var query = params[4]
