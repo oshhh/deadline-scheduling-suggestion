@@ -224,7 +224,7 @@ async function handleRequest(req, res) {
 			break
 			case `courses`: 
 				if(params.length == 3) {
-					helper.isCoursePresent(collegeName, courseName, (err, courses) => {
+					helper.getCourses(collegeName, (err, courses) => {
         				if(err) {
         					sendError(res, err);
         					return;
