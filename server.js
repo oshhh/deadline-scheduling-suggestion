@@ -233,6 +233,7 @@ async function handleRequest(req, res) {
 		    			res.write(courses.toString())
 						res.end();        			
 					})
+					return;
 				}
 				var courseName = decodeURIComponent(params[3])
 				console.log(courseName)
