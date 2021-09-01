@@ -1,0 +1,1266 @@
+[
+  {
+    "name": "Easy Scheduler",
+    "folders": [
+      {
+        "name": "get_suggestions",
+        "requests": [
+          {
+            "collection": 0,
+            "httpUser": "",
+            "method": "GET",
+            "url": "https://easyscheduler.kracr.iiitd.edu.in:8200",
+            "params": [
+              {
+                "active": true,
+                "type": "path",
+                "value": "IIIT Delhi",
+                "key": "college_name"
+              },
+              {
+                "type": "path",
+                "active": true,
+                "key": "course_name",
+                "value": "CSE202 - Fundamentals of Database Management Systems"
+              },
+              {
+                "key": "duration",
+                "value": "2-0-0",
+                "active": true,
+                "type": "path"
+              },
+              {
+                "type": "path",
+                "value": "2021-01-16T00:00:00.000Z",
+                "active": true,
+                "key": "min_due_date"
+              },
+              {
+                "key": "max_due_date",
+                "value": "2021-01-23T00:00:00.000Z",
+                "active": true,
+                "type": "path"
+              }
+            ],
+            "preRequestScript": "// pw.env.set('variable', 'value');",
+            "contentType": "",
+            "rawParams": "",
+            "rawInput": true,
+            "httpPassword": "",
+            "bearerToken": "",
+            "requestType": "curl",
+            "path": "/<<college_name>>/get_suggestions/<<course_name>>/<<duration>>/<<min_due_date>>/<<max_due_date>>",
+            "headers": [],
+            "name": "max_due_date invalid",
+            "bodyParams": [],
+            "passwordFieldType": "password",
+            "auth": "None",
+            "testScript": "// pw.expect('variable').toBe('value');"
+          },
+          {
+            "collection": 0,
+            "httpUser": "",
+            "method": "GET",
+            "url": "https://easyscheduler.kracr.iiitd.edu.in:8200",
+            "params": [
+              {
+                "active": true,
+                "type": "path",
+                "value": "IIIT Delhi",
+                "key": "college_name"
+              },
+              {
+                "type": "path",
+                "active": true,
+                "key": "course_name",
+                "value": "CSE202 - Fundamentals of Database Management Systems"
+              },
+              {
+                "key": "duration",
+                "value": "2-0-0",
+                "active": true,
+                "type": "path"
+              },
+              {
+                "type": "path",
+                "value": "2021-01-16T00:00:00.000Z",
+                "active": true,
+                "key": "min_due_date"
+              },
+              {
+                "key": "max_due_date",
+                "value": "2021-01-23T00:00:00.000Z",
+                "active": true,
+                "type": "path"
+              }
+            ],
+            "preRequestScript": "// pw.env.set('variable', 'value');",
+            "contentType": "",
+            "rawParams": "",
+            "rawInput": true,
+            "httpPassword": "",
+            "bearerToken": "",
+            "requestType": "curl",
+            "path": "/<<college_name>>/get_suggestions/<<course_name>>/<<duration>>/<<min_due_date>>/<<max_due_date>>",
+            "headers": [],
+            "name": "min_due_date invalid",
+            "bodyParams": [],
+            "passwordFieldType": "password",
+            "auth": "None",
+            "testScript": "// pw.expect('variable').toBe('value');"
+          },
+          {
+            "collection": 0,
+            "httpUser": "",
+            "method": "GET",
+            "url": "https://easyscheduler.kracr.iiitd.edu.in:8200",
+            "params": [
+              {
+                "active": true,
+                "type": "path",
+                "value": "IIIT Delhi",
+                "key": "college_name"
+              },
+              {
+                "type": "path",
+                "active": true,
+                "key": "course_name",
+                "value": "CSE202 - Fundamentals of Database Management Systems"
+              },
+              {
+                "key": "duration",
+                "value": "2-0-0",
+                "active": true,
+                "type": "path"
+              },
+              {
+                "type": "path",
+                "value": "2021-01-16T00:00:00.000Z",
+                "active": true,
+                "key": "min_due_date"
+              },
+              {
+                "key": "max_due_date",
+                "value": "2021-01-23T00:00:00.000Z",
+                "active": true,
+                "type": "path"
+              }
+            ],
+            "preRequestScript": "// pw.env.set('variable', 'value');",
+            "contentType": "",
+            "rawParams": "",
+            "rawInput": true,
+            "httpPassword": "",
+            "bearerToken": "",
+            "requestType": "curl",
+            "path": "/<<college_name>>/get_suggestions/<<course_name>>/<<duration>>/<<min_due_date>>/<<max_due_date>>",
+            "headers": [],
+            "name": "duration invalid",
+            "bodyParams": [],
+            "passwordFieldType": "password",
+            "auth": "None",
+            "testScript": "// pw.expect('variable').toBe('value');"
+          },
+          {
+            "collection": 0,
+            "httpUser": "",
+            "method": "GET",
+            "url": "https://easyscheduler.kracr.iiitd.edu.in:8200",
+            "params": [
+              {
+                "active": true,
+                "type": "path",
+                "value": "IIIT Delhi",
+                "key": "college_name"
+              },
+              {
+                "type": "path",
+                "active": true,
+                "key": "course_name",
+                "value": "CSE202 - Fundamentals of Database Management Systems"
+              },
+              {
+                "key": "duration",
+                "value": "2-0-0",
+                "active": true,
+                "type": "path"
+              },
+              {
+                "type": "path",
+                "value": "2021-01-16T00:00:00.000Z",
+                "active": true,
+                "key": "min_due_date"
+              },
+              {
+                "key": "max_due_date",
+                "value": "2021-01-23T00:00:00.000Z",
+                "active": true,
+                "type": "path"
+              }
+            ],
+            "preRequestScript": "// pw.env.set('variable', 'value');",
+            "contentType": "",
+            "rawParams": "",
+            "rawInput": true,
+            "httpPassword": "",
+            "bearerToken": "",
+            "requestType": "curl",
+            "path": "/<<college_name>>/get_suggestions/<<course_name>>/<<duration>>/<<min_due_date>>/<<max_due_date>>",
+            "headers": [],
+            "name": "course_name invalid",
+            "bodyParams": [],
+            "passwordFieldType": "password",
+            "auth": "None",
+            "testScript": "// pw.expect('variable').toBe('value');"
+          },
+          {
+            "collection": 0,
+            "httpUser": "",
+            "method": "GET",
+            "url": "https://easyscheduler.kracr.iiitd.edu.in:8200",
+            "params": [
+              {
+                "active": true,
+                "type": "path",
+                "value": "IIIT Delhi",
+                "key": "college_name"
+              },
+              {
+                "type": "path",
+                "active": true,
+                "key": "course_name",
+                "value": "CSE202 - Fundamentals of Database Management Systems"
+              },
+              {
+                "key": "duration",
+                "value": "2-0-0",
+                "active": true,
+                "type": "path"
+              },
+              {
+                "type": "path",
+                "value": "2021-01-16T00:00:00.000Z",
+                "active": true,
+                "key": "min_due_date"
+              },
+              {
+                "key": "max_due_date",
+                "value": "2021-01-23T00:00:00.000Z",
+                "active": true,
+                "type": "path"
+              }
+            ],
+            "preRequestScript": "// pw.env.set('variable', 'value');",
+            "contentType": "",
+            "rawParams": "",
+            "rawInput": true,
+            "httpPassword": "",
+            "bearerToken": "",
+            "requestType": "curl",
+            "path": "/<<college_name>>/get_suggestions/<<course_name>>/<<duration>>/<<min_due_date>>/<<max_due_date>>",
+            "headers": [],
+            "name": "college_name invalid",
+            "bodyParams": [],
+            "passwordFieldType": "password",
+            "auth": "None",
+            "testScript": "// pw.expect('variable').toBe('value');"
+          },
+          {
+            "collection": 0,
+            "httpUser": "",
+            "method": "GET",
+            "url": "https://easyscheduler.kracr.iiitd.edu.in:8200",
+            "params": [
+              {
+                "active": true,
+                "type": "path",
+                "value": "IIIT Delhi",
+                "key": "college_name"
+              },
+              {
+                "type": "path",
+                "active": true,
+                "key": "course_name",
+                "value": "CSE202 - Fundamentals of Database Management Systems"
+              },
+              {
+                "key": "duration",
+                "value": "2-0-0",
+                "active": true,
+                "type": "path"
+              },
+              {
+                "type": "path",
+                "value": "2021-01-16T00:00:00.000Z",
+                "active": true,
+                "key": "min_due_date"
+              },
+              {
+                "key": "max_due_date",
+                "value": "2021-01-23T00:00:00.000Z",
+                "active": true,
+                "type": "path"
+              }
+            ],
+            "preRequestScript": "// pw.env.set('variable', 'value');",
+            "contentType": "",
+            "rawParams": "",
+            "rawInput": true,
+            "httpPassword": "",
+            "bearerToken": "",
+            "requestType": "curl",
+            "path": "/<<college_name>>/get_suggestions/<<course_name>>/<<duration>>/<<min_due_date>>/<<max_due_date>>",
+            "headers": [],
+            "name": "valid query",
+            "bodyParams": [],
+            "passwordFieldType": "password",
+            "auth": "None",
+            "testScript": "// pw.expect('variable').toBe('value');"
+          }
+        ],
+        "folders": []
+      },
+      {
+        "name": "student_schedule",
+        "requests": [
+          {
+            "collection": 0,
+            "httpUser": "",
+            "method": "GET",
+            "url": "https://easyscheduler.kracr.iiitd.edu.in:8200",
+            "params": [
+              {
+                "active": true,
+                "type": "path",
+                "value": "iiitd",
+                "key": "college_name"
+              },
+              {
+                "type": "path",
+                "active": true,
+                "key": "course_name",
+                "value": "CSE202 - Fundamentals of Database Management Systems"
+              }
+            ],
+            "preRequestScript": "// pw.env.set('variable', 'value');",
+            "contentType": "",
+            "rawParams": "",
+            "rawInput": true,
+            "httpPassword": "",
+            "bearerToken": "",
+            "requestType": "curl",
+            "path": "/<<college_name>>/student_schedule/<<course_name>>/week",
+            "headers": [],
+            "name": "valid query",
+            "bodyParams": [],
+            "passwordFieldType": "password",
+            "auth": "None",
+            "testScript": "// pw.expect('variable').toBe('value');"
+          },
+          {
+            "collection": 0,
+            "httpUser": "",
+            "method": "GET",
+            "url": "https://easyscheduler.kracr.iiitd.edu.in:8200",
+            "params": [
+              {
+                "active": true,
+                "type": "path",
+                "value": "iiitd",
+                "key": "college_name"
+              },
+              {
+                "type": "path",
+                "active": true,
+                "key": "course_name",
+                "value": "CSE202 - Fundamentals of Database Management Systems"
+              }
+            ],
+            "preRequestScript": "// pw.env.set('variable', 'value');",
+            "contentType": "",
+            "rawParams": "",
+            "rawInput": true,
+            "httpPassword": "",
+            "bearerToken": "",
+            "requestType": "curl",
+            "path": "/<<college_name>>/student_schedule/<<course_name>>/week",
+            "headers": [],
+            "name": "course_name invalid",
+            "bodyParams": [],
+            "passwordFieldType": "password",
+            "auth": "None",
+            "testScript": "// pw.expect('variable').toBe('value');"
+          },
+          {
+            "collection": 0,
+            "httpUser": "",
+            "method": "GET",
+            "url": "https://easyscheduler.kracr.iiitd.edu.in:8200",
+            "params": [
+              {
+                "active": true,
+                "type": "path",
+                "value": "iiitd",
+                "key": "college_name"
+              },
+              {
+                "type": "path",
+                "active": true,
+                "key": "course_name",
+                "value": "CSE202 - Fundamentals of Database Management Systems"
+              }
+            ],
+            "preRequestScript": "// pw.env.set('variable', 'value');",
+            "contentType": "",
+            "rawParams": "",
+            "rawInput": true,
+            "httpPassword": "",
+            "bearerToken": "",
+            "requestType": "curl",
+            "path": "/<<college_name>>/student_schedule/<<course_name>>/week",
+            "headers": [],
+            "name": "college_name invalid",
+            "bodyParams": [],
+            "passwordFieldType": "password",
+            "auth": "None",
+            "testScript": "// pw.expect('variable').toBe('value');"
+          },
+          {
+            "collection": 0,
+            "httpUser": "",
+            "method": "GET",
+            "url": "https://easyscheduler.kracr.iiitd.edu.in:8200",
+            "params": [
+              {
+                "active": true,
+                "type": "path",
+                "value": "iiitd",
+                "key": "college_name"
+              },
+              {
+                "key": "course_name",
+                "value": "CSE202 - Fundamentals of Database Management Systems",
+                "type": "path",
+                "active": true
+              },
+              {
+                "key": "type",
+                "value": "quiz",
+                "type": "path",
+                "active": true
+              },
+              {
+                "key": "start_date",
+                "value": "2021-01-16T00:00:00.000Z",
+                "type": "path",
+                "active": true
+              },
+              {
+                "key": "end_date",
+                "value": "2021-01-23T00:00:00.000Z",
+                "type": "path",
+                "active": true
+              }
+            ],
+            "preRequestScript": "// pw.env.set('variable', 'value');",
+            "contentType": "",
+            "rawParams": "",
+            "rawInput": true,
+            "httpPassword": "",
+            "bearerToken": "",
+            "requestType": "curl",
+            "path": "/<<college_name>>/student_schedule/<<course_name>>/month",
+            "headers": [],
+            "name": "duration invalid",
+            "bodyParams": [],
+            "passwordFieldType": "password",
+            "auth": "None",
+            "testScript": "// pw.expect('variable').toBe('value');"
+          }
+        ],
+        "folders": []
+      },
+      {
+        "name": "courses",
+        "requests": [
+          {
+            "collection": 0,
+            "httpUser": "",
+            "method": "GET",
+            "url": "https://easyscheduler.kracr.iiitd.edu.in:8200",
+            "params": [
+              {
+                "active": true,
+                "type": "path",
+                "value": "iiitd",
+                "key": "college_name"
+              },
+              {
+                "type": "path",
+                "active": true,
+                "key": "course_name",
+                "value": "CSE202 - Fundamentals of Database Management Systems"
+              }
+            ],
+            "preRequestScript": "// pw.env.set('variable', 'value');",
+            "contentType": "",
+            "rawParams": "",
+            "rawInput": true,
+            "httpPassword": "",
+            "bearerToken": "",
+            "requestType": "curl",
+            "path": "/<<college_name>>/courses/<<course_name>>/is_present",
+            "headers": [],
+            "name": "course present",
+            "bodyParams": [],
+            "passwordFieldType": "password",
+            "auth": "None",
+            "testScript": "// pw.expect('variable').toBe('value');"
+          },
+          {
+            "collection": 0,
+            "httpUser": "",
+            "method": "GET",
+            "url": "https://easyscheduler.kracr.iiitd.edu.in:8200",
+            "params": [
+              {
+                "active": true,
+                "type": "path",
+                "value": "iiitd",
+                "key": "college_name"
+              },
+              {
+                "key": "course_name",
+                "value": "CSE202 - Fundamentals of Database Management Systems",
+                "type": "path",
+                "active": true
+              },
+              {
+                "key": "type",
+                "value": "quiz",
+                "type": "path",
+                "active": true
+              },
+              {
+                "key": "start_date",
+                "value": "2021-01-16T00:00:00.000Z",
+                "type": "path",
+                "active": true
+              },
+              {
+                "key": "end_date",
+                "value": "2021-01-23T00:00:00.000Z",
+                "type": "path",
+                "active": true
+              }
+            ],
+            "preRequestScript": "// pw.env.set('variable', 'value');",
+            "contentType": "",
+            "rawParams": "",
+            "rawInput": true,
+            "httpPassword": "",
+            "bearerToken": "",
+            "requestType": "curl",
+            "path": "/<<college_name>>/courses/<<course_name>>/is_present",
+            "headers": [],
+            "name": "college_name invalid",
+            "bodyParams": [],
+            "passwordFieldType": "password",
+            "auth": "None",
+            "testScript": "// pw.expect('variable').toBe('value');"
+          },
+          {
+            "collection": 0,
+            "httpUser": "",
+            "method": "GET",
+            "url": "https://easyscheduler.kracr.iiitd.edu.in:8200",
+            "params": [
+              {
+                "active": true,
+                "type": "path",
+                "value": "iiitd",
+                "key": "college_name"
+              },
+              {
+                "key": "course_name",
+                "value": "CSE202 - Fundamentals of Database Management Systems",
+                "type": "path",
+                "active": true
+              },
+              {
+                "key": "type",
+                "value": "quiz",
+                "type": "path",
+                "active": true
+              },
+              {
+                "key": "start_date",
+                "value": "2021-01-16T00:00:00.000Z",
+                "type": "path",
+                "active": true
+              },
+              {
+                "key": "end_date",
+                "value": "2021-01-23T00:00:00.000Z",
+                "type": "path",
+                "active": true
+              }
+            ],
+            "preRequestScript": "// pw.env.set('variable', 'value');",
+            "contentType": "",
+            "rawParams": "",
+            "rawInput": true,
+            "httpPassword": "",
+            "bearerToken": "",
+            "requestType": "curl",
+            "path": "/<<college_name>>/courses/<<course_name>>/is_present",
+            "headers": [],
+            "name": "course absent",
+            "bodyParams": [],
+            "passwordFieldType": "password",
+            "auth": "None",
+            "testScript": "// pw.expect('variable').toBe('value');"
+          },
+          {
+            "collection": 0,
+            "httpUser": "",
+            "method": "GET",
+            "url": "https://easyscheduler.kracr.iiitd.edu.in:8200",
+            "params": [
+              {
+                "active": true,
+                "type": "path",
+                "value": "iiitd",
+                "key": "college_name"
+              },
+              {
+                "key": "course_name",
+                "value": "CSE202 - Fundamentals of Database Management Systems",
+                "type": "path",
+                "active": true
+              },
+              {
+                "key": "type",
+                "value": "quiz",
+                "type": "path",
+                "active": true
+              },
+              {
+                "key": "start_date",
+                "value": "2021-01-16T00:00:00.000Z",
+                "type": "path",
+                "active": true
+              },
+              {
+                "key": "end_date",
+                "value": "2021-01-23T00:00:00.000Z",
+                "type": "path",
+                "active": true
+              }
+            ],
+            "preRequestScript": "// pw.env.set('variable', 'value');",
+            "contentType": "",
+            "rawParams": "",
+            "rawInput": true,
+            "httpPassword": "",
+            "bearerToken": "",
+            "requestType": "curl",
+            "path": "/<<college_name>>/courses/<<course_name>>/isPresent",
+            "headers": [],
+            "name": "query invalid",
+            "bodyParams": [],
+            "passwordFieldType": "password",
+            "auth": "None",
+            "testScript": "// pw.expect('variable').toBe('value');"
+          }
+        ],
+        "folders": []
+      },
+      {
+        "name": "find_date",
+        "requests": [
+          {
+            "collection": 0,
+            "httpUser": "",
+            "method": "GET",
+            "url": "https://easyscheduler.kracr.iiitd.edu.in:8200",
+            "params": [
+              {
+                "active": true,
+                "type": "path",
+                "value": "iiitd",
+                "key": "college_name"
+              },
+              {
+                "key": "course_name",
+                "value": "CSE202 - Fundamentals of Database Management Systems",
+                "type": "path",
+                "active": true
+              },
+              {
+                "key": "type",
+                "value": "quiz",
+                "type": "path",
+                "active": true
+              },
+              {
+                "key": "start_date",
+                "value": "2021-01-16T00:00:00.000Z",
+                "type": "path",
+                "active": true
+              },
+              {
+                "key": "end_date",
+                "value": "2021-01-23T00:00:00.000Z",
+                "type": "path",
+                "active": true
+              }
+            ],
+            "preRequestScript": "// pw.env.set('variable', 'value');",
+            "contentType": "",
+            "rawParams": "",
+            "rawInput": true,
+            "httpPassword": "",
+            "bearerToken": "",
+            "requestType": "curl",
+            "path": "/<<college_name>>/find_date/<<text>>",
+            "headers": [],
+            "name": "quiz tomorrow",
+            "bodyParams": [],
+            "passwordFieldType": "password",
+            "auth": "None",
+            "testScript": "// pw.expect('variable').toBe('value');"
+          },
+          {
+            "collection": 0,
+            "httpUser": "",
+            "method": "GET",
+            "url": "https://easyscheduler.kracr.iiitd.edu.in:8200",
+            "params": [
+              {
+                "active": true,
+                "type": "path",
+                "value": "iiitd",
+                "key": "college_name"
+              },
+              {
+                "key": "course_name",
+                "value": "CSE202 - Fundamentals of Database Management Systems",
+                "type": "path",
+                "active": true
+              },
+              {
+                "key": "type",
+                "value": "quiz",
+                "type": "path",
+                "active": true
+              },
+              {
+                "key": "start_date",
+                "value": "2021-01-16T00:00:00.000Z",
+                "type": "path",
+                "active": true
+              },
+              {
+                "key": "end_date",
+                "value": "2021-01-23T00:00:00.000Z",
+                "type": "path",
+                "active": true
+              }
+            ],
+            "preRequestScript": "// pw.env.set('variable', 'value');",
+            "contentType": "",
+            "rawParams": "",
+            "rawInput": true,
+            "httpPassword": "",
+            "bearerToken": "",
+            "requestType": "curl",
+            "path": "/<<college_name>>/find_date/<<text>>",
+            "headers": [],
+            "name": "no date present",
+            "bodyParams": [],
+            "passwordFieldType": "password",
+            "auth": "None",
+            "testScript": "// pw.expect('variable').toBe('value');"
+          },
+          {
+            "collection": 0,
+            "httpUser": "",
+            "method": "GET",
+            "url": "https://easyscheduler.kracr.iiitd.edu.in:8200",
+            "params": [
+              {
+                "active": true,
+                "type": "path",
+                "value": "iiitd",
+                "key": "college_name"
+              },
+              {
+                "key": "course_name",
+                "value": "CSE202 - Fundamentals of Database Management Systems",
+                "type": "path",
+                "active": true
+              },
+              {
+                "key": "type",
+                "value": "quiz",
+                "type": "path",
+                "active": true
+              },
+              {
+                "key": "start_date",
+                "value": "2021-01-16T00:00:00.000Z",
+                "type": "path",
+                "active": true
+              },
+              {
+                "key": "end_date",
+                "value": "2021-01-23T00:00:00.000Z",
+                "type": "path",
+                "active": true
+              }
+            ],
+            "preRequestScript": "// pw.env.set('variable', 'value');",
+            "contentType": "",
+            "rawParams": "",
+            "rawInput": true,
+            "httpPassword": "",
+            "bearerToken": "",
+            "requestType": "curl",
+            "path": "/<<college_name>>/find_date/<<text>>>>",
+            "headers": [],
+            "name": "empty text",
+            "bodyParams": [],
+            "passwordFieldType": "password",
+            "auth": "None",
+            "testScript": "// pw.expect('variable').toBe('value');"
+          }
+        ],
+        "folders": []
+      },
+      {
+        "name": "inform_about_event",
+        "requests": [
+          {
+            "collection": 0,
+            "httpUser": "",
+            "method": "GET",
+            "url": "https://easyscheduler.kracr.iiitd.edu.in:8200",
+            "params": [
+              {
+                "active": true,
+                "type": "path",
+                "value": "iiitd",
+                "key": "college_name"
+              },
+              {
+                "key": "course_name",
+                "value": "CSE202 - Fundamentals of Database Management Systems",
+                "type": "path",
+                "active": true
+              },
+              {
+                "key": "type",
+                "value": "quiz",
+                "type": "path",
+                "active": true
+              },
+              {
+                "key": "start_date",
+                "value": "2021-01-16T00:00:00.000Z",
+                "type": "path",
+                "active": true
+              },
+              {
+                "key": "end_date",
+                "value": "2021-01-23T00:00:00.000Z",
+                "type": "path",
+                "active": true
+              }
+            ],
+            "preRequestScript": "// pw.env.set('variable', 'value');",
+            "contentType": "",
+            "rawParams": "",
+            "rawInput": true,
+            "httpPassword": "",
+            "bearerToken": "",
+            "requestType": "curl",
+            "path": "/<<college_name>>/inform_about_event/<<type>>/<<course_name>>/<<start_date>>/<<end_date>>",
+            "headers": [],
+            "name": "inform about quiz",
+            "bodyParams": [],
+            "passwordFieldType": "password",
+            "auth": "None",
+            "testScript": "// pw.expect('variable').toBe('value');"
+          },
+          {
+            "collection": 0,
+            "httpUser": "",
+            "method": "GET",
+            "url": "https://easyscheduler.kracr.iiitd.edu.in:8200",
+            "params": [
+              {
+                "active": true,
+                "type": "path",
+                "value": "iiitd",
+                "key": "college_name"
+              },
+              {
+                "key": "course_name",
+                "value": "CSE202 - Fundamentals of Database Management Systems",
+                "type": "path",
+                "active": true
+              },
+              {
+                "key": "type",
+                "value": "quiz",
+                "type": "path",
+                "active": true
+              },
+              {
+                "key": "start_date",
+                "value": "2021-01-16T00:00:00.000Z",
+                "type": "path",
+                "active": true
+              },
+              {
+                "key": "end_date",
+                "value": "2021-01-23T00:00:00.000Z",
+                "type": "path",
+                "active": true
+              }
+            ],
+            "preRequestScript": "// pw.env.set('variable', 'value');",
+            "contentType": "",
+            "rawParams": "",
+            "rawInput": true,
+            "httpPassword": "",
+            "bearerToken": "",
+            "requestType": "curl",
+            "path": "/<<college_name>>/inform_about_event/<<type>>/<<course_name>>/<<start_date>>/<<end_date>>",
+            "headers": [],
+            "name": "inform about deadline",
+            "bodyParams": [],
+            "passwordFieldType": "password",
+            "auth": "None",
+            "testScript": "// pw.expect('variable').toBe('value');"
+          },
+          {
+            "collection": 0,
+            "httpUser": "",
+            "method": "GET",
+            "url": "https://easyscheduler.kracr.iiitd.edu.in:8200",
+            "params": [
+              {
+                "active": true,
+                "type": "path",
+                "value": "iiitd",
+                "key": "college_name"
+              },
+              {
+                "key": "course_name",
+                "value": "CSE202 - Fundamentals of Database Management Systems",
+                "type": "path",
+                "active": true
+              },
+              {
+                "key": "type",
+                "value": "quiz",
+                "type": "path",
+                "active": true
+              },
+              {
+                "key": "start_date",
+                "value": "2021-01-16T00:00:00.000Z",
+                "type": "path",
+                "active": true
+              },
+              {
+                "key": "end_date",
+                "value": "2021-01-23T00:00:00.000Z",
+                "type": "path",
+                "active": true
+              }
+            ],
+            "preRequestScript": "// pw.env.set('variable', 'value');",
+            "contentType": "",
+            "rawParams": "",
+            "rawInput": true,
+            "httpPassword": "",
+            "bearerToken": "",
+            "requestType": "curl",
+            "path": "/<<college_name>>/inform_about_event/<<type>>/<<course_name>>/<<start_date>>/<<end_date>>",
+            "headers": [],
+            "name": "inform about deadline reminder",
+            "bodyParams": [],
+            "passwordFieldType": "password",
+            "auth": "None",
+            "testScript": "// pw.expect('variable').toBe('value');"
+          },
+          {
+            "collection": 0,
+            "httpUser": "",
+            "method": "GET",
+            "url": "https://easyscheduler.kracr.iiitd.edu.in:8200",
+            "params": [
+              {
+                "active": true,
+                "type": "path",
+                "value": "iiitd",
+                "key": "college_name"
+              },
+              {
+                "key": "course_name",
+                "value": "CSE202 - Fundamentals of Database Management Systems",
+                "type": "path",
+                "active": true
+              },
+              {
+                "key": "type",
+                "value": "quiz",
+                "type": "path",
+                "active": true
+              },
+              {
+                "key": "start_date",
+                "value": "2021-01-16T00:00:00.000Z",
+                "type": "path",
+                "active": true
+              },
+              {
+                "key": "end_date",
+                "value": "2021-01-23T00:00:00.000Z",
+                "type": "path",
+                "active": true
+              }
+            ],
+            "preRequestScript": "// pw.env.set('variable', 'value');",
+            "contentType": "",
+            "rawParams": "",
+            "rawInput": true,
+            "httpPassword": "",
+            "bearerToken": "",
+            "requestType": "curl",
+            "path": "/<<college_name>>/inform_about_event/<<type>>/<<course_name>>/<<start_date>>/<<end_date>>",
+            "headers": [],
+            "name": "type invalid",
+            "bodyParams": [],
+            "passwordFieldType": "password",
+            "auth": "None",
+            "testScript": "// pw.expect('variable').toBe('value');"
+          },
+          {
+            "collection": 0,
+            "httpUser": "",
+            "method": "GET",
+            "url": "https://easyscheduler.kracr.iiitd.edu.in:8200",
+            "params": [
+              {
+                "active": true,
+                "type": "path",
+                "value": "iiitd",
+                "key": "college_name"
+              },
+              {
+                "key": "course_name",
+                "value": "CSE202 - Fundamentals of Database Management Systems",
+                "type": "path",
+                "active": true
+              },
+              {
+                "key": "type",
+                "value": "quiz",
+                "type": "path",
+                "active": true
+              },
+              {
+                "key": "start_date",
+                "value": "2021-01-16T00:00:00.000Z",
+                "type": "path",
+                "active": true
+              },
+              {
+                "key": "end_date",
+                "value": "2021-01-23T00:00:00.000Z",
+                "type": "path",
+                "active": true
+              }
+            ],
+            "preRequestScript": "// pw.env.set('variable', 'value');",
+            "contentType": "",
+            "rawParams": "",
+            "rawInput": true,
+            "httpPassword": "",
+            "bearerToken": "",
+            "requestType": "curl",
+            "path": "/<<college_name>>/inform_about_event/<<type>>/<<course_name>>/<<start_date>>/<<end_date>>",
+            "headers": [],
+            "name": "start_date invalid",
+            "bodyParams": [],
+            "passwordFieldType": "password",
+            "auth": "None",
+            "testScript": "// pw.expect('variable').toBe('value');"
+          },
+          {
+            "collection": 0,
+            "httpUser": "",
+            "method": "GET",
+            "url": "https://easyscheduler.kracr.iiitd.edu.in:8200",
+            "params": [
+              {
+                "active": true,
+                "type": "path",
+                "value": "iiitd",
+                "key": "college_name"
+              },
+              {
+                "key": "course_name",
+                "value": "CSE202 - Fundamentals of Database Management Systems",
+                "type": "path",
+                "active": true
+              },
+              {
+                "key": "type",
+                "value": "quiz",
+                "type": "path",
+                "active": true
+              },
+              {
+                "key": "start_date",
+                "value": "2021-01-16T00:00:00.000Z",
+                "type": "path",
+                "active": true
+              },
+              {
+                "key": "end_date",
+                "value": "2021-01-23T00:00:00.000Z",
+                "type": "path",
+                "active": true
+              }
+            ],
+            "preRequestScript": "// pw.env.set('variable', 'value');",
+            "contentType": "",
+            "rawParams": "",
+            "rawInput": true,
+            "httpPassword": "",
+            "bearerToken": "",
+            "requestType": "curl",
+            "path": "/<<college_name>>/inform_about_event/<<type>>/<<course_name>>/<<start_date>>/<<end_date>>",
+            "headers": [],
+            "name": "end_date invalid",
+            "bodyParams": [],
+            "passwordFieldType": "password",
+            "auth": "None",
+            "testScript": "// pw.expect('variable').toBe('value');"
+          },
+          {
+            "collection": 0,
+            "httpUser": "",
+            "method": "GET",
+            "url": "https://easyscheduler.kracr.iiitd.edu.in:8200",
+            "params": [
+              {
+                "active": true,
+                "type": "path",
+                "value": "iiitd",
+                "key": "college_name"
+              },
+              {
+                "key": "course_name",
+                "value": "CSE202 - Fundamentals of Database Management Systems",
+                "type": "path",
+                "active": true
+              },
+              {
+                "key": "type",
+                "value": "quiz",
+                "type": "path",
+                "active": true
+              },
+              {
+                "key": "start_date",
+                "value": "2021-01-16T00:00:00.000Z",
+                "type": "path",
+                "active": true
+              },
+              {
+                "key": "end_date",
+                "value": "2021-01-23T00:00:00.000Z",
+                "type": "path",
+                "active": true
+              }
+            ],
+            "preRequestScript": "// pw.env.set('variable', 'value');",
+            "contentType": "",
+            "rawParams": "",
+            "rawInput": true,
+            "httpPassword": "",
+            "bearerToken": "",
+            "requestType": "curl",
+            "path": "/<<college_name>>/inform_about_event/<<type>>/<<course_name>>/<<start_date>>/<<end_date>>",
+            "headers": [],
+            "name": "course_name invalid",
+            "bodyParams": [],
+            "passwordFieldType": "password",
+            "auth": "None",
+            "testScript": "// pw.expect('variable').toBe('value');"
+          },
+          {
+            "collection": 0,
+            "httpUser": "",
+            "method": "GET",
+            "url": "https://easyscheduler.kracr.iiitd.edu.in:8200",
+            "params": [
+              {
+                "active": true,
+                "type": "path",
+                "value": "iiitd",
+                "key": "college_name"
+              },
+              {
+                "key": "course_name",
+                "value": "CSE202 - Fundamentals of Database Management Systems",
+                "type": "path",
+                "active": true
+              },
+              {
+                "key": "type",
+                "value": "quiz",
+                "type": "path",
+                "active": true
+              },
+              {
+                "key": "start_date",
+                "value": "2021-01-16T00:00:00.000Z",
+                "type": "path",
+                "active": true
+              },
+              {
+                "key": "end_date",
+                "value": "2021-01-23T00:00:00.000Z",
+                "type": "path",
+                "active": true
+              }
+            ],
+            "preRequestScript": "// pw.env.set('variable', 'value');",
+            "contentType": "",
+            "rawParams": "",
+            "rawInput": true,
+            "httpPassword": "",
+            "bearerToken": "",
+            "requestType": "curl",
+            "path": "/<<college_name>>/inform_about_event/<<type>>/<<course_name>>/<<start_date>>/<<end_date>>",
+            "headers": [],
+            "name": "college_name invalid",
+            "bodyParams": [],
+            "passwordFieldType": "password",
+            "auth": "None",
+            "testScript": "// pw.expect('variable').toBe('value');"
+          }
+        ],
+        "folders": []
+      }
+    ],
+    "requests": []
+  }
+]

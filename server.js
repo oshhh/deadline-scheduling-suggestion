@@ -37,6 +37,12 @@ async function handleRequest(req, res) {
         params = decodeURI(req.url).split(`/`);
         console.log(params);
 
+        if(params.length == 0) {
+        	fs.readFile(__dirname + 'enrollment_info.html', 'utf8', function(err, text){
+                res.send(text);
+            });
+        }
+
         if(params.length < 3) {
         	sendError(res, new Error("insufficient parameters"));
         	return;
