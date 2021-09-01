@@ -1,4 +1,5 @@
 var https = require(`https`); // 1 - Import Node.js core module
+// var http = require(`http`);
 var fs = require(`fs`);
 var helper = require(`./helper`)
 var calendar_helper = require(`./calendar_helper`)
@@ -265,8 +266,9 @@ const options = {
 	cert: fs.readFileSync(process.env.SSL_CERT_FILE).toString()
 }
 
-var server = https.createServer(options, handleRequest);
 
+var server = https.createServer(options, handleRequest);
+// var server = http.createServer(handleRequest);
 
 server.listen(port);
 

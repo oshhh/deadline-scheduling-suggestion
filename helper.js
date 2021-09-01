@@ -25,13 +25,13 @@ async function suggestDueDate(collegeName, courseName, duration, minDueDate, max
 		if(err) return callback(err);
 		if(! isPresent) {
 			return callback(new Error(`course ${courseName} not in college ${collegeName} according to our database`))
-		}	
+		}
+		console.log(`course present`);
 		db_helper.getStudents(collegeName, courseName, (err, students) => {
-			if(err) return callback(err);
+		    if(err) return callback(err);
 		    calendar_helper.getAllEvents(minDueDate, (err, allCourseWork) => {
 		    	if(err) return callback(err);
-				console.log(students);
-				var commonStudents = getCommonStudents(students, courseName)
+			var commonStudents = getCommonStudents(students, courseName)
 		        console.log(commonStudents)
 		        var suggestions = [];
 
@@ -183,6 +183,7 @@ function calculateScore(start_date, end_date, allCourseWork, commonStudents, fle
 	for(var i = 0; i < allCourseWork.length; ++ i) {
 		var courseWork = allCourseWork[i];
         if(commonStudents[courseWork.course_name] == null) continue;
+		console.log(courseWork)
 		score += commonStudents[courseWork.course_name] * fractionalOverlap(start_date, end_date, courseWork.start_date, courseWork.end_date);
 		if(fractionalOverlap(start_date, end_date, courseWork.start_date, courseWork.end_date) != 0) {
 			reason.push({

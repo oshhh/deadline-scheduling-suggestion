@@ -3,8 +3,8 @@ const readline = require('readline');
 const {google} = require('googleapis');
 require('dotenv').config({path: __dirname + '/.env'});
 
-const CLASSROOM_CALENDAR_ID = 'iiitd.ac.in_classroom'
-// const CLASSROOM_CALENDAR_ID = 'classroom'
+// const CLASSROOM_CALENDAR_ID = 'iiitd.ac.in_classroom'
+const CLASSROOM_CALENDAR_ID = 'classroom'
 const BACKPACK_CALENDAR_ID = 'backpack'
 const EVENTS = 'iiitd_events'
 const STUDENT_CALENDAR = 'osheen18059@iiitd.ac.in'
@@ -29,6 +29,7 @@ function authorize(credentials, callback) {
 	token = process.env.TOKEN;
 	if (token == "") return getAccessToken(oAuth2Client, callback);
 	oAuth2Client.setCredentials(JSON.parse(token));
+	console.log(`authorized`);
 	return callback(oAuth2Client);
 }
 
@@ -96,14 +97,16 @@ function getAllEvents(start, callback) {
     listCalendars(auth, (err, auth, calendars) => {
       if(err) return callback(err);
       var calendar_count = 0;
+	console.log(calendars);
       calendars.forEach((calendar) => {
-        if(calendar.id.substring(0, CLASSROOM_CALENDAR_ID.length) == CLASSROOM_CALENDAR_ID || calendar.id.substring(0, BACKPACK_CALENDAR_ID.length) == BACKPACK_CALENDAR_ID || calendar.id.substring(0, EVENTS.length) == EVENTS) {
+        if(calendar.id.includes(CLASSROOM_CALENDAR_ID) || calendar.id.substring(0, BACKPACK_CALENDAR_ID.length) == BACKPACK_CALENDAR_ID || calendar.id.substring(0, EVENTS.length) == EVENTS) {
           calendar_count ++;
-        }          
+	console.log(calendar.id);
+        }
       });
       var assignments = [];
       calendars.forEach((calendar) => {
-        if(calendar.id.substring(0, CLASSROOM_CALENDAR_ID.length) == CLASSROOM_CALENDAR_ID || calendar.id.substring(0, BACKPACK_CALENDAR_ID.length) == BACKPACK_CALENDAR_ID || calendar.id.substring(0, EVENTS.length) == EVENTS) {
+        if(calendar.id.includes(CLASSROOM_CALENDAR_ID) || calendar.id.substring(0, BACKPACK_CALENDAR_ID.length) == BACKPACK_CALENDAR_ID || calendar.id.substring(0, EVENTS.length) == EVENTS) {
           console.log(calendar.summary)
           listEvents(auth, calendar.id, start, (err, auth, events) => {
             if(err) return callback(err);

@@ -38,7 +38,7 @@ function handleDisconnect() {
 handleDisconnect();
 
 function runQuery(query, callback) {
-  console.log("Query Run/ :"+query);
+  console.log("Query Run: " + query);
   result = con.query(query, function (err, result) {
   if (err) {
     console.log("Error in SQL Query")
@@ -55,16 +55,13 @@ function runQuery(query, callback) {
 
 async function getStudents(collegeName, courseName, callback) {
 	query = `select id from college where name = '${collegeName}'`
-	console.log(query);
 	runQuery(query, (err, college) => {
-    if(err) return callback(err);
-		console.log(college);
+    		if(err) return callback(err);
 		if(college.length == 0) return callback(new Error(`Invalid Request: college '${collegeName}' doesn't exist in our database\n`), null);
 		college_id = college[0]['id']
-		console.log(college_id)
 		query = `select admission_number, course.classroom_name from course_student, student, course where student.id = student_id and course.id = course_id and student.college_id = '${college_id}' and student.id in (select s.id from student as s, course_student as cs, course as c where s.id = cs.student_id and c.id = cs.course_id and c.classroom_name = '${courseName}');`;
 		runQuery(query, (err, course_students) => {
-      if(err) return callback(err);
+      			if(err) return callback(err);
 			students = {}
 			for(i in course_students) {
 				if(!(course_students[i]['admission_number'] in students)) {
@@ -72,13 +69,10 @@ async function getStudents(collegeName, courseName, callback) {
 				}
 				students[course_students[i]['admission_number']].push(course_students[i]['classroom_name'])
 			}
+			console.log(`students of ${courseName} fetched`);
 			return callback(null, students);
 		})
 	})
-}
-
-async function isCollegePresent(collegeName, courseName, callback) {
-
 }
 
 async function isCoursePresent(collegeName, courseName, callback) {
@@ -89,7 +83,6 @@ async function isCoursePresent(collegeName, courseName, callback) {
 		console.log(college)
 		if(college.length == 0) return callback(new Error(`Invalid Request: college ${collegeName} doesn't exist in our database\n`), null)
 		college_id = college[0]['id']
-		
 		query = `select id from course where college_id = ${college_id} and classroom_name = '${courseName}'`
 		runQuery(query, (err, course) => {
       if(err) return callback(err);
