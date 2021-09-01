@@ -230,7 +230,7 @@ async function handleRequest(req, res) {
         					return;
         				}
 						res.writeHead(200, {"Content-Type": `text/plain`});
-		    			res.write(courses.toString())
+		    			res.write(JSON.stringify(courses))
 						res.end();        			
 					})
 					return;
