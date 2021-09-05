@@ -137,6 +137,16 @@ async function getStudentSchedule(collegeName, courseId, duration, callback) {
 
 		    calendar_helper.getAllEvents(start_date, (err, allCourseWork) => {
 		    	if(err) return callback(err);
+				db_helper.getCourses(collegeName, (err, courseNames) => {
+					if(err) return callback(err);
+					courseNameToId = {}
+					for(var id in courseNames) {
+						courseNameToId[courseNames] = id;
+					}
+					for(var i in allCourseWork) {
+						allCourseWork[i].course_name = courseNameToId[allCourseWork[i].course_name]
+					}
+				})
 		    	var score = calculateScore(start_date, end_date, allCourseWork, commonStudents);
 		    	return callback(null, score);
 		    });
