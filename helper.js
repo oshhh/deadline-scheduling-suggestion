@@ -45,8 +45,6 @@ async function suggestDueDate(collegeName, courseId, duration, minDueDate, maxDu
 							allCourseWork[i].course_name = courseNameToId[allCourseWork[i].course_name]
 						}
 					}
-					console.log(allCourseWork);
-					console.log(students);
 					var commonStudents = getCommonStudents(students, courseId)
 					console.log(commonStudents)
 					var suggestions = [];
@@ -72,7 +70,8 @@ async function suggestDueDate(collegeName, courseId, duration, minDueDate, maxDu
 						suggestion.setDate(suggestion.getDate() + 1);
 					}
 					suggestions.sort((a, b) => {return a.clash.score - b.clash.score;});
-
+					console.log(suggestions);
+					
 					var flexi_suggestions = [];
 					if(duration.days > 0) {
 						// one day more than allowed duration
@@ -85,6 +84,8 @@ async function suggestDueDate(collegeName, courseId, duration, minDueDate, maxDu
 						while(suggestion <= lastDate) {
 							var start_date = new Date(suggestion);
 							var end_date = new Date(suggestion);
+							console.log(start_date)
+							console.log(end_date)
 							end_date.setDate(end_date.getDate() + duration.days);
 							end_date.setHours(end_date.getHours() + duration.hours);
 							end_date.setMinutes(end_date.getMinutes() + duration.minutes);
