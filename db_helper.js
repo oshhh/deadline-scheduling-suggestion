@@ -59,7 +59,7 @@ async function getStudents(collegeName, courseId, callback) {
     		if(err) return callback(err);
 		if(college.length == 0) return callback(new Error(`Invalid Request: college '${collegeName}' doesn't exist in our database\n`), null);
 		college_id = college[0]['id']
-		query = `select admission_number, course.id from course_student, student where student.id = student_id and student.college_id = '${college_id}' and student.id in (select s.id from student as s, course_student as cs where s.id = cs.student_id and cs.id = '${courseId}');`;
+		query = `select admission_number, course_id from course_student, student where student.id = student_id and student.college_id = '${college_id}' and student.id in (select s.id from student as s, course_student as cs where s.id = cs.student_id and cs.id = '${courseId}');`;
 		runQuery(query, (err, course_students) => {
       			if(err) return callback(err);
 			students = {}
