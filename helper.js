@@ -48,6 +48,7 @@ async function suggestDueDate(collegeName, courseId, duration, minDueDate, maxDu
 					var commonStudents = getCommonStudents(students, courseId);
 					console.log(commonStudents);
 					console.log(allCourseWork);
+					console.log(courseNameToId);
 					var suggestions = [];
 
 					var suggestion = new Date(minDueDate);
@@ -151,7 +152,7 @@ async function getStudentSchedule(collegeName, courseId, duration, callback) {
 					if(err) return callback(err);
 					courseNameToId = {}
 					for(var id in courseNames) {
-						courseNameToId[courseNames] = id;
+						courseNameToId[courseNames[id]] = id;
 					}
 					for(var i in allCourseWork) {
 						allCourseWork[i].course_name = courseNameToId[allCourseWork[i].course_name]
