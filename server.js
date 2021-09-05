@@ -74,7 +74,7 @@ async function handleRequest(req, res) {
 	        	}
         	break
 	        case `get_suggestions`:
-	        	var courseName = params[3];
+	        	var courseId = params[3];
 			    var duration = params[4];
 			    var minDueDate = params[5];
 			    var maxDueDate = params[6];
@@ -96,7 +96,7 @@ async function handleRequest(req, res) {
 					return;
 			    }
 			    
-				helper.suggestDueDate(collegeName, courseName, duration, minDueDate, maxDueDate, (err, suggestions) => {
+				helper.suggestDueDate(collegeName, courseId, duration, minDueDate, maxDueDate, (err, suggestions) => {
 				    if(err) {
     					sendError(res, err);
     					return;
