@@ -97,21 +97,16 @@ function getAllEvents(start, callback) {
     listCalendars(auth, (err, auth, calendars) => {
       if(err) return callback(err);
       var calendar_count = 0;
-	console.log(calendars);
       calendars.forEach((calendar) => {
         if(calendar.id.includes(CLASSROOM_CALENDAR_ID) || calendar.id.substring(0, BACKPACK_CALENDAR_ID.length) == BACKPACK_CALENDAR_ID || calendar.id.substring(0, EVENTS.length) == EVENTS) {
           calendar_count ++;
-	console.log(calendar.id);
         }
       });
       var assignments = [];
       calendars.forEach((calendar) => {
         if(calendar.id.includes(CLASSROOM_CALENDAR_ID) || calendar.id.substring(0, BACKPACK_CALENDAR_ID.length) == BACKPACK_CALENDAR_ID || calendar.id.substring(0, EVENTS.length) == EVENTS) {
-          console.log(calendar.summary)
           listEvents(auth, calendar.id, start, (err, auth, events) => {
             if(err) return callback(err);
-            console.log(calendar.summary)
-            console.log(events)
             calendar_count --;
             events.forEach((event) => {
               if(event.summary.substring(0, 10) == 'Assignment') {
