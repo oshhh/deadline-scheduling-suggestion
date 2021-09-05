@@ -42,7 +42,7 @@ async function suggestDueDate(collegeName, courseId, duration, minDueDate, maxDu
 					}
 					for(var i in allCourseWork) {
 						if(allCourseWork[i].course_name in courseNameToId) {
-							allCourseWork[i].course_name = courseNameToId[allCourseWork[i].course_name]
+							allCourseWork[i].course_id = courseNameToId[allCourseWork[i].course_name]
 						}
 					}
 					var commonStudents = getCommonStudents(students, courseId);
@@ -155,7 +155,7 @@ async function getStudentSchedule(collegeName, courseId, duration, callback) {
 						courseNameToId[courseNames[id]] = id;
 					}
 					for(var i in allCourseWork) {
-						allCourseWork[i].course_name = courseNameToId[allCourseWork[i].course_name]
+						allCourseWork[i].course_id = courseNameToId[allCourseWork[i].course_name]
 					}
 					var score = calculateScore(start_date, end_date, allCourseWork, commonStudents);
 					callback(null, score);
@@ -198,7 +198,7 @@ function getCommonStudents(students, courseId) {
 	~~ Parameters ~~
 	start_date: datatype - Date
 	end_date: datatype - Date
-	allCourseWork: datatype - list of courseWorks, format - {course_name: .., coursework_name: .., start_date: (datatype - Date), end_date: (datatype - Date)}
+	allCourseWork: datatype - list of courseWorks, format - {course_name: .., course_id: ..., coursework_name: .., start_date: (datatype - Date), end_date: (datatype - Date)}
 	commonStudents: datatype - JSON, format - {courseId: studentCount}
 */
 function calculateScore(start_date, end_date, allCourseWork, commonStudents, flexi_factor = 1) {
@@ -206,13 +206,13 @@ function calculateScore(start_date, end_date, allCourseWork, commonStudents, fle
 	var reason = [];
 	for(var i = 0; i < allCourseWork.length; ++ i) {
 		var courseWork = allCourseWork[i];
-        if(commonStudents[courseWork.course_name] == null) continue;
+        if(commonStudents[courseWork.course_id] == null) continue;
 		console.log(courseWork)
-		score += commonStudents[courseWork.course_name] * fractionalOverlap(start_date, end_date, courseWork.start_date, courseWork.end_date);
+		score += commonStudents[courseWork.course_id] * fractionalOverlap(start_date, end_date, courseWork.start_date, courseWork.end_date);
 		if(fractionalOverlap(start_date, end_date, courseWork.start_date, courseWork.end_date) != 0) {
 			reason.push({
 				courseWork: courseWork,
-				fraction_of_students: commonStudents[courseWork.course_name],
+				fraction_of_students: commonStudents[courseWork.course_id],
 				fraction_of_overlap: fractionalOverlap(start_date, end_date, courseWork.start_date, courseWork.end_date),
 			});
 		}
