@@ -67,7 +67,7 @@ async function getStudents(collegeName, courseId, callback) {
 				if(!(course_students[i]['admission_number'] in students)) {
 					students[course_students[i]['admission_number']] = []
 				}
-				students[course_students[i]['admission_number']].push(course_students[i]['classroom_name'])
+				students[course_students[i]['admission_number']].push(course_students[i]['course_id'])
 			}
 			console.log(`students of ${courseId} fetched`);
 			return callback(null, students);
