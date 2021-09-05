@@ -34,11 +34,11 @@ async function suggestDueDate(collegeName, courseId, duration, minDueDate, maxDu
 		    if(err) return callback(err);
 		    calendar_helper.getAllEvents(minDueDate, (err, allCourseWork) => {
 		    	if(err) return callback(err);
-				db_helper.getCourses(collegeName, (err, courseNames) => {
+				db_helper.getCalendarNames(collegeName, (err, courseNames) => {
 					if(err) return callback(err);
 					courseNameToId = {}
 					for(var id in courseNames) {
-						courseNameToId[courseNames] = id;
+						courseNameToId[courseNames[id]] = id;
 					}
 					for(var i in allCourseWork) {
 						if(allCourseWork[i].course_name in courseNameToId) {
@@ -147,7 +147,7 @@ async function getStudentSchedule(collegeName, courseId, duration, callback) {
 
 		    calendar_helper.getAllEvents(start_date, (err, allCourseWork) => {
 		    	if(err) return callback(err);
-				db_helper.getCourses(collegeName, (err, courseNames) => {
+				db_helper.getCalendarNames(collegeName, (err, courseNames) => {
 					if(err) return callback(err);
 					courseNameToId = {}
 					for(var id in courseNames) {
