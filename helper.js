@@ -4,8 +4,8 @@ var fs = require('fs');
 require('dotenv').config({path: __dirname + '/.env'});
 
 
-async function isCoursePresent(collegeName, courseName, callback) {
-	db_helper.isCoursePresent(collegeName, courseName, callback)
+async function isCoursePresent(collegeName, courseId, callback) {
+	db_helper.isCoursePresent(collegeName, courseId, callback)
 }
 
 async function getCourses(collegeName, callback) {
@@ -15,7 +15,7 @@ async function getCourses(collegeName, callback) {
 /*
 	~~ Parameters ~~
 	collegeName: datatype - string
-	courseName: datatype - string
+	courseId: datatype - string
 	duration: datatype - JSON, format - {date: .., hours: .., minutes: ..}
 	minDueDate: datatype - Date
 	maxDueDate: datatype - Date
@@ -23,18 +23,18 @@ async function getCourses(collegeName, callback) {
 	Some due date suggestions for an assignment of duration `duration`, this due date being between the min and max due date. 
 	Score and clashes with other events.
 */
-async function suggestDueDate(collegeName, courseName, duration, minDueDate, maxDueDate, callback) {
-	db_helper.isCoursePresent(collegeName, courseName, (err, isPresent) => {
+async function suggestDueDate(collegeName, courseId, duration, minDueDate, maxDueDate, callback) {
+	db_helper.isCoursePresent(collegeName, courseId, (err, isPresent) => {
 		if(err) return callback(err);
 		if(! isPresent) {
-			return callback(new Error(`course ${courseName} not in college ${collegeName} according to our database`))
+			return callback(new Error(`course ${courseId} not in college ${collegeName} according to our database`))
 		}
 		console.log(`course present`);
-		db_helper.getStudents(collegeName, courseName, (err, students) => {
+		db_helper.getStudents(collegeName, courseId, (err, students) => {
 		    if(err) return callback(err);
 		    calendar_helper.getAllEvents(minDueDate, (err, allCourseWork) => {
 		    	if(err) return callback(err);
-			var commonStudents = getCommonStudents(students, courseName)
+			var commonStudents = getCommonStudents(students, courseId)
 		        console.log(commonStudents)
 		        var suggestions = [];
 
@@ -114,18 +114,18 @@ async function suggestDueDate(collegeName, courseName, duration, minDueDate, max
 /*
 	~~ Parameters ~~
 	collegeName: datatype - string
-	courseName: datatype - string
+	courseId: datatype - string
 	duration: datatype - JSON, format - {date: .., hours: .., minutes: ..}
 	~~ Returns ~~
 	Score relating to how free the students are and the clashes with other events from today to today + duration
 */
-async function getStudentSchedule(collegeName, courseName, duration, callback) {
-	db_helper.isCoursePresent(collegeName, courseName, (err, isPresent) => {
+async function getStudentSchedule(collegeName, courseId, duration, callback) {
+	db_helper.isCoursePresent(collegeName, courseId, (err, isPresent) => {
 		if(err) return callback(err);
 		if(! isPresent) {
-			return callback(new Error(`course ${courseName} not in college ${collegeName} according to our database`))
+			return callback(new Error(`course ${courseId} not in college ${collegeName} according to our database`))
 		}
-		db_helper.getStudents(collegeName, courseName, (err, students) => {
+		db_helper.getStudents(collegeName, courseId, (err, students) => {
 			if(err) return callback(err);
 		    var start_date = new Date();
 		    var end_date = new Date();
@@ -133,7 +133,7 @@ async function getStudentSchedule(collegeName, courseName, duration, callback) {
 		    end_date.setHours(end_date.getHours() + duration.hours);
 		    end_date.setMinutes(end_date.getMinutes() + duration.minutes);
 
-		    var commonStudents = getCommonStudents(students, courseName);
+		    var commonStudents = getCommonStudents(students, courseId);
 
 		    calendar_helper.getAllEvents(start_date, (err, allCourseWork) => {
 		    	if(err) return callback(err);
@@ -148,13 +148,13 @@ async function addEventToCalendar(eventName, eventStartDate, eventEndDate, callb
 	calendar_helper.insertEvent(eventName, eventStartDate, eventEndDate, callback)
 }
 
-function getCommonStudents(students, courseName) {
+function getCommonStudents(students, courseId) {
 	var commonStudents = {};
 	var total = 0;
 	for(var i in students) {
 		var studentInCourse = false;
 		for(var j in students[i]) {
-		    if(courseName == students[i][j]) {
+		    if(courseId == students[i][j]) {
 		        studentInCourse = true;
 		    }
 		}
@@ -178,7 +178,7 @@ function getCommonStudents(students, courseName) {
 	start_date: datatype - Date
 	end_date: datatype - Date
 	allCourseWork: datatype - list of courseWorks, format - {course_name: .., coursework_name: .., start_date: (datatype - Date), end_date: (datatype - Date)}
-	commonStudents: datatype - JSON, format - {courseName: studentCount}
+	commonStudents: datatype - JSON, format - {courseId: studentCount}
 */
 function calculateScore(start_date, end_date, allCourseWork, commonStudents, flexi_factor = 1) {
 	var score = 0;
