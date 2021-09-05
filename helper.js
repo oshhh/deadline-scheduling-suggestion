@@ -118,8 +118,8 @@ async function suggestDueDate(collegeName, courseId, duration, minDueDate, maxDu
 						}
 						flexi_suggestions.sort((a, b) => {return a.clash.score - b.clash.score;});
 				    }
+					return callback(null, {suggestions: suggestions, flexi_suggestions: flexi_suggestions});
 				});
-		        return callback(null, {suggestions: suggestions, flexi_suggestions: flexi_suggestions});
 		    });		
 		})
 	})
