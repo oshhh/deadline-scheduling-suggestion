@@ -83,7 +83,7 @@ async function getCourses(callback) {
     if(err) return callback(err);
     courseNames = {}
     courses.forEach(course => {
-      courseNames[course['id']] = course['name']
+      courseNames[course['course_id']] = course['name']
     });
     return callback(null, courseNames);
   })
