@@ -54,7 +54,7 @@ function runQuery(query, callback) {
 
 
 async function getStudents(courseId, callback) {
-  query = `select student_id, course_id from course_student where "${courseId}" in (select cs.course_id from course_student as cs where cs.student_id == course_student.student_id);`;
+  query = `select student_id, course_id from course_student where "${courseId}" in (select cs.course_id from course_student as cs where cs.student_id = course_student.student_id);`;
   runQuery(query, (err, course_students) => {
           if(err) return callback(err);
     students = {}
