@@ -4,10 +4,7 @@ const {google} = require('googleapis');
 require('dotenv').config({path: __dirname + '/.env'});
 
 // const CLASSROOM_CALENDAR_ID = 'iiitd.ac.in_classroom'
-const CLASSROOM_CALENDAR_ID = 'classroom'
-const BACKPACK_CALENDAR_ID = 'backpack'
-const EVENTS = 'iiitd_events'
-const STUDENT_CALENDAR = 'osheen18059@iiitd.ac.in'
+const STUDENT_CALENDAR = 'scheduler@iiitd.ac.in'
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/calendar'];
@@ -96,47 +93,33 @@ function getAllEvents(start, callback) {
   authorize(credentials_json, (auth) => {
     listCalendars(auth, (err, auth, calendars) => {
       if(err) return callback(err);
-      var calendar_count = 0;
-      calendars.forEach((calendar) => {
-        if(calendar.id.includes(CLASSROOM_CALENDAR_ID) || calendar.id.substring(0, BACKPACK_CALENDAR_ID.length) == BACKPACK_CALENDAR_ID || calendar.id.substring(0, EVENTS.length) == EVENTS) {
-          calendar_count ++;
-        }
-      });
+      var calendar_count = calendars.length;
       var assignments = [];
       calendars.forEach((calendar) => {
-        if(calendar.id.includes(CLASSROOM_CALENDAR_ID) || calendar.id.substring(0, BACKPACK_CALENDAR_ID.length) == BACKPACK_CALENDAR_ID || calendar.id.substring(0, EVENTS.length) == EVENTS) {
-          listEvents(auth, calendar.id, start, (err, auth, events) => {
-            if(err) return callback(err);
-            calendar_count --;
-            events.forEach((event) => {
-              if(event.summary.substring(0, 10) == 'Assignment') {
-                assignments.push({
-                  course_name: event.organizer.displayName,
-                  coursework_name: event.summary,
-                  start_date: new Date(event.created),
-                  end_date: new Date(event.end.dateTime != null ? event.end.dateTime : `${event.start.date}T18:29:00Z`),
-                });
-              } else if(event.summary.substring(0, 10) == '#Deadline:') {
-                assignments.push({
-                  course_name: event.summary.substring(11),
-                  coursework_name: event.summary,
-                  start_date: new Date(event.created),
-                  end_date: new Date(event.end.dateTime != null ? event.end.dateTime : `${event.start.date}T18:29:00Z`),
-                });
-              } else if(event.summary.substring(0, 6) == '#Quiz:') {
-                assignments.push({
-                  course_name: event.summary.substring(7),
-                  coursework_name: event.summary,
-                  start_date: new Date(event.created),
-                  end_date: new Date(event.end.dateTime != null ? event.end.dateTime : `${event.start.date}T18:29:00Z`),
-                });
-              }
-            });
-            if(calendar_count == 0) {
-              return callback(null, assignments);
+        listEvents(auth, calendar.id, start, (err, auth, events) => {
+          if(err) return callback(err);
+          calendar_count --;
+          events.forEach((event) => {
+            if(event.summary.substring(0, 10) == 'Assignment') {
+              assignments.push({
+                course_name: event.organizer.displayName,
+                coursework_name: event.summary,
+                start_date: new Date(event.created),
+                end_date: new Date(event.end.dateTime != null ? event.end.dateTime : `${event.start.date}T18:29:00Z`),
+              });
+            } else if(event.summary.substring(0, 6) == '#Quiz:') {
+              assignments.push({
+                course_name: event.summary.substring(7),
+                coursework_name: event.summary,
+                start_date: new Date(event.created),
+                end_date: new Date(event.end.dateTime != null ? event.end.dateTime : `${event.start.date}T18:29:00Z`),
+              });
             }
           });
-        }
+          if(calendar_count == 0) {
+            return callback(null, assignments);
+          }
+        });
       });
     });
   });
