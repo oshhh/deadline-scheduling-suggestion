@@ -53,113 +53,53 @@ function runQuery(query, callback) {
 }
 
 
-async function getStudents(collegeName, courseId, callback) {
-	query = `select id from college where name = '${collegeName}'`
-	runQuery(query, (err, college) => {
-    		if(err) return callback(err);
-		if(college.length == 0) return callback(new Error(`Invalid Request: college '${collegeName}' doesn't exist in our database\n`), null);
-		college_id = college[0]['id']
-		query = `select admission_number, course_id from course_student, student where student.id = student_id and student.college_id = '${college_id}' and student.id in (select s.id from student as s, course_student as cs where s.id = cs.student_id and cs.course_id = '${courseId}');`;
-		runQuery(query, (err, course_students) => {
-      			if(err) return callback(err);
-			students = {}
-			for(i in course_students) {
-				if(!(course_students[i]['admission_number'] in students)) {
-					students[course_students[i]['admission_number']] = []
-				}
-				students[course_students[i]['admission_number']].push(course_students[i]['course_id'])
-			}
-			console.log(`students of ${courseId} fetched`);
-			return callback(null, students);
-		})
-	})
+async function getStudents(courseId, callback) {
+  query = `select student_id, course_id from course_student where "${courseId}" in (select cs.course_id from course_student as cs where cs.student_id == course_student.student_id);`;
+  runQuery(query, (err, course_students) => {
+          if(err) return callback(err);
+    students = {}
+    for(i in course_students) {
+      if(!(course_students[i]['student_id'] in students)) {
+        students[course_students[i]['student_id']] = []
+      }
+      students[course_students[i]['student_id']].push(course_students[i]['course_id'])
+    }
+    console.log(`students of ${courseId} fetched`);
+    return callback(null, students);
+  })
 }
 
-async function isCoursePresent(collegeName, courseId, callback) {
-
-	query = `select id from college where name = '${collegeName}'`
-	runQuery(query, (err, college) => {
+async function isCoursePresent(courseId, callback) {
+  query = `select course_id from course where course_id = '${courseId}';`
+  runQuery(query, (err, course) => {
     if(err) return callback(err);
-		console.log(college)
-		if(college.length == 0) return callback(new Error(`Invalid Request: college ${collegeName} doesn't exist in our database\n`), null)
-		college_id = college[0]['id']
-		query = `select id from course where college_id = ${college_id} and id = '${courseId}'`
-		runQuery(query, (err, course) => {
-      if(err) return callback(err);
-      console.log(course)
-			return callback(null, course.length != 0)
-		})
-	})
+    return callback(null, course.length != 0)
+  })
 }
 
-async function getCourses(collegeName, callback) {
-  query = `select id from college where name = '${collegeName}'`
-	runQuery(query, (err, college) => {
+async function getCourses(callback) {
+  query = `select course_id, name from course;`
+  runQuery(query, (err, courses) => {
     if(err) return callback(err);
-		console.log(college)
-		if(college.length == 0) return callback(new Error(`Invalid Request: college ${collegeName} doesn't exist in our database\n`), null)
-		college_id = college[0]['id']
-		query = `select id, name from course where college_id = ${college_id}`
-		runQuery(query, (err, courses) => {
-      if(err) return callback(err);
-      courseNames = {}
-      courses.forEach(course => {
-        courseNames[course['id']] = course['name']
-      });
-			return callback(null, courseNames);
-		})
-	})
+    courseNames = {}
+    courses.forEach(course => {
+      courseNames[course['id']] = course['name']
+    });
+    return callback(null, courseNames);
+  })
 }
 
-async function getCalendarNames(collegeName, callback) {
-  query = `select id from college where name = '${collegeName}'`
-	runQuery(query, (err, college) => {
+async function getCalendarNames(callback) {
+	query = `select course_id, classroom_name from course;`
+  runQuery(query, (err, courses) => {
     if(err) return callback(err);
-		console.log(college)
-		if(college.length == 0) return callback(new Error(`Invalid Request: college ${collegeName} doesn't exist in our database\n`), null)
-		college_id = college[0]['id']
-		query = `select id, classroom_name from course where college_id = ${college_id}`
-		runQuery(query, (err, courses) => {
-      if(err) return callback(err);
-      courseNames = {}
-      courses.forEach(course => {
-        courseNames[course['id']] = course['classroom_name']
-      });
-			return callback(null, courseNames);
-		})
-	})
+    courseNames = {}
+    courses.forEach(course => {
+      courseNames[course['course_id']] = course['classroom_name']
+    });
+    return callback(null, courseNames);
+  })
 }
-
-// async function addNewCourse(collegeName, courseCode, professorName, professorEmail, students, callback) {
-// 	var userName = professorEmail.split('@')[0]
-// 	var professor = db.collection('colleges').doc(collegeName).collection('professors').doc(userName)
-// 	await professor.set({
-// 		name: professorName,
-// 		email: professorEmail
-// 	})
-// 	await db.collection('colleges').doc(collegeName).collection('courses').doc(courseCode).set({
-// 		name: courseCode,
-// 		professor: professor
-// 	})
-// 	var course = db.collection('colleges').doc(collegeName).collection('courses').doc(courseCode)
-// 	for(i in students) {
-// 		student = students[i]
-// 		console.log(`${courseCode}: ${student}`)
-// 		var docref = db.collection('colleges').doc(collegeName).collection('students').doc(student)
-// 		var doc = await docref.get()
-// 		// if(!doc.exists) {
-// 		// 	docref.set({
-// 		// 		courses: [course]
-// 		// 	})
-// 		// } else {
-// 		db.collection('colleges').doc(collegeName).collection('students').doc(doc.id).set({
-// 			courses: admin.firestore.FieldValue.arrayUnion(course)
-// 		}, {merge: true})
-// 		// }
-// 	}
-// 	return callback()
-// }
-
 
 module.exports = {
   getStudents: getStudents,

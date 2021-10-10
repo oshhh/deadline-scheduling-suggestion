@@ -4,17 +4,16 @@ var fs = require('fs');
 require('dotenv').config({path: __dirname + '/.env'});
 
 
-async function isCoursePresent(collegeName, courseId, callback) {
-	db_helper.isCoursePresent(collegeName, courseId, callback)
+async function isCoursePresent(courseId, callback) {
+	db_helper.isCoursePresent(courseId, callback)
 }
 
-async function getCourses(collegeName, callback) {
-	db_helper.getCourses(collegeName, callback);
+async function getCourses(callback) {
+	db_helper.getCourses(callback);
 }
 
 /*
 	~~ Parameters ~~
-	collegeName: datatype - string
 	courseId: datatype - string
 	duration: datatype - JSON, format - {date: .., hours: .., minutes: ..}
 	minDueDate: datatype - Date
@@ -23,18 +22,18 @@ async function getCourses(collegeName, callback) {
 	Some due date suggestions for an assignment of duration `duration`, this due date being between the min and max due date. 
 	Score and clashes with other events.
 */
-async function suggestDueDate(collegeName, courseId, duration, minDueDate, maxDueDate, callback) {
-	db_helper.isCoursePresent(collegeName, courseId, (err, isPresent) => {
+async function suggestDueDate(courseId, duration, minDueDate, maxDueDate, callback) {
+	db_helper.isCoursePresent(courseId, (err, isPresent) => {
 		if(err) return callback(err);
 		if(! isPresent) {
-			return callback(new Error(`course ${courseId} not in college ${collegeName} according to our database`))
+			return callback(new Error(`course ${courseId} does not exist according to our database. visit /courses to view the list of courses.`))
 		}
 		console.log(`course present`);
-		db_helper.getStudents(collegeName, courseId, (err, students) => {
+		db_helper.getStudents(courseId, (err, students) => {
 		    if(err) return callback(err);
 		    calendar_helper.getAllEvents(minDueDate, (err, allCourseWork) => {
 		    	if(err) return callback(err);
-				db_helper.getCalendarNames(collegeName, (err, courseNames) => {
+				db_helper.getCalendarNames((err, courseNames) => {
 					if(err) return callback(err);
 					courseNameToId = {}
 					for(var id in courseNames) {
@@ -124,19 +123,18 @@ async function suggestDueDate(collegeName, courseId, duration, minDueDate, maxDu
 
 /*
 	~~ Parameters ~~
-	collegeName: datatype - string
 	courseId: datatype - string
 	duration: datatype - JSON, format - {date: .., hours: .., minutes: ..}
 	~~ Returns ~~
 	Score relating to how free the students are and the clashes with other events from today to today + duration
 */
-async function getStudentSchedule(collegeName, courseId, duration, callback) {
-	db_helper.isCoursePresent(collegeName, courseId, (err, isPresent) => {
+async function getStudentSchedule(courseId, duration, callback) {
+	db_helper.isCoursePresent(courseId, (err, isPresent) => {
 		if(err) return callback(err);
 		if(! isPresent) {
-			return callback(new Error(`course ${courseId} not in college ${collegeName} according to our database`))
+			return callback(new Error(`course ${courseId} does not exist according to our database`))
 		}
-		db_helper.getStudents(collegeName, courseId, (err, students) => {
+		db_helper.getStudents(courseId, (err, students) => {
 			if(err) return callback(err);
 		    var start_date = new Date();
 		    var end_date = new Date();
@@ -148,7 +146,7 @@ async function getStudentSchedule(collegeName, courseId, duration, callback) {
 
 		    calendar_helper.getAllEvents(start_date, (err, allCourseWork) => {
 		    	if(err) return callback(err);
-				db_helper.getCalendarNames(collegeName, (err, courseNames) => {
+				db_helper.getCalendarNames((err, courseNames) => {
 					if(err) return callback(err);
 					courseNameToId = {}
 					for(var id in courseNames) {
