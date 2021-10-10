@@ -112,37 +112,26 @@ async function handleRequest(req, res) {
 				switch(eventType) {
 					case `quiz`:
 						courseName = params[4]
-						helper.isCoursePresent(courseName, (err, isPresent) => {
+						eventStartDate = new Date(params[5])
+						if(isNaN(eventStartDate)) {
+							sendError(res, new Error(`Event start date not formatted correctly: ${eventStartDate}`));
+							return;
+						}
+						eventEndDate = new Date(params[6])
+						if(isNaN(eventEndDate)) {
+							sendError(res, new Error(`Event end date not formatted correctly: ${eventEndDate}`));
+							return;
+						}
+						eventName = `#Quiz: ${courseName}`
+						helper.addEventToCalendar(eventName, eventStartDate, eventEndDate, (err) => {
 							if(err) {
-	        					sendError(res, err);
-	        					return;
-	        				}
-
-							if(!isPresent) {
-								sendError(res, new Error(`Course ${courseName} not found`));
+								sendError(res, err);
 								return;
+							} else {
+								res.writeHead(200, {"Content-Type": `text/plain`});
+								res.write(`${courseName} quiz from ${eventStartDate} to ${eventEndDate} created`)
+								res.end();
 							}
-							eventStartDate = new Date(params[5])
-							if(isNaN(eventStartDate)) {
-								sendError(res, new Error(`Event start date not formatted correctly: ${eventStartDate}`));
-								return;
-							}
-							eventEndDate = new Date(params[6])
-							if(isNaN(eventEndDate)) {
-								sendError(res, new Error(`Event end date not formatted correctly: ${eventEndDate}`));
-								return;
-							}
-							eventName = `#Quiz: ${courseName}`
-							helper.addEventToCalendar(eventName, eventStartDate, eventEndDate, (err) => {
-		        				if(err) {
-		        					sendError(res, err);
-		        					return;
-		        				} else {
-									res.writeHead(200, {"Content-Type": `text/plain`});
-									res.write(`${courseName} quiz from ${eventStartDate} to ${eventEndDate} created`)
-									res.end();
-		        				}
-							})
 						})
 					break
 					default:
