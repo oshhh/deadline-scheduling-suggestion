@@ -206,8 +206,8 @@ function calculateScore(start_date, end_date, allCourseWork, commonStudents, fle
 		var courseWork = allCourseWork[i];
         if(commonStudents[courseWork.course_id] == null) continue;
 		console.log(courseWork)
-		score += commonStudents[courseWork.course_id] * fractionalOverlap(start_date, end_date, courseWork.start_date, courseWork.end_date);
-		if(fractionalOverlap(start_date, end_date, courseWork.start_date, courseWork.end_date) != 0) {
+		score += commonStudents[courseWork.course_id] * clash(start_date, end_date, courseWork.start_date, courseWork.end_date);
+		if(clash(start_date, end_date, courseWork.start_date, courseWork.end_date) != 0) {
 			reason.push({
 				courseWork: courseWork,
 				fraction_of_students: commonStudents[courseWork.course_id],
