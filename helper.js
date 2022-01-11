@@ -206,12 +206,13 @@ function calculateScore(start_date, end_date, allCourseWork, commonStudents, fle
 		var courseWork = allCourseWork[i];
         if(commonStudents[courseWork.course_id] == null) continue;
 		console.log(courseWork)
-		score += commonStudents[courseWork.course_id] * clash(start_date, end_date, courseWork.start_date, courseWork.end_date);
+		var currScore = clash(start_date, end_date, courseWork.start_date, courseWork.end_date) + distance_between_deadlines(start_date, end_date, courseWork.start_date, courseWork.end_date)
+		score += commonStudents[courseWork.course_id] * currScore;
 		if(clash(start_date, end_date, courseWork.start_date, courseWork.end_date) != 0) {
 			reason.push({
 				courseWork: courseWork,
 				fraction_of_students: commonStudents[courseWork.course_id],
-				fraction_of_overlap: clash(start_date, end_date, courseWork.start_date, courseWork.end_date) + distance_between_deadlines(start_date, end_date, courseWork.start_date, courseWork.end_date),
+				fraction_of_overlap: currScore,
 			});
 		}
 	}
@@ -231,7 +232,7 @@ function clash(startDate, endDate, c_startDate, c_endDate) {
 }
 
 function distance_between_deadlines(startDate, endDate, c_startDate, c_endDate) {
-	return 1/(1 + Math.abs(endDate - c_endDate));
+	return 2/(1 + Math.abs(endDate - c_endDate));
 }
 
 module.exports = {
