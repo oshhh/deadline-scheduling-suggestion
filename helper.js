@@ -207,8 +207,8 @@ function calculateScore(start_date, end_date, allCourseWork, commonStudents, fle
         if(commonStudents[courseWork.course_id] == null) continue;
 		console.log(courseWork)
 		var currScore = clash(start_date, end_date, courseWork.start_date, courseWork.end_date) + distance_between_deadlines(start_date, end_date, courseWork.start_date, courseWork.end_date)
-		score += commonStudents[courseWork.course_id] * currScore;
 		if(clash(start_date, end_date, courseWork.start_date, courseWork.end_date) != 0) {
+			score += commonStudents[courseWork.course_id] * currScore;
 			reason.push({
 				courseWork: courseWork,
 				fraction_of_students: commonStudents[courseWork.course_id],
