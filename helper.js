@@ -231,7 +231,7 @@ function clash(startDate, endDate, c_startDate, c_endDate) {
 }
 
 function distance_between_deadlines(startDate, endDate, c_startDate, c_endDate) {
-	return 1/(1 + Math.abs(endDate - c_endDate));
+	return 2/(1 + Math.abs(endDate - c_endDate));
 }
 
 module.exports = {
