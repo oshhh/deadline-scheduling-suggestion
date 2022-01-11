@@ -211,26 +211,28 @@ function calculateScore(start_date, end_date, allCourseWork, commonStudents, fle
 			reason.push({
 				courseWork: courseWork,
 				fraction_of_students: commonStudents[courseWork.course_id],
-				fraction_of_overlap: fractionalOverlap(start_date, end_date, courseWork.start_date, courseWork.end_date),
+				fraction_of_overlap: clash(start_date, end_date, courseWork.start_date, courseWork.end_date) + distance_between_deadlines(start_date, end_date, courseWork.start_date, courseWork.end_date),
 			});
 		}
 	}
 	return {score: score/flexi_factor, reason: reason};
 }
 
-function fractionalOverlap(c1_startDate, c1_endDate, c2_startDate, c2_endDate) {
-	if(c1_startDate >= c2_endDate || c2_startDate > c1_endDate) return 0;
-	c2_startDate = Math.max(c1_startDate, c2_startDate)
-	if(c1_endDate >= c2_endDate && c1_startDate <= c2_startDate) {
+function clash(startDate, endDate, c_startDate, c_endDate) {
+	if(startDate >= c_endDate || c_startDate > endDate) return 0;
+	if(endDate >= c_endDate && startDate <= c_startDate) {
 		return 1;
 	}
-	if(c1_startDate < c2_startDate) {
-		return (c1_endDate - c2_startDate)/(c2_endDate - c2_startDate);
+	if(startDate < c_startDate) {
+		return (endDate - c_startDate)/(c_endDate - c_startDate);
 	} else {
-		return (c2_endDate - c1_startDate)/(c2_endDate - c2_startDate);
+		return (c_endDate - startDate)/(c_endDate - c_startDate);
 	}
 }
 
+function distance_between_deadlines(startDate, endDate, c_startDate, c_endDate) {
+	return 1/(1 + Math.abs(endDate - c_endDate));
+}
 
 module.exports = {
   suggestDueDate: suggestDueDate,
