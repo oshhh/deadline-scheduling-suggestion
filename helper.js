@@ -88,7 +88,7 @@ async function suggestDueDate(courseId, duration, minDueDate, maxDueDate, callba
 							flexi_suggestions.push({
 								start_date: start_date,
 								end_date: end_date,
-								clash: 2 * calculateScore(start_date, end_date, allCourseWork, commonStudents, duration.days/(duration.days - 1)),
+								clash: calculateScore(start_date, end_date, allCourseWork, commonStudents, duration.days/(duration.days - 1)),
 							});
 							suggestion.setDate(suggestion.getDate() + 1);
 						}
@@ -108,7 +108,7 @@ async function suggestDueDate(courseId, duration, minDueDate, maxDueDate, callba
 							flexi_suggestions.push({
 								start_date: start_date,
 								end_date: end_date,
-								clash: 2 * calculateScore(start_date, end_date, allCourseWork, commonStudents, duration.days/(duration.days - 2)),
+								clash: calculateScore(start_date, end_date, allCourseWork, commonStudents, duration.days/(duration.days - 2)),
 							});
 							suggestion.setDate(suggestion.getDate() + 1);
 						}
@@ -215,7 +215,7 @@ function calculateScore(start_date, end_date, allCourseWork, commonStudents, fle
 			});
 		}
 	}
-	return {score: score/flexi_factor, reason: reason};
+	return {score: 2 * score/flexi_factor, reason: reason};
 }
 
 function clash(startDate, endDate, c_startDate, c_endDate) {
