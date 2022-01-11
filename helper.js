@@ -108,7 +108,7 @@ async function suggestDueDate(courseId, duration, minDueDate, maxDueDate, callba
 							flexi_suggestions.push({
 								start_date: start_date,
 								end_date: end_date,
-								clash: calculateScore(start_date, end_date, allCourseWork, commonStudents, duration.days/(duration.days - 2)),
+								clash: 2 * (calculateScore(start_date, end_date, allCourseWork, commonStudents, duration.days/(duration.days - 2))),
 							});
 							suggestion.setDate(suggestion.getDate() + 1);
 						}
@@ -231,7 +231,7 @@ function clash(startDate, endDate, c_startDate, c_endDate) {
 }
 
 function distance_between_deadlines(startDate, endDate, c_startDate, c_endDate) {
-	return 2/(1 + Math.abs(endDate - c_endDate));
+	return 1/(1 + Math.abs(endDate - c_endDate));
 }
 
 module.exports = {
